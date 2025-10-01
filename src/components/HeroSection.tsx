@@ -1,0 +1,64 @@
+import React from 'react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
+import heroVideo from '@/assets/dog.mp4';
+
+export const HeroSection = () => {
+  const scrollToNext = () => {
+    const nextSection = document.getElementById('services');
+    nextSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* 배경 비디오 - 무한 반복 재생 */}
+      <div className="absolute inset-0 z-0">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src={heroVideo} type="video/mp4" />
+          {/* 브라우저가 비디오를 지원하지 않을 경우를 위한 대체 이미지 */}
+          <img 
+            src="/src/assets/olympic-bridge.png" 
+            alt="대한민국 상이군경회 시설사업소" 
+            className="w-full h-full object-cover"
+          />
+        </video>
+      </div>
+
+      {/* 텍스트 - 좌표로 직접 배치 */}
+      <div className="absolute top-32 left-36 z-10">
+        <div className="hero-text-slide-down">
+          <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
+            국민들의 안전하고 쾌적한,
+          </p>
+        </div>
+
+        <div className="hero-text-slide-down">
+          <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
+            아름다운 생활을 영위하는 나라건설
+          </p>
+        </div>
+
+        <div className="hero-text-slide-down">
+          <p className="text-sm text-gray-200 font-korean leading-relaxed drop-shadow-lg">
+            사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다.
+          </p>
+        </div>
+      </div>
+
+      {/* 스크롤 인디케이터 */}
+      <button 
+        onClick={scrollToNext}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 hover:text-white transition-colors animate-bounce"
+        aria-label="다음 섹션으로 스크롤"
+      >
+        <ChevronDown className="h-8 w-8" />
+      </button>
+
+    </section>
+  );
+};
