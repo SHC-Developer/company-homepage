@@ -18,11 +18,21 @@ export const HeroSection = () => {
           muted 
           playsInline
           className="w-full h-full object-cover"
+          onError={(e) => {
+            console.error('Video failed to load:', e);
+            // 비디오 로드 실패 시 대체 이미지로 교체
+            const video = e.target as HTMLVideoElement;
+            const img = document.createElement('img');
+            img.src = '/placeholder.svg';
+            img.alt = '대한민국 상이군경회 시설사업소';
+            img.className = 'w-full h-full object-cover';
+            video.parentNode?.replaceChild(img, video);
+          }}
         >
           <source src={heroVideo} type="video/mp4" />
           {/* 브라우저가 비디오를 지원하지 않을 경우를 위한 대체 이미지 */}
           <img 
-            src="/src/assets/olympic-bridge.png" 
+            src="/placeholder.svg" 
             alt="대한민국 상이군경회 시설사업소" 
             className="w-full h-full object-cover"
           />
