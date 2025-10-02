@@ -1,25 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
 export const HeroSection = () => {
   const [videoError, setVideoError] = useState(false);
-  const [showFallback, setShowFallback] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
-
-  useEffect(() => {
-    // 3초 후에도 비디오가 로드되지 않으면 대체 배경 표시
-    const timer = setTimeout(() => {
-      setShowFallback(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleVideoClick = () => {
-    setUserInteracted(true);
-    setVideoError(false);
-    setShowFallback(false);
-  };
 
   const scrollToNext = () => {
     const nextSection = document.getElementById('services');
@@ -28,13 +11,13 @@ export const HeroSection = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* YouTube 배경 비디오 또는 대체 배경 */}
-      <div className="youtube-container">
-        {!videoError && !showFallback ? (
-          <>
+      {/* YouTube 배경 비디오 */}
+      <div className="absolute inset-0 z-0">
+        {!videoError ? (
+          <div className="relative w-full h-full">
             <iframe
-              className="youtube-background"
-              src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&rel=0&modestbranding=1&playsinline=1&start=0"
+              className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2"
+              src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1"
               title="대한민국 상이군경회 시설사업소 배경 영상"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -44,14 +27,13 @@ export const HeroSection = () => {
                 pointerEvents: 'none',
               }}
             />
-            
-            {/* YouTube 브랜딩 숨기기 위한 상단 오버레이 */}
-            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none"></div>
-          </>
+            {/* 비디오 위에 오버레이 - 텍스트 가독성을 위한 어두운 필터 */}
+            <div className="absolute inset-0 bg-black/30 z-10"></div>
+          </div>
         ) : (
-          /* 대체 배경 - 그라데이션 + 패턴 */
+          /* 대체 배경 - YouTube 로드 실패 시 */
           <div 
-            className="w-full h-full bg-gradient-to-br from-primary to-primary-hover relative"
+            className="w-full h-full bg-gradient-to-br from-primary to-primary-hover"
             style={{
               backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))`,
             }}
@@ -67,19 +49,8 @@ export const HeroSection = () => {
                 <rect width="100%" height="100%" fill="url(#grid)" />
               </svg>
             </div>
-            
-            {/* 비디오 재시도 버튼 */}
-            <button
-              onClick={handleVideoClick}
-              className="absolute bottom-20 right-8 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg backdrop-blur-sm transition-all duration-300 text-sm font-korean z-20"
-            >
-              🎬 배경 영상 재생
-            </button>
           </div>
         )}
-        
-        {/* 비디오 위에 오버레이 - 텍스트 가독성을 위한 어두운 필터 */}
-        <div className="absolute inset-0 bg-black/30 z-10"></div>
       </div>
 
       {/* 텍스트 - 좌표로 직접 배치 */}
