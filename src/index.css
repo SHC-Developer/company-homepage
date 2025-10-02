@@ -337,20 +337,14 @@ All colors MUST be HSL.
   
   /* YouTube 배경 비디오 스타일 */
   .youtube-background {
-    border: none !important;
-    outline: none !important;
+    transform: scale(1.1); /* 약간 확대하여 YouTube UI 요소 숨기기 */
+    transform-origin: center center;
   }
   
-  /* YouTube 브랜딩 요소 숨기기 */
-  .youtube-background::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: transparent;
-    z-index: 10;
-    pointer-events: none;
+  /* YouTube iframe 반응형 처리 */
+  @media (max-width: 768px) {
+    .youtube-background {
+      transform: scale(1.2);
+    }
   }
 }
