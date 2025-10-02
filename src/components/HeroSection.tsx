@@ -12,8 +12,8 @@ export const HeroSection = () => {
       {/* YouTube 배경 비디오 */}
       <div className="absolute inset-0 z-0">
         <iframe
-          className="w-full h-full object-cover"
-          src="https://www.youtube.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1"
+          className="w-full h-full object-cover youtube-background"
+          src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1&start=0&end=999999&vq=hd1080&origin=https://shc-developer.github.io"
           title="대한민국 상이군경회 시설사업소 배경 영상"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -21,12 +21,16 @@ export const HeroSection = () => {
           style={{
             pointerEvents: 'none',
             minWidth: '100%',
-            width: '100vw',
-            height: '56.25vw', // 16:9 비율
-            minHeight: '100vh',
+            width: '120vw', // 약간 확대해서 YouTube 브랜딩 잘라내기
+            height: '67.5vw', // 확대된 비율에 맞춤
+            minHeight: '120vh',
             objectFit: 'cover',
+            transform: 'translate(-10vw, -10vh)', // 중앙 정렬 및 상단 잘라내기
           }}
         />
+        
+        {/* YouTube 브랜딩 숨기기 위한 상단 오버레이 */}
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none"></div>
         
         {/* 비디오 위에 오버레이 - 텍스트 가독성을 위한 어두운 필터 */}
         <div className="absolute inset-0 bg-black/30 z-10"></div>

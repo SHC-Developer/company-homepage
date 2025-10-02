@@ -334,4 +334,23 @@ All colors MUST be HSL.
   .logo-container:hover .logo-glow {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
+  
+  /* YouTube 배경 비디오 스타일 */
+  .youtube-background {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  /* YouTube 브랜딩 요소 숨기기 */
+  .youtube-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: transparent;
+    z-index: 10;
+    pointer-events: none;
+  }
 }
