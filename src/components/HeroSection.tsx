@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
 export const HeroSection = () => {
+  const [videoError, setVideoError] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+
+  useEffect(() => {
+    // 5초 후에도 비디오가 로드되지 않으면 대체 배경 표시
+    const timer = setTimeout(() => {
+      setShowFallback(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const scrollToNext = () => {
     const nextSection = document.getElementById('services');
     nextSection?.scrollIntoView({ behavior: 'smooth' });
@@ -9,22 +21,47 @@ export const HeroSection = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* YouTube 배경 비디오 */}
+      {/* YouTube 배경 비디오 또는 대체 배경 */}
       <div className="youtube-container">
-        <iframe
-          className="youtube-background"
-          src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1"
-          title="대한민국 상이군경회 시설사업소 배경 영상"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          style={{
-            pointerEvents: 'none',
-          }}
-        />
-        
-        {/* YouTube 브랜딩 숨기기 위한 상단 오버레이 */}
-        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none"></div>
+        {!videoError && !showFallback ? (
+          <>
+            <iframe
+              className="youtube-background"
+              src="https://www.youtube.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1&origin=https://shc-developer.github.io"
+              title="대한민국 상이군경회 시설사업소 배경 영상"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              onError={() => setVideoError(true)}
+              style={{
+                pointerEvents: 'none',
+              }}
+            />
+            
+            {/* YouTube 브랜딩 숨기기 위한 상단 오버레이 */}
+            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none"></div>
+          </>
+        ) : (
+          /* 대체 배경 - 그라데이션 + 패턴 */
+          <div 
+            className="w-full h-full bg-gradient-to-br from-primary to-primary-hover"
+            style={{
+              backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))`,
+            }}
+          >
+            {/* 패턴 오버레이 */}
+            <div className="absolute inset-0 opacity-10">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+              </svg>
+            </div>
+          </div>
+        )}
         
         {/* 비디오 위에 오버레이 - 텍스트 가독성을 위한 어두운 필터 */}
         <div className="absolute inset-0 bg-black/30 z-10"></div>
