@@ -9,30 +9,31 @@ export const HeroSection = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* 배경 이미지 - 임시로 비디오 대신 사용 */}
+      {/* YouTube 배경 비디오 */}
       <div className="absolute inset-0 z-0">
-        <div 
-          className="w-full h-full bg-gradient-to-br from-primary to-primary-hover"
+        <iframe
+          className="w-full h-full object-cover"
+          src="https://www.youtube.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1"
+          title="대한민국 상이군경회 시설사업소 배경 영상"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
           style={{
-            backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))`,
+            pointerEvents: 'none',
+            minWidth: '100%',
+            width: '100vw',
+            height: '56.25vw', // 16:9 비율
+            minHeight: '100vh',
+            objectFit: 'cover',
           }}
-        >
-          {/* 패턴 오버레이 */}
-          <div className="absolute inset-0 opacity-10">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
-          </div>
-        </div>
+        />
+        
+        {/* 비디오 위에 오버레이 - 텍스트 가독성을 위한 어두운 필터 */}
+        <div className="absolute inset-0 bg-black/30 z-10"></div>
       </div>
 
       {/* 텍스트 - 좌표로 직접 배치 */}
-      <div className="absolute top-32 left-36 z-10">
+      <div className="absolute top-32 left-36 z-20">
         <div className="hero-text-slide-down">
           <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
             국민들의 안전하고 쾌적한,
@@ -55,7 +56,7 @@ export const HeroSection = () => {
       {/* 스크롤 인디케이터 */}
       <button 
         onClick={scrollToNext}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 hover:text-white transition-colors animate-bounce"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 hover:text-white transition-colors animate-bounce z-20"
         aria-label="다음 섹션으로 스크롤"
       >
         <ChevronDown className="h-8 w-8" />
