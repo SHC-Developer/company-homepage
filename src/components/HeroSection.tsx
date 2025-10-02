@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import heroVideo from '@/assets/dog.mp4';
 
 export const HeroSection = () => {
   const scrollToNext = () => {
@@ -10,33 +9,26 @@ export const HeroSection = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* 배경 비디오 - 무한 반복 재생 */}
+      {/* 배경 이미지 - 임시로 비디오 대신 사용 */}
       <div className="absolute inset-0 z-0">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            console.error('Video failed to load:', e);
-            // 비디오 로드 실패 시 대체 이미지로 교체
-            const video = e.target as HTMLVideoElement;
-            const img = document.createElement('img');
-            img.src = '/placeholder.svg';
-            img.alt = '대한민국 상이군경회 시설사업소';
-            img.className = 'w-full h-full object-cover';
-            video.parentNode?.replaceChild(img, video);
+        <div 
+          className="w-full h-full bg-gradient-to-br from-primary to-primary-hover"
+          style={{
+            backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))`,
           }}
         >
-          <source src={heroVideo} type="video/mp4" />
-          {/* 브라우저가 비디오를 지원하지 않을 경우를 위한 대체 이미지 */}
-          <img 
-            src="/placeholder.svg" 
-            alt="대한민국 상이군경회 시설사업소" 
-            className="w-full h-full object-cover"
-          />
-        </video>
+          {/* 패턴 오버레이 */}
+          <div className="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* 텍스트 - 좌표로 직접 배치 */}
