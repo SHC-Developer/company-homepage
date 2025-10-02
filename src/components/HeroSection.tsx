@@ -10,9 +10,9 @@ export const HeroSection = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* YouTube 배경 비디오 */}
-      <div className="absolute inset-0 z-0">
+      <div className="youtube-container">
         <iframe
-          className="w-full h-full object-cover youtube-background"
+          className="youtube-background"
           src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1"
           title="대한민국 상이군경회 시설사업소 배경 영상"
           frameBorder="0"
@@ -20,9 +20,6 @@ export const HeroSection = () => {
           allowFullScreen
           style={{
             pointerEvents: 'none',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
           }}
         />
         
