@@ -4,15 +4,22 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 export const HeroSection = () => {
   const [videoError, setVideoError] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   useEffect(() => {
-    // 5초 후에도 비디오가 로드되지 않으면 대체 배경 표시
+    // 3초 후에도 비디오가 로드되지 않으면 대체 배경 표시
     const timer = setTimeout(() => {
       setShowFallback(true);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleVideoClick = () => {
+    setUserInteracted(true);
+    setVideoError(false);
+    setShowFallback(false);
+  };
 
   const scrollToNext = () => {
     const nextSection = document.getElementById('services');
@@ -27,7 +34,7 @@ export const HeroSection = () => {
           <>
             <iframe
               className="youtube-background"
-              src="https://www.youtube.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&cc_load_policy=0&playsinline=1&enablejsapi=1&origin=https://shc-developer.github.io"
+              src="https://www.youtube-nocookie.com/embed/Hv2G26LsIaE?autoplay=1&mute=1&loop=1&playlist=Hv2G26LsIaE&controls=0&rel=0&modestbranding=1&playsinline=1&start=0"
               title="대한민국 상이군경회 시설사업소 배경 영상"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -44,7 +51,7 @@ export const HeroSection = () => {
         ) : (
           /* 대체 배경 - 그라데이션 + 패턴 */
           <div 
-            className="w-full h-full bg-gradient-to-br from-primary to-primary-hover"
+            className="w-full h-full bg-gradient-to-br from-primary to-primary-hover relative"
             style={{
               backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))`,
             }}
@@ -60,6 +67,14 @@ export const HeroSection = () => {
                 <rect width="100%" height="100%" fill="url(#grid)" />
               </svg>
             </div>
+            
+            {/* 비디오 재시도 버튼 */}
+            <button
+              onClick={handleVideoClick}
+              className="absolute bottom-20 right-8 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg backdrop-blur-sm transition-all duration-300 text-sm font-korean z-20"
+            >
+              🎬 배경 영상 재생
+            </button>
           </div>
         )}
         
