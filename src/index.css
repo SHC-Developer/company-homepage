@@ -154,17 +154,6 @@ All colors MUST be HSL.
     opacity: 1;
   }
   
-  .nav-slide-right {
-    @apply transform transition-all duration-200 ease-out;
-    transform: translateX(-10px);
-    opacity: 0;
-  }
-  
-  .nav-slide-right.open {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  
   /* Hero section utilities */
   .hero-gradient {
     background: var(--gradient-hero);
@@ -236,6 +225,11 @@ All colors MUST be HSL.
     right: -4px;
     height: 2px;
     background-color: white;
+  }
+  
+  /* 밝은 배경 위에서의 네비게이션 스타일 */
+  .nav-light-theme::after {
+    background-color: #000000; /* 검정색 선 */
   }
   
   /* Legal 페이지용 네비게이션 스타일 */

@@ -49,7 +49,7 @@ const legalText = `수의계약 체결 가능한 법률조항 :
 const LegalBasis = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navigation variant='legal' />
+      <Navigation variant='legal' forceLightTheme={true} />
       
       <main className="pt-20">
         {/* Hero Section */}

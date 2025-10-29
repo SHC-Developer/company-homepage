@@ -53,24 +53,26 @@ export const HeroSection = () => {
         )}
       </div>
 
-      {/* 텍스트 - 좌표로 직접 배치 */}
-      <div className="absolute top-32 left-36 z-20">
-        <div className="hero-text-slide-down">
-          <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
-            국민들의 안전하고 쾌적한,
-          </p>
-        </div>
+      {/* 텍스트 - 네비게이션 바의 최좌측에 맞춰서 배치 */}
+      <div className="absolute top-44 left-0 right-0 z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="hero-text-slide-down">
+            <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
+              국민들의 안전하고 쾌적한,
+            </p>
+          </div>
 
-        <div className="hero-text-slide-down">
-          <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
-            아름다운 생활을 영위하는 나라건설
-          </p>
-        </div>
+          <div className="hero-text-slide-down">
+            <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
+              아름다운 생활을 영위하는 나라건설
+            </p>
+          </div>
 
-        <div className="hero-text-slide-down">
-          <p className="text-sm text-gray-200 font-korean leading-relaxed drop-shadow-lg">
-            사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다.
-          </p>
+          <div className="hero-text-slide-down">
+            <p className="text-sm text-gray-200 font-korean leading-relaxed drop-shadow-lg">
+              사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다.
+            </p>
+          </div>
         </div>
       </div>
 
