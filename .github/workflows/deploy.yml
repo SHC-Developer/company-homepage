@@ -32,7 +32,18 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          echo "Building for production..."
+          npm run build
+          echo "Build completed. Checking dist folder:"
+          find dist -type f
+
+      - name: Verify build output
+        run: |
+          echo "Build output verification:"
+          ls -la dist/
+          echo "Checking index.html:"
+          head -n 35 dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
