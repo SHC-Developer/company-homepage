@@ -13,7 +13,7 @@ export const SitemapSection = () => {
   return (
     <section className="py-16 bg-muted/30 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 className="text-2xl font-bold text-center mb-8 font-korean">협력 기관</h3>
+        <h3 className="text-2xl font-bold text-center mb-8 font-korean">유관 기관</h3>
         
         {/* 자동 슬라이드 컨테이너 */}
         <div className="relative">

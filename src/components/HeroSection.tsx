@@ -1,13 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
 export const HeroSection = () => {
   const [videoError, setVideoError] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [showFirstMessage, setShowFirstMessage] = useState(true);
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+  const [isFirstMessageVisible, setIsFirstMessageVisible] = useState(true);
+  const [isPageReady, setIsPageReady] = useState(false);
+  const [allSentencesComplete, setAllSentencesComplete] = useState(false);
+  const [showSecondMessages, setShowSecondMessages] = useState(true);
+  const [isCurrentSentenceVisible, setIsCurrentSentenceVisible] = useState(true);
+  const [showBottomText, setShowBottomText] = useState(false);
+  const charIndexRef = useRef(0);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  const firstMessage = '당신의 오늘은 안전하셨습니까?';
+  const secondMessages = [
+    '국민들의 안전하고 쾌적한',
+    '아름다운 생활을 영위하는 나라건설',
+    '사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다'
+  ];
 
   const scrollToNext = () => {
     const nextSection = document.getElementById('services');
     nextSection?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // 페이지 로드 후 2초 대기 후 첫 번째 메시지 시작
+  useEffect(() => {
+    const initialDelay = setTimeout(() => {
+      setIsPageReady(true);
+    }, 2000);
+
+    return () => {
+      clearTimeout(initialDelay);
+    };
+  }, []);
+
+  // 첫 번째 메시지 타이핑
+  useEffect(() => {
+    if (!showFirstMessage || !isPageReady) return;
+
+    const typeFirstMessage = () => {
+      if (charIndexRef.current < firstMessage.length) {
+        setDisplayText(firstMessage.slice(0, charIndexRef.current + 1));
+        charIndexRef.current++;
+        timeoutRef.current = setTimeout(typeFirstMessage, 100);
+      } else {
+        // 타이핑 완료 후 2초 대기
+        timeoutRef.current = setTimeout(() => {
+          setIsFirstMessageVisible(false);
+          timeoutRef.current = setTimeout(() => {
+            setShowFirstMessage(false);
+            setDisplayText('');
+            setCurrentSentenceIndex(0);
+            charIndexRef.current = 0;
+          }, 1000);
+        }, 2000);
+      }
+    };
+
+    typeFirstMessage();
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [showFirstMessage, isPageReady]);
+
+  // 두 번째 메시지들 타이핑 (한 문단씩 출력 후 지우기)
+  useEffect(() => {
+    if (showFirstMessage || currentSentenceIndex >= secondMessages.length || currentSentenceIndex < 0) return;
+
+    const typeSecondMessage = () => {
+      const currentSentence = secondMessages[currentSentenceIndex];
+      
+      if (charIndexRef.current < currentSentence.length) {
+        setDisplayText(currentSentence.slice(0, charIndexRef.current + 1));
+        charIndexRef.current++;
+        timeoutRef.current = setTimeout(typeSecondMessage, 100);
+      } else {
+        // 타이핑 완료 후 일정 시간 표시
+        timeoutRef.current = setTimeout(() => {
+          // 마지막 문장이 아니면 페이드아웃 후 다음 문장으로
+          if (currentSentenceIndex < secondMessages.length - 1) {
+            // 페이드아웃
+            setIsCurrentSentenceVisible(false);
+            timeoutRef.current = setTimeout(() => {
+              // 페이드아웃 완료 후 다음 문장으로
+              setDisplayText('');
+              setCurrentSentenceIndex(prev => prev + 1);
+              charIndexRef.current = 0;
+              setIsCurrentSentenceVisible(true);
+            }, 1000);
+          } else {
+            // 마지막 문장은 지우지 않고 유지
+            setAllSentencesComplete(true);
+            // 2초 표시 후 페이드아웃
+            timeoutRef.current = setTimeout(() => {
+              setShowSecondMessages(false);
+              // 페이드아웃 후 하단 텍스트 표시
+              timeoutRef.current = setTimeout(() => {
+                setShowBottomText(true);
+              }, 1000);
+            }, 2000);
+          }
+        }, 1000);
+      }
+    };
+
+    const startDelay = setTimeout(() => {
+      typeSecondMessage();
+    }, 500);
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (startDelay) clearTimeout(startDelay);
+    };
+  }, [showFirstMessage, currentSentenceIndex]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -53,28 +163,45 @@ export const HeroSection = () => {
         )}
       </div>
 
-      {/* 텍스트 - 네비게이션 바의 최좌측에 맞춰서 배치 */}
-      <div className="absolute top-44 left-0 right-0 z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="hero-text-slide-down">
-            <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
-              국민들의 안전하고 쾌적한,
-            </p>
-          </div>
-
-          <div className="hero-text-slide-down">
-            <p className="text-base text-gray-100 font-korean mb-2 leading-relaxed drop-shadow-lg">
-              아름다운 생활을 영위하는 나라건설
-            </p>
-          </div>
-
-          <div className="hero-text-slide-down">
-            <p className="text-sm text-gray-200 font-korean leading-relaxed drop-shadow-lg">
-              사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다.
-            </p>
+      {/* 텍스트 - 완전 정 중앙 배치 */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="relative inline-block">
+            {showFirstMessage ? (
+              <div className={`transition-opacity duration-1000 ${isFirstMessageVisible ? 'opacity-100' : 'opacity-0'}`}>
+                {displayText && (
+                  <p className="text-[32pt] text-white font-korean leading-relaxed drop-shadow-2xl whitespace-nowrap">
+                    {displayText}
+                    <span className="animate-pulse">|</span>
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className={`transition-opacity duration-1000 ${showSecondMessages && isCurrentSentenceVisible ? 'opacity-100' : 'opacity-0'}`}>
+                {displayText && (
+                  <p className={`${currentSentenceIndex === 2 ? 'text-[26pt]' : 'text-[32pt]'} text-white font-korean leading-relaxed drop-shadow-2xl ${currentSentenceIndex === 2 ? 'whitespace-nowrap' : ''}`}>
+                    {displayText}
+                    {!allSentencesComplete && <span className="animate-pulse">|</span>}
+                  </p>
+                )}
+              </div>
+            )}
+            
           </div>
         </div>
       </div>
+
+      {/* 우측 하단 텍스트 */}
+      {showBottomText && (
+        <div className="absolute bottom-8 right-8 z-20 text-right transition-opacity duration-1000 animate-fade-in">
+          <p className="text-[16pt] text-white font-korean drop-shadow-lg">
+            25.10.25 올림픽대교 전경
+          </p>
+          <p className="text-[10pt] text-white/80 font-korean drop-shadow-md mt-2">
+            © 대한민국 상이군경회 시설사업소. All rights reserved.
+          </p>
+        </div>
+      )}
 
       {/* 스크롤 인디케이터 */}
       <button 

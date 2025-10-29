@@ -9,7 +9,7 @@ interface MenuStructure {
 const menuStructure = {
   '회사소개': ['인사말', '경영이념', '회사연혁', '보유면허', '보유기술', '조직구성', '오시는길'],
   '관계법령': ['수의계약근거'],
-  '사업분야': ['진단', '설계', '감리'],
+  '사업분야': ['안전진단', '엔지니어링', '설계/사업관리'],
   '수행실적': ['진단', '설계', '감리'],
   '자료실': ['채용공고', '이력서 양식', '개인기록카드 양식']
 };
@@ -123,13 +123,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0' : '-translate-y-full'} ${
       isOverLightBackground ? 'bg-white shadow-lg' : 'bg-transparent'
     }`} ref={menuRef}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3">
-        <div className={`flex justify-between items-end h-20 pb-3 ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0">
+        <div className={`flex justify-between items-end h-[90px] pb-1 ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
           isOverLightBackground ? 'nav-light-theme' : ''
         }`}>
           {/* 회사명만 표시 */}
           <div className="flex-shrink-0">
-            <Link to="/" className={`text-lg sm:text-xl font-bold font-logo transition-colors duration-300 ${
+            <Link to="/" className={`text-2xl sm:text-3xl font-bold font-logo transition-colors duration-300 ${
               isOverLightBackground 
                 ? 'text-[#1e40af] hover:text-[#1e40af]/80' 
                 : 'text-white hover:text-white/80 drop-shadow-lg'
@@ -148,7 +148,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                 onMouseLeave={handleMenuLeave}
               >
                 <button
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 font-korean ${
+                  className={`px-4 py-2 text-lg font-medium rounded-lg transition-all duration-200 font-korean ${
                     isOverLightBackground 
                       ? `drop-shadow-none ${activeMenu === menu 
                           ? 'bg-gray-200 text-black' 
@@ -177,7 +177,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         <Link
                           key={subMenu}
                           to="/legal-basis"
-                          className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             isOverLightBackground 
                               ? 'text-gray-700 hover:text-black' 
                               : 'text-gray-300 hover:text-white'
@@ -189,7 +189,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         <Link
                           key={subMenu}
                           to="/greeting"
-                          className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             isOverLightBackground 
                               ? 'text-gray-700 hover:text-black' 
                               : 'text-gray-300 hover:text-white'
@@ -201,7 +201,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         <a
                           key={subMenu}
                           href="#"
-                          className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             isOverLightBackground 
                               ? 'text-gray-700 hover:text-black' 
                               : 'text-gray-300 hover:text-white'
@@ -245,7 +245,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                 <div key={menu}>
                   <button
                     onClick={() => toggleMobileMenu(menu)}
-                    className={`w-full text-left px-4 py-2 text-sm font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 ${
+                    className={`w-full text-left px-4 py-2 text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 ${
                       isOverLightBackground 
                         ? 'text-black hover:bg-gray-100' 
                         : 'text-white hover:bg-white/20'
@@ -261,7 +261,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           <Link
                             key={subMenu}
                             to="/legal-basis"
-                            className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               isOverLightBackground 
                                 ? 'text-gray-700 hover:text-black' 
                                 : 'text-gray-300 hover:text-white'
@@ -273,7 +273,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           <Link
                             key={subMenu}
                             to="/greeting"
-                            className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               isOverLightBackground 
                                 ? 'text-gray-700 hover:text-black' 
                                 : 'text-gray-300 hover:text-white'
@@ -285,7 +285,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           <a
                             key={subMenu}
                             href="#"
-                            className={`block px-4 py-2 text-sm hover:underline transition-all duration-200 font-korean ${
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               isOverLightBackground 
                                 ? 'text-gray-700 hover:text-black' 
                                 : 'text-gray-300 hover:text-white'
