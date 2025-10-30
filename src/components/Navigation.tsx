@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface MenuStructure {
   [key: string]: string[];
@@ -29,6 +29,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
   
   const menuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const location = useLocation();
 
   const handleMenuEnter = (menu: string) => {
     if (timeoutRef.current) {
@@ -120,19 +121,36 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
   }, [forceLightTheme]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0' : '-translate-y-full'} ${
-      isOverLightBackground ? 'bg-white shadow-lg' : 'bg-transparent'
+    <nav className={`fixed -top-4 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0' : '-translate-y-full'} ${
+      location.pathname === '/greeting'
+        ? (isOverLightBackground ? 'bg-white' : 'bg-transparent')
+        : isOverLightBackground ? 'bg-white' : 'bg-transparent'
     }`} ref={menuRef}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0">
-        <div className={`flex justify-between items-end h-[90px] pb-1 ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
+      <div className="w-[90%] mx-auto px-4 sm:px-6 lg:px-8 pt-0">
+        <div className={`flex justify-between items-end h-20 sm:h-28 md:h-[120px] pb-1 ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
           isOverLightBackground ? 'nav-light-theme' : ''
         }`}>
-          {/* 회사명만 표시 */}
-          <div className="flex-shrink-0">
-            <Link to="/" className={`text-2xl sm:text-3xl font-bold font-logo transition-colors duration-300 ${
-              isOverLightBackground 
-                ? 'text-[#1e40af] hover:text-[#1e40af]/80' 
-                : 'text-white hover:text-white/80 drop-shadow-lg'
+          {/* 로고와 회사명 */}
+          <div className="flex-shrink-0 flex items-center gap-3 sm:gap-4">
+            <img 
+              src={
+                location.pathname === '/greeting' && isOverLightBackground
+                  ? '/logo3.png'
+                  : isOverLightBackground 
+                    ? '/logo3.png' 
+                    : (location.pathname === '/' || location.pathname === '/greeting' ? '/logo2.png' : '/logo3.png')
+              } 
+              alt="회사 로고" 
+              className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
+            />
+            <Link to="/" className={`text-xl sm:text-3xl md:text-4xl font-medium font-logo transition-colors duration-300 ${
+              location.pathname === '/greeting'
+                ? (isOverLightBackground
+                    ? 'text-[#1e40af] hover:text-[#1e40af]/80'
+                    : 'text-white hover:text-white/80 drop-shadow-lg')
+                : isOverLightBackground 
+                  ? 'text-[#1e40af] hover:text-[#1e40af]/80' 
+                  : 'text-white hover:text-white/80 drop-shadow-lg'
             }`}>
               대한민국 상이군경회 시설사업소
             </Link>
@@ -148,16 +166,26 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                 onMouseLeave={handleMenuLeave}
               >
                 <button
-                  className={`px-4 py-2 text-lg font-medium rounded-lg transition-all duration-200 font-korean ${
-                    isOverLightBackground 
-                      ? `drop-shadow-none ${activeMenu === menu 
-                          ? 'bg-gray-200 text-black' 
-                          : 'text-black hover:text-black/80 hover:bg-gray-100'
-                        }`
-                      : `drop-shadow-md ${activeMenu === menu 
-                          ? 'bg-white/20 text-white' 
-                          : 'text-white hover:text-white/80 hover:bg-white/10'
-                        }`
+                  className={`px-4 py-2 text-xl font-normal rounded-lg transition-all duration-200 font-korean ${
+                    location.pathname === '/greeting'
+                      ? (isOverLightBackground
+                          ? `drop-shadow-none ${activeMenu === menu 
+                              ? 'bg-gray-200 text-black' 
+                              : 'text-black hover:text-black/80 hover:bg-gray-100'
+                            }`
+                          : `drop-shadow-md ${activeMenu === menu 
+                              ? 'bg-white/20 text-white' 
+                              : 'text-white hover:text-white/80 hover:bg-white/10'
+                            }`)
+                      : isOverLightBackground 
+                        ? `drop-shadow-none ${activeMenu === menu 
+                            ? 'bg-gray-200 text-black' 
+                            : 'text-black hover:text-black/80 hover:bg-gray-100'
+                          }`
+                        : `drop-shadow-md ${activeMenu === menu 
+                            ? 'bg-white/20 text-white' 
+                            : 'text-white hover:text-white/80 hover:bg-white/10'
+                          }`
                   }`}
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
@@ -168,9 +196,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                 {/* 드롭다운 메뉴 - 흰색 라인 아래로 위치 */}
                 {activeMenu === menu && menuStructure[menu].length > 0 && (
                   <div className={`absolute top-full left-0 mt-3 w-48 rounded-lg shadow-lg nav-slide-down open ${
-                    isOverLightBackground 
-                      ? 'bg-white border border-gray-200' 
-                      : 'bg-slate-800 border border-slate-700'
+                    location.pathname === '/greeting'
+                      ? (isOverLightBackground
+                          ? 'bg-white border border-gray-200'
+                          : 'bg-slate-800 border border-slate-700')
+                      : isOverLightBackground 
+                        ? 'bg-white border border-gray-200' 
+                        : 'bg-slate-800 border border-slate-700'
                   }`}>
                     {menuStructure[menu].map((subMenu) => (
                       subMenu === '수의계약근거' ? (
@@ -178,9 +210,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           key={subMenu}
                           to="/legal-basis"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            isOverLightBackground 
-                              ? 'text-gray-700 hover:text-black' 
-                              : 'text-gray-300 hover:text-white'
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
                           }`}
                         >
                           {subMenu}
@@ -190,9 +226,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           key={subMenu}
                           to="/greeting"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            isOverLightBackground 
-                              ? 'text-gray-700 hover:text-black' 
-                              : 'text-gray-300 hover:text-white'
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
                           }`}
                         >
                           {subMenu}
@@ -202,9 +242,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           key={subMenu}
                           href="#"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            isOverLightBackground 
-                              ? 'text-gray-700 hover:text-black' 
-                              : 'text-gray-300 hover:text-white'
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
                           }`}
                         >
                           {subMenu}
@@ -236,9 +280,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
           <div className={`lg:hidden backdrop-blur-sm border-t ${
-            isOverLightBackground 
-              ? 'bg-white/95 border-gray-200' 
-              : 'bg-black/80 border-white'
+            location.pathname === '/greeting'
+              ? (isOverLightBackground
+                  ? 'bg-white/95 border-gray-200'
+                  : 'bg-black/80 border-white')
+              : isOverLightBackground 
+                ? 'bg-white/95 border-gray-200' 
+                : 'bg-black/80 border-white'
           }`}>
             <div className="px-4 py-4 space-y-2">
               {Object.keys(menuStructure).map((menu) => (
@@ -246,9 +294,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                   <button
                     onClick={() => toggleMobileMenu(menu)}
                     className={`w-full text-left px-4 py-2 text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 ${
-                      isOverLightBackground 
-                        ? 'text-black hover:bg-gray-100' 
-                        : 'text-white hover:bg-white/20'
+                      location.pathname === '/greeting'
+                        ? (isOverLightBackground
+                            ? 'text-black hover:bg-gray-100'
+                            : 'text-white hover:bg-white/20')
+                        : isOverLightBackground 
+                          ? 'text-black hover:bg-gray-100' 
+                          : 'text-white hover:bg-white/20'
                     }`}
                   >
                     {menu}
@@ -262,9 +314,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             key={subMenu}
                             to="/legal-basis"
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                              isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
                             }`}
                           >
                             {subMenu}
@@ -274,9 +330,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             key={subMenu}
                             to="/greeting"
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                              isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
                             }`}
                           >
                             {subMenu}
@@ -286,9 +346,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             key={subMenu}
                             href="#"
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                              isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
                             }`}
                           >
                             {subMenu}

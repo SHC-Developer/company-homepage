@@ -29,20 +29,49 @@
     <link rel="apple-touch-icon" href="/company-homepage/logo.ico" />
     
     <script>
-      // GitHub Pages SPA redirect
-      var path = location.pathname;
-      var segments = path.split('/').filter(Boolean);
+      // GitHub Pages SPA redirect - 404.html을 index.html로 리다이렉트
+      sessionStorage.redirect = location.href;
       var basePath = '/company-homepage';
+      var path = location.pathname;
       
-      // If path doesn't start with basePath, redirect
-      if (!path.startsWith(basePath)) {
-        window.location.replace(basePath + path);
+      if (path === '/404.html' || path.includes('/404')) {
+        location.replace(basePath + '/');
+      } else {
+        location.replace(basePath + path);
       }
     </script>
   </head>
 
   <body>
     <div id="root"></div>
-    <script type="module" src="/company-homepage/assets/index.js"></script>
+    <script type="module">
+      // Build된 assets를 동적으로 로드
+      const scripts = document.querySelectorAll('script[type="module"]');
+      const basePath = '/company-homepage';
+      fetch(basePath + '/index.html')
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const scriptTag = doc.querySelector('script[type="module"][crossorigin]');
+          const linkTag = doc.querySelector('link[rel="stylesheet"][crossorigin]');
+          
+          if (scriptTag) {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.crossOrigin = 'anonymous';
+            script.src = scriptTag.src;
+            document.head.appendChild(script);
+          }
+          
+          if (linkTag) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.crossOrigin = 'anonymous';
+            link.href = linkTag.href;
+            document.head.appendChild(link);
+          }
+        });
+    </script>
   </body>
 </html>
