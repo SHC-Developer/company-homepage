@@ -205,7 +205,7 @@ export const GreetingSection = () => {
             >
               <div className="aspect-[4/3] bg-gradient-to-br from-green-400 to-blue-500 rounded-lg overflow-hidden shadow-lg">
                 <img 
-                  src="/profile.jpg" 
+                  src={`${import.meta.env.BASE_URL}profile.jpg`}
                   alt="시설사업소 소장님 사진" 
                   className="w-full h-full object-cover"
                 />

@@ -135,10 +135,10 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
             <img 
               src={
                 location.pathname === '/greeting' && isOverLightBackground
-                  ? '/logo3.png'
+                  ? `${import.meta.env.BASE_URL}logo3.png`
                   : isOverLightBackground 
-                    ? '/logo3.png' 
-                    : (location.pathname === '/' || location.pathname === '/greeting' ? '/logo2.png' : '/logo3.png')
+                    ? `${import.meta.env.BASE_URL}logo3.png` 
+                    : (location.pathname === '/' || location.pathname === '/greeting' ? `${import.meta.env.BASE_URL}logo2.png` : `${import.meta.env.BASE_URL}logo3.png`)
               } 
               alt="회사 로고" 
               className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
