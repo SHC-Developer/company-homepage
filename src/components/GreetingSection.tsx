@@ -4,7 +4,7 @@ import { HandHeart, Target, Award, TrendingUp, Globe } from 'lucide-react';
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
   const [showBottomText, setShowBottomText] = useState(true);
-  const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false]);
+  const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false, false]);
   const [visibleTitle, setVisibleTitle] = useState(false);
   const [visibleImage, setVisibleImage] = useState(false);
   const [visibleCEOMessage, setVisibleCEOMessage] = useState(false);
@@ -42,7 +42,7 @@ export const GreetingSection = () => {
         },
         {
           threshold: 0.3, // 요소의 30%가 보일 때 트리거
-          rootMargin: '0px 0px -250px 0px' // 아래에서 33px 위에서 시작 (기존 100px에서 1/3 축소)
+          rootMargin: '0px 0px -100px 0px' // 아래에서 100px 위치에서 시작
         }
       );
       
@@ -349,100 +349,6 @@ export const GreetingSection = () => {
         )}
       </section>
 
-      {/* 인사말 콘텐츠 섹션 */}
-      <div className="min-h-screen bg-white pt-10" id="ceo-message">
-        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {/* 상단 섹션 */}
-          <div className="mb-12">
-            <div 
-              ref={ceoMessageRef}
-              className={`text-sm font-medium text-[#1e40af] mb-3 tracking-wider transition-all duration-1000 ${visibleCEOMessage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              CEO'S MESSAGE
-            </div>
-            
-            <div className="mb-4">
-              <div 
-                ref={titleRef}
-                className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-              >
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
-                  大韓民國 傷痍軍警會
-                </h1>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight">
-                  Engineering Safety. Inspiring Innovation.
-                </h1>
-              </div>
-            </div>
-            
-            <div 
-              ref={subtitleRef}
-              className={`space-y-2 text- sm:text-base text-[#000000] font-medium transition-all duration-1000 ${visibleSubtitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              <p>기술혁신의 창의를 바탕으로, 보다 안전하고 편의로운 국가를 완성하다.</p>
-            </div>
-          </div>
-
-          {/* 하단 섹션 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* 이미지 영역 */}
-            <div 
-              ref={imageRef}
-              className={`relative transition-all duration-1000 ${visibleImage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              <div className="aspect-[4/3] bg-gradient-to-br from-green-400 to-blue-500 rounded-lg overflow-hidden shadow-lg max-w-xl">
-                <img 
-                  src={`${import.meta.env.BASE_URL}profile.jpg`}
-                  alt="시설사업소 소장님 사진" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* 텍스트 영역 */}
-            <div className="space-y-4">
-              <div className="max-w-none">
-                <div 
-                  ref={el => paragraphRefs.current[0] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                >
-                  <p className="leading-relaxed text-base sm:text-lg" style={{ color: '#27292B', marginBottom: '2.0rem' }}>
-                  본 시설사업소는 『국가유공자단체설립에관한법률』『건설산업기본법』『건설기술진흥법』『시설물의 안전 및 유지관리에 관한 특별법』에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
-                  </p>
-                </div>
-                
-                <div 
-                  ref={el => paragraphRefs.current[1] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                >
-                  <p className="leading-relaxed text-base sm:text-lg" style={{ color: '#27292B', marginBottom: '2.0rem' }}>
-                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. 토목 및 건축시설물의 설계용역 및 정밀안전진단용역, 그리고 각종 감리용역분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
-                  </p>
-                </div>
-                
-                <div 
-                  ref={el => paragraphRefs.current[2] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                >
-                  <p className="leading-relaxed text-base sm:text-lg" style={{ color: '#27292B', marginBottom: '2.0rem' }}>
-                  지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 대한민국상이군경회 시설사업소에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
-                  </p>
-                </div>
-                
-                <div 
-                  ref={el => paragraphRefs.current[3] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                >
-                  <p className="leading-relaxed text-base sm:text-lg font-semibold" style={{ color: '#27292B' }}>
-                    대한민국 상이군경회 시설사업소장
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* 경영이념 콘텐츠 섹션 */}
       <div className="min-h-screen pt-10" id="management-philosophy" style={{ backgroundColor: '#F8F8FF' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -476,27 +382,12 @@ export const GreetingSection = () => {
             className={`mb-20 transition-all duration-1000 ${visiblePhilosophyContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 본회소개 카드 */}
-              <div 
-                ref={el => philosophyCardRefs.current[0] = el}
-                className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-[#1e40af] transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              >
-                <h3 className="text-2xl font-bold text-[#1e40af] mb-4 flex items-center">
-                  <span className="w-10 h-10 bg-[#1e40af]/10 rounded-full flex items-center justify-center mr-3 text-[#1e40af] font-bold">1</span>
-                  본회소개
-                </h3>
-                <p className="leading-relaxed text-gray-700 text-base">
-                  대한민국상이군경회는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 공명정대하고 투명한 조직운영과 회원 상호간의 상부상조 및 유대관계를 기본으로 하고 있으며, 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
-                </p>
-              </div>
-
               {/* 국가 보훈의 이념 카드 */}
               <div 
                 ref={el => philosophyCardRefs.current[1] = el}
                 className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-blue-500 transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               >
-                <h3 className="text-2xl font-bold text-blue-600 mb-4 flex items-center">
-                  <span className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center mr-3 text-blue-600 font-bold">2</span>
+                <h3 className="text-2xl font-bold text-blue-600 mb-4">
                   국가 보훈의 이념
                 </h3>
                 <p className="leading-relaxed text-gray-700 text-base">
@@ -509,26 +400,11 @@ export const GreetingSection = () => {
                 ref={el => philosophyCardRefs.current[2] = el}
                 className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-indigo-500 transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               >
-                <h3 className="text-2xl font-bold text-indigo-600 mb-4 flex items-center">
-                  <span className="w-10 h-10 bg-indigo-500/10 rounded-full flex items-center justify-center mr-3 text-indigo-600 font-bold">3</span>
+                <h3 className="text-2xl font-bold text-indigo-600 mb-4">
                   단체설립근거
                 </h3>
                 <p className="leading-relaxed text-gray-700 text-base">
                   대한민국상이군경회의 단체설립 근거는 『국가유공자 등 단체설립에 관한법률』에 있으며 법 제1조(목적) : 『이 법은 대한민국상이군경회·대한민국전몰군경유족회·대한민국전몰군경미망인회·광복회·4.19민주혁명회·4.19혁명희생자유족회·4.19혁명공로자회·재일학도의용군동지회 및 대한민국무공수훈자회를 설립함으로써 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 한다』고 되어 있음
-                </p>
-              </div>
-
-              {/* 시설사업소 설립 목적 카드 */}
-              <div 
-                ref={el => philosophyCardRefs.current[3] = el}
-                className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-cyan-500 transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              >
-                <h3 className="text-2xl font-bold text-cyan-600 mb-4 flex items-center">
-                  <span className="w-10 h-10 bg-cyan-500/10 rounded-full flex items-center justify-center mr-3 text-cyan-600 font-bold">4</span>
-                  시설사업소 설립 목적
-                </h3>
-                <p className="leading-relaxed text-gray-700 text-base">
-                  『국가유공자단체설립에관한법률』과 대한민국상이군경회 정관에 의거한 수익사업 중 『건설산업기본법』, 『건설기술진흥법』 및 『시설물의 안전 및 유지관리에 관한 특별법』에 근거한 건설 분야의 기술용역사업수행을 통해 상이군경회원들의 복지활동을 추구하며 국민의 생활안전과 보호를 도모하고 국가발전에 기여함
                 </p>
               </div>
             </div>
@@ -629,8 +505,121 @@ export const GreetingSection = () => {
         </div>
       </div>
 
+      {/* 인사말 콘텐츠 섹션 */}
+      <div className="min-h-screen bg-white pt-10" id="ceo-message">
+        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* 상단 섹션 */}
+          <div className="mb-12">
+            <div 
+              ref={ceoMessageRef}
+              className={`text-sm font-medium text-[#1e40af] mb-3 tracking-wider transition-all duration-1000 ${visibleCEOMessage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+            >
+              CEO'S MESSAGE
+            </div>
+            
+            <div className="mb-4">
+              <div 
+                ref={titleRef}
+                className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+              >
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
+                  大韓民國 傷痍軍警會
+                </h1>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight">
+                  Engineering Safety. Inspiring Innovation.
+                </h1>
+              </div>
+            </div>
+            
+            <div 
+              ref={subtitleRef}
+              className={`space-y-2 text- sm:text-base text-[#000000] font-medium transition-all duration-1000 ${visibleSubtitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+            >
+              <p>기술혁신의 창의를 바탕으로, 보다 안전하고 편의로운 국가를 완성하다.</p>
+            </div>
+          </div>
+
+          {/* 하단 섹션 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
+            {/* 이미지 영역 */}
+            <div 
+              ref={imageRef}
+              className={`relative transition-all duration-1000 ${visibleImage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+            >
+              <div className="aspect-[4/3] bg-gradient-to-br from-green-400 to-blue-500 rounded-lg overflow-hidden shadow-lg max-w-xl">
+                <img 
+                  src={`${import.meta.env.BASE_URL}profile.jpg`}
+                  alt="시설사업소 소장님 사진" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* 텍스트 영역 */}
+            <div className="space-y-4" style={{ marginLeft: '-8rem' }}>
+              <div className="max-w-none">
+                <div 
+                  ref={el => paragraphRefs.current[0] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  <b>대한민국상이군경회</b>는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 공명정대하고 투명한 조직운영과 회원 상호간의 상부상조 및 유대관계를 기본으로 하고 있으며, 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
+
+                  </p>
+                </div>
+                
+                <div 
+                  ref={el => paragraphRefs.current[1] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  이러한 근간의 정신을 바탕으로 저희 <b>대한민국상이군경회</b>에서는 <b>『 국가유공자등단체설립에관한법률 』</b> 제7조의 2 및 <b>『 국가유공자단체의수익사업에관한규칙 』</b> 제5조의 규정에 의하여 국가보훈처장의 승인을 받아 시행하던 수익사업 중 시설물유지관리 및 토목 건축설계 등에 대하여 집중적으로 기술용역사업을 확대 시행하게 되었습니다.
+                  </p>
+                </div>
+                
+                <div 
+                  ref={el => paragraphRefs.current[2] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '14pt' }}>본 시설사업소</span>는 <b>『엔지니어링산업진흥법』</b> <b>『건설산업기본법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
+                  </p>
+                </div>
+
+                <div 
+                  ref={el => paragraphRefs.current[3] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <span style={{ color: '#3B2FFF' }}>설계용역</span> 및 <span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span>, 그리고 각종 감리용역분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
+                  </p>
+                </div>
+
+                <div 
+                  ref={el => paragraphRefs.current[4] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회 시설사업소</b>에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
+                  </p>
+                </div>
+                
+                <div 
+                  ref={el => paragraphRefs.current[5] = el}
+                  className={`transition-all duration-1000 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                >
+                  <p className="leading-relaxed text-base sm:text-lg font-semibold" style={{ color: '#27292B' }}>
+                    대한민국 상이군경회 시설사업소장
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 회사연혁 콘텐츠 섹션 */}
-      <div className="min-h-screen bg-white pt-10" id="company-history">
+      <div className="min-h-screen bg-white pt-48" id="company-history">
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 제목 섹션 */}
           <div className="mb-16">

@@ -7,7 +7,7 @@ interface MenuStructure {
 }
 
 const menuStructure = {
-  '회사소개': ['인사말', '경영이념', '회사연혁', '보유면허', '보유기술', '조직구성', '오시는길'],
+  '회사소개': ['인사말', '회사연혁', '보유면허', '보유기술', '조직구성', '오시는길'],
   '관계법령': ['수의계약근거'],
   '사업분야': ['안전진단', '엔지니어링', '설계/사업관리'],
   '수행실적': ['진단', '설계', '감리'],
@@ -92,6 +92,30 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
       navigate('/greeting#company-history');
       setTimeout(() => {
         const element = document.getElementById('company-history');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleCompanyIntroClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      // 이미 greeting 페이지에 있으면 스크롤만
+      const element = document.getElementById('management-philosophy');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL에 해시 추가
+        window.history.pushState(null, '', '#management-philosophy');
+      }
+    } else {
+      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
+      navigate('/greeting#management-philosophy');
+      setTimeout(() => {
+        const element = document.getElementById('management-philosophy');
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -192,7 +216,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
               alt="회사 로고" 
               className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
             />
-            <Link to="/" className={`text-xl sm:text-3xl md:text-4xl font-medium font-logo transition-colors duration-300 ${
+            <Link to="/" onClick={() => window.scrollTo(0, 0)} className={`text-xl sm:text-3xl md:text-4xl font-medium font-logo transition-colors duration-300 ${
               location.pathname === '/greeting'
                 ? (isOverLightBackground
                     ? 'text-[#1e40af] hover:text-[#1e40af]/80'
@@ -236,6 +260,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             : 'text-white hover:text-white/80 hover:bg-white/10'
                           }`
                   }`}
+                  onClick={menu === '회사소개' ? handleCompanyIntroClick : undefined}
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
                 >
@@ -286,23 +311,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         >
                           {subMenu}
                         </Link>
-                      ) : subMenu === '경영이념' ? (
-                        <a
-                          key={subMenu}
-                          href="/greeting#management-philosophy"
-                          onClick={handlePhilosophyClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
                       ) : subMenu === '회사연혁' ? (
                         <a
                           key={subMenu}
@@ -424,23 +432,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           >
                             {subMenu}
                           </Link>
-                        ) : subMenu === '경영이념' ? (
-                          <a
-                            key={subMenu}
-                            href="/greeting#management-philosophy"
-                            onClick={handlePhilosophyClick}
-                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
-                            }`}
-                          >
-                            {subMenu}
-                          </a>
                         ) : subMenu === '회사연혁' ? (
                           <a
                             key={subMenu}
