@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface MenuStructure {
   [key: string]: string[];
@@ -30,6 +30,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
   const menuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleMenuEnter = (menu: string) => {
     if (timeoutRef.current) {
@@ -50,6 +51,54 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
         ? prev.filter(m => m !== menu)
         : [...prev, menu]
     );
+  };
+
+  const handlePhilosophyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      // 이미 greeting 페이지에 있으면 스크롤만
+      const element = document.getElementById('management-philosophy');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL에 해시 추가
+        window.history.pushState(null, '', '#management-philosophy');
+      }
+    } else {
+      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
+      navigate('/greeting#management-philosophy');
+      setTimeout(() => {
+        const element = document.getElementById('management-philosophy');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleHistoryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      // 이미 greeting 페이지에 있으면 스크롤만
+      const element = document.getElementById('company-history');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL에 해시 추가
+        window.history.pushState(null, '', '#company-history');
+      }
+    } else {
+      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
+      navigate('/greeting#company-history');
+      setTimeout(() => {
+        const element = document.getElementById('company-history');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
   };
 
   // 클릭 외부 감지
@@ -126,7 +175,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
         ? (isOverLightBackground ? 'bg-white' : 'bg-transparent')
         : isOverLightBackground ? 'bg-white' : 'bg-transparent'
     }`} ref={menuRef}>
-      <div className="w-[90%] mx-auto px-4 sm:px-6 lg:px-8 pt-0">
+      <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 pt-0">
         <div className={`flex justify-between items-end h-20 sm:h-28 md:h-[120px] pb-1 ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
           isOverLightBackground ? 'nav-light-theme' : ''
         }`}>
@@ -237,6 +286,40 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         >
                           {subMenu}
                         </Link>
+                      ) : subMenu === '경영이념' ? (
+                        <a
+                          key={subMenu}
+                          href="/greeting#management-philosophy"
+                          onClick={handlePhilosophyClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
+                      ) : subMenu === '회사연혁' ? (
+                        <a
+                          key={subMenu}
+                          href="/greeting#company-history"
+                          onClick={handleHistoryClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
                       ) : (
                         <a
                           key={subMenu}
@@ -341,6 +424,40 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           >
                             {subMenu}
                           </Link>
+                        ) : subMenu === '경영이념' ? (
+                          <a
+                            key={subMenu}
+                            href="/greeting#management-philosophy"
+                            onClick={handlePhilosophyClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '회사연혁' ? (
+                          <a
+                            key={subMenu}
+                            href="/greeting#company-history"
+                            onClick={handleHistoryClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
                         ) : (
                           <a
                             key={subMenu}
