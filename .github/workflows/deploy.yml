@@ -46,6 +46,14 @@ jobs:
             echo "✓ Created .nojekyll in dist"
           fi
           ls -la dist/.nojekyll || (echo "ERROR: .nojekyll not found!" && exit 1)
+          
+      - name: Verify JavaScript files
+        run: |
+          echo "Checking JavaScript files in dist:"
+          find dist -name "*.js" -type f | head -5
+          echo ""
+          echo "Checking if assets directory exists:"
+          ls -la dist/assets/ || echo "WARNING: assets directory not found"
 
       - name: Verify dist contents
         run: |
@@ -54,6 +62,17 @@ jobs:
           echo ""
           echo "Checking for .nojekyll:"
           test -f dist/.nojekyll && echo "✓ .nojekyll exists" || (echo "✗ .nojekyll missing!" && exit 1)
+          echo ""
+          echo "Verifying JavaScript file exists:"
+          JS_FILE=$(find dist/assets -name "*.js" -type f | head -1)
+          if [ -z "$JS_FILE" ]; then
+            echo "✗ ERROR: No JavaScript file found in dist/assets/"
+            exit 1
+          else
+            echo "✓ Found: $JS_FILE"
+            echo "File size: $(stat -f%z "$JS_FILE" 2>/dev/null || stat -c%s "$JS_FILE" 2>/dev/null) bytes"
+            echo "File type: $(file "$JS_FILE" 2>/dev/null || echo 'unknown')"
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
