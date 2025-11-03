@@ -48,7 +48,9 @@ export const GreetingSection = () => {
       applicationNo: '2023-0185643',
       name: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템',
       registrationDate: '2024.04.01.',
-      registrationNo: '10-2654625'
+      registrationNo: '10-2654625',
+      performance2024: '안전진단 1건',
+      performance2025: '정밀안전점검 1건(예정)'
     },
     {
       division: '2',
@@ -56,7 +58,9 @@ export const GreetingSection = () => {
       applicationNo: '2023-0185661',
       name: '교량의 3차원 거동 측정 방법',
       registrationDate: '2024.04.01.',
-      registrationNo: '10-2654629'
+      registrationNo: '10-2654629',
+      performance2024: '-',
+      performance2025: '-'
     },
     {
       division: '3',
@@ -64,7 +68,9 @@ export const GreetingSection = () => {
       applicationNo: '2023-0185678',
       name: '교량의 3차원 거동 측정 시스템',
       registrationDate: '2024.04.01.',
-      registrationNo: '10-2654632'
+      registrationNo: '10-2654632',
+      performance2024: '-',
+      performance2025: '-'
     }
   ];
 
@@ -968,12 +974,17 @@ export const GreetingSection = () => {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-yellow-50 border-y-2 border-gray-400">
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900 w-12">구분</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">출원일자</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">출원번호</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">특허명칭</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">등록일자</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">등록번호</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900 w-12" rowSpan={2}>구분</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>출원일자</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>출원번호</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>특허명칭</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>등록일자</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>등록번호</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" colSpan={2}>활용실적</th>
+                </tr>
+                <tr className="bg-yellow-50 border-b-2 border-gray-400">
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">2024년도</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">2025년도</th>
                 </tr>
               </thead>
               <tbody>
@@ -985,6 +996,8 @@ export const GreetingSection = () => {
                     <td className="border border-gray-400 px-4 py-3 text-left text-sm font-korean text-gray-900">{patent.name}</td>
                     <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationDate}</td>
                     <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationNo}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.performance2024}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.performance2025}</td>
                   </tr>
                 ))}
               </tbody>

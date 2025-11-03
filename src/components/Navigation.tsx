@@ -9,8 +9,7 @@ interface MenuStructure {
 const menuStructure = {
   '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성', '오시는길'],
   '관계법령': ['수의계약근거'],
-  '사업분야': ['안전진단', '엔지니어링', '설계/사업관리'],
-  '수행실적': ['진단', '설계', '감리'],
+  '분야별 수행실적': ['안전진단', '엔지니어링', '설계/사업관리'],
   '자료실': ['채용공고', '이력서 양식', '개인기록카드 양식']
 };
 
@@ -173,6 +172,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
     setIsMobileMenuOpen(false);
   };
 
+  const handlePortfolioClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/portfolio');
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
   // 클릭 외부 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -308,7 +314,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             : 'text-white hover:text-white/80 hover:bg-white/10'
                           }`
                   }`}
-                  onClick={menu === '회사소개' ? handleCompanyIntroClick : undefined}
+                  onClick={menu === '회사소개' ? handleCompanyIntroClick : menu === '분야별 수행실적' ? handlePortfolioClick : undefined}
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
                 >
@@ -411,9 +417,9 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           {subMenu}
                         </a>
                       ) : (
-                        <a
+                        <Link
                           key={subMenu}
-                          href="#"
+                          to="/portfolio"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             location.pathname === '/greeting'
                               ? (isOverLightBackground
@@ -425,7 +431,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           }`}
                         >
                           {subMenu}
-                        </a>
+                        </Link>
                       )
                     ))}
                   </div>
@@ -465,7 +471,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
               {Object.keys(menuStructure).map((menu) => (
                 <div key={menu}>
                   <button
-                    onClick={() => toggleMobileMenu(menu)}
+                    onClick={() => {
+                      if (menu === '분야별 수행실적') {
+                        handlePortfolioClick({} as React.MouseEvent);
+                      } else {
+                        toggleMobileMenu(menu);
+                      }
+                    }}
                     className={`w-full text-left px-4 py-2 text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 ${
                       location.pathname === '/greeting'
                         ? (isOverLightBackground
@@ -566,9 +578,9 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             {subMenu}
                           </a>
                         ) : (
-                          <a
+                          <Link
                             key={subMenu}
-                            href="#"
+                            to="/portfolio"
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground
@@ -580,7 +592,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             }`}
                           >
                             {subMenu}
-                          </a>
+                          </Link>
                         )
                       ))}
                     </div>
