@@ -15,6 +15,7 @@ export const GreetingSection = () => {
   const [visibleCoreValues, setVisibleCoreValues] = useState<boolean[]>([false, false, false, false, false]);
   const [visibleHistoryTitle, setVisibleHistoryTitle] = useState(false);
   const [visibleHistoryItems, setVisibleHistoryItems] = useState<boolean[]>([false, false, false, false, false, false, false, false, false, false, false, false, false]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -27,6 +28,52 @@ export const GreetingSection = () => {
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [focusedHistoryIndex, setFocusedHistoryIndex] = useState<number | null>(null);
+
+  // 인증서 목록 (특허증 제외)
+  const certifications = [
+    { name: '건설기술용역업등록증', path: 'certification/건설기술용역업등록증.jpg' },
+    { name: '사업자등록증', path: 'certification/사업자등록증.jpg' },
+    { name: '수익사업승인서', path: 'certification/수익사업승인서.jpg' },
+    { name: '안전진단전문기관등록증', path: 'certification/안전진단전문기관등록증.jpg' },
+    { name: '엔지니어링사업자신고증_1', path: 'certification/엔지니어링사업자신고증_1.jpg' },
+    { name: '엔지니어링사업자신고증_2', path: 'certification/엔지니어링사업자신고증_2.jpg' },
+    { name: '중소기업확인서', path: 'certification/중소기업확인서.jpg' },
+  ];
+
+  // 보유기술 (특허) 목록
+  const patents = [
+    {
+      division: '1',
+      applicationDate: '2023.12.19.',
+      applicationNo: '2023-0185643',
+      name: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템',
+      registrationDate: '2024.04.01.',
+      registrationNo: '10-2654625'
+    },
+    {
+      division: '2',
+      applicationDate: '2023.12.19.',
+      applicationNo: '2023-0185661',
+      name: '교량의 3차원 거동 측정 방법',
+      registrationDate: '2024.04.01.',
+      registrationNo: '10-2654629'
+    },
+    {
+      division: '3',
+      applicationDate: '2023.12.19.',
+      applicationNo: '2023-0185678',
+      name: '교량의 3차원 거동 측정 시스템',
+      registrationDate: '2024.04.01.',
+      registrationNo: '10-2654632'
+    }
+  ];
+
+  // 특허증 이미지 목록
+  const patentImages = [
+    { name: '특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템', path: 'certification/특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템.jpg' },
+    { name: '특허증_제10-2654629호_교량의 3차원 거동 측정 방법', path: 'certification/특허증_제10-2654629호_교량의 3차원 거동 측정 방법.jpg' },
+    { name: '특허증_제10-2654632호_교량의 3차원 거동 측정 시스템', path: 'certification/특허증_제10-2654632호_교량의 3차원 거동 측정 시스템_.jpg' },
+  ];
 
   useEffect(() => {
     const observers = paragraphRefs.current.map((ref, index) => {
@@ -506,7 +553,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 인사말 콘텐츠 섹션 */}
-      <div className="min-h-screen bg-white pt-10" id="ceo-message">
+      <div className="min-h-screen pt-10" id="ceo-message" style={{ backgroundColor: '#FFFEFC' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-12">
@@ -591,7 +638,7 @@ export const GreetingSection = () => {
                   className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
-                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <span style={{ color: '#3B2FFF' }}>설계용역</span> 및 <span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span>, 그리고 각종 감리용역분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
+                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <span style={{ color: '#3B2FFF' }}>설계용역</span> 및 <span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span>, 그리고 각종 <span style={{ color: '#3B2FFF' }}>감리용역</span>분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
                   </p>
                 </div>
 
@@ -600,7 +647,7 @@ export const GreetingSection = () => {
                   className={`transition-all duration-1000 ${visibleParagraphs[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
-                  지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회 시설사업소</b>에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
+                  지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회시설사업소</b>에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
                   </p>
                 </div>
                 
@@ -609,7 +656,7 @@ export const GreetingSection = () => {
                   className={`transition-all duration-1000 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="leading-relaxed text-base sm:text-lg font-semibold" style={{ color: '#27292B' }}>
-                    대한민국 상이군경회 시설사업소장
+                    대한민국상이군경회시설사업소장
                   </p>
                 </div>
               </div>
@@ -619,7 +666,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 회사연혁 콘텐츠 섹션 */}
-      <div className="min-h-screen bg-white pt-48" id="company-history">
+      <div className="min-h-screen pt-48" id="company-history" style={{ backgroundColor: '#F0F4F8' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 제목 섹션 */}
           <div className="mb-16">
@@ -715,7 +762,7 @@ export const GreetingSection = () => {
                         </div>
                         <div className="w-1/2 pl-16">
                           <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2002년</h3>
-                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회 시설관리사업소 설립 / 소장 김양명</p>
+                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회 시설관리사업`소 설립 / 소장 김양명</p>
                         </div>
                       </div>
                     </div>
@@ -842,6 +889,253 @@ export const GreetingSection = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 보유면허 및 기술 콘텐츠 섹션 */}
+      <div className="pt-20 pb-16" id="license" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* 제목 */}
+          <div className="mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent py-4 border-l-4 border-blue-600 pl-6">국가승인서 및 등록증</h2>
+          </div>
+
+          {/* 인증서 갤러리 - 4+3 그리드 */}
+          <div className="space-y-8">
+            {/* 첫 번째 줄 - 4개 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {certifications.slice(0, 4).map((cert, index) => (
+                <div key={index} className="flex flex-col items-center cursor-pointer group">
+                  <div 
+                    className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}${cert.path}`}
+                      alt={cert.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                        <p className="text-sm font-semibold">이미지 확대</p>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{cert.name}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* 두 번째 줄 - 3개 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {certifications.slice(4, 7).map((cert, index) => (
+                <div key={index + 4} className="flex flex-col items-center cursor-pointer group">
+                  <div 
+                    className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}${cert.path}`}
+                      alt={cert.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                        <p className="text-sm font-semibold">이미지 확대</p>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{cert.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 보유기술 (특허) 콘텐츠 섹션 */}
+      <div className="pt-20 pb-16" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* 제목 */}
+          <div className="mb-12">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent py-4 border-l-4 border-blue-600 pl-6">보유기술</h2>
+          </div>
+
+          {/* 특허 테이블 */}
+          <div className="mb-16 overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-yellow-50 border-y-2 border-gray-400">
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900 w-12">구분</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">출원일자</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">출원번호</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">특허명칭</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">등록일자</th>
+                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">등록번호</th>
+                </tr>
+              </thead>
+              <tbody>
+                {patents.map((patent, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.division}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.applicationDate}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.applicationNo}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-left text-sm font-korean text-gray-900">{patent.name}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationDate}</td>
+                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationNo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 특허증 갤러리 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {patentImages.map((patent, index) => (
+              <div key={index} className="flex flex-col items-center cursor-pointer group">
+                <div 
+                  className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${patent.path}`)}
+                >
+                  <img
+                    src={`${import.meta.env.BASE_URL}${patent.path}`}
+                    alt={patent.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                      <p className="text-sm font-semibold">이미지 확대</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{patent.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+        {/* 모달 팝업 */}
+        {selectedImage && (
+          <div 
+            className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div 
+              className="relative max-w-3xl w-full max-h-[90vh] bg-white rounded-lg overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* 닫기 버튼 */}
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-200 transition-colors duration-200 shadow-lg"
+              >
+                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* 이미지 */}
+              <img
+                src={selectedImage}
+                alt="확대된 이미지"
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        )}
+
+      {/* 오시는길 콘텐츠 섹션 */}
+      <div className="min-h-screen pt-20 pb-16" id="directions" style={{ backgroundColor: '#FFFEF5' }}>
+        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* 제목 */}
+          <div className="mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">오시는 길</h2>
+            <p className="text-lg text-gray-600">대한민국상이군경회시설사업소의 위치를 확인하세요.</p>
+          </div>
+
+          {/* 메인 콘텐츠 - 좌우 레이아웃 */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 auto-rows-max lg:auto-rows-min">
+            {/* 좌측: 지도 (2칸) */}
+            <div className="lg:col-span-2 lg:row-span-3">
+              <div className="rounded-lg overflow-hidden shadow-lg">
+                <div style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: 0,
+                  paddingBottom: '60%'
+                }}>
+                  <iframe 
+                    src="https://naver.me/I55AanzX" 
+                    style={{
+                      position: 'absolute',
+                      width: '100%',
+                      height: '100%',
+                      border: 'none'
+                    }}
+                    title="회사 위치 - 네이버 지도"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 우측: 정보 카드 (1칸) - 주소 정보 */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">주소 정보</h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-600 mb-1">회사명</p>
+                  <p className="text-sm font-semibold text-gray-900">대한민국상이군경회시설사업소</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600 mb-1">주소</p>
+                  <p className="text-sm text-gray-900">경기도 성남시 분당구 판교역로 230 삼환하이펙스 B동 9층 907호</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600 mb-1">전화</p>
+                  <p className="text-sm text-gray-900">02-572-6218</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 우측: 정보 카드 (1칸) - 대중교통 안내 */}
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">대중교통 안내</h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-600 mb-1 font-semibold">지하철</p>
+                  <p className="text-xs text-gray-700">
+                    지도에서 확인되는 대중교통 정보를 참고하세요.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600 mb-1 font-semibold">버스</p>
+                  <p className="text-xs text-gray-700">
+                    네이버 지도의 대중교통 탭에서 버스 노선을 확인할 수 있습니다.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600 mb-1 font-semibold">자가용</p>
+                  <p className="text-xs text-gray-700">
+                    네이버 지도 앱에서 길찾기를 통해 최적의 경로를 확인하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 우측: 지도 링크 버튼 */}
+            <div>
+              <a 
+                href="https://naver.me/I55AanzX" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-center text-sm h-full flex items-center justify-center"
+              >
+                네이버 지도에서 더 자세히 보기
+              </a>
             </div>
           </div>
         </div>

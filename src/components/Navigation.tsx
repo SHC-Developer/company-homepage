@@ -7,7 +7,7 @@ interface MenuStructure {
 }
 
 const menuStructure = {
-  '회사소개': ['인사말', '회사연혁', '보유면허', '보유기술', '조직구성', '오시는길'],
+  '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성', '오시는길'],
   '관계법령': ['수의계약근거'],
   '사업분야': ['안전진단', '엔지니어링', '설계/사업관리'],
   '수행실적': ['진단', '설계', '감리'],
@@ -92,6 +92,54 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
       navigate('/greeting#company-history');
       setTimeout(() => {
         const element = document.getElementById('company-history');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleDirectionsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      // 이미 greeting 페이지에 있으면 스크롤만
+      const element = document.getElementById('directions');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL에 해시 추가
+        window.history.pushState(null, '', '#directions');
+      }
+    } else {
+      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
+      navigate('/greeting#directions');
+      setTimeout(() => {
+        const element = document.getElementById('directions');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLicenseClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      // 이미 greeting 페이지에 있으면 스크롤만
+      const element = document.getElementById('license');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL에 해시 추가
+        window.history.pushState(null, '', '#license');
+      }
+    } else {
+      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
+      navigate('/greeting#license');
+      setTimeout(() => {
+        const element = document.getElementById('license');
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -225,7 +273,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                   ? 'text-[#1e40af] hover:text-[#1e40af]/80' 
                   : 'text-white hover:text-white/80 drop-shadow-lg'
             }`}>
-              대한민국 상이군경회 시설사업소
+              대한민국상이군경회시설사업소
             </Link>
           </div>
 
@@ -316,6 +364,40 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           key={subMenu}
                           href="/greeting#company-history"
                           onClick={handleHistoryClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
+                      ) : subMenu === '보유면허 및 기술' ? (
+                        <a
+                          key={subMenu}
+                          href="#"
+                          onClick={handleLicenseClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
+                      ) : subMenu === '오시는길' ? (
+                        <a
+                          key={subMenu}
+                          href="#"
+                          onClick={handleDirectionsClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             location.pathname === '/greeting'
                               ? (isOverLightBackground
@@ -437,6 +519,40 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             key={subMenu}
                             href="/greeting#company-history"
                             onClick={handleHistoryClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '보유면허 및 기술' ? (
+                          <a
+                            key={subMenu}
+                            href="#"
+                            onClick={handleLicenseClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '오시는길' ? (
+                          <a
+                            key={subMenu}
+                            href="#"
+                            onClick={handleDirectionsClick}
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground

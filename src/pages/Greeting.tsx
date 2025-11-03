@@ -26,6 +26,24 @@ const Greeting = () => {
         }
       }, 100);
       return () => clearTimeout(timer);
+    } else if (hash === '#license') {
+      // 보유면허 및 기술특허 섹션으로 스크롤
+      const timer = setTimeout(() => {
+        const licenseSection = document.getElementById('license');
+        if (licenseSection) {
+          licenseSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (hash === '#directions') {
+      // 오시는길 섹션으로 스크롤
+      const timer = setTimeout(() => {
+        const directionsSection = document.getElementById('directions');
+        if (directionsSection) {
+          directionsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     } else {
       // 기본적으로 CEO MESSAGE 섹션으로 스크롤
       const timer = setTimeout(() => {
