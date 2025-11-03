@@ -641,7 +641,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[5] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold" style={{ color: '#27292B' }}>
+                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold text-right" style={{ color: '#27292B' }}>
                     대한민국상이군경회시설사업소장
                   </p>
                 </div>

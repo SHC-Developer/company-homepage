@@ -87,22 +87,13 @@ const Portfolio = () => {
               <table className="w-full">
                 {/* 헤더 */}
                 <thead>
-                  {/* 첫 번째 행: 대주제 */}
-                  <tr>
-                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-white"></th>
-                    <th colSpan={2} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">안전진단</th>
-                    <th colSpan={1} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">엔지니어링</th>
-                    <th colSpan={1} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">설계/사업관리</th>
-                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg bg-white"></th>
-                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg bg-white"></th>
-                  </tr>
                   {/* 두 번째 행: 세부 항목 */}
                   <tr className="bg-gradient-to-r from-slate-200 to-slate-300">
                     <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">구분</th>
                     <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">정밀안전진단</th>
                     <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">정밀안전점검</th>
-                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">설계</th>
-                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">감리</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">엔지니어링 설계</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">설계/사업관리(감리)</th>
                     <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">기타</th>
                     <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg">합계</th>
                   </tr>
@@ -132,7 +123,7 @@ const Portfolio = () => {
             
             {/* 표 하단 설명 */}
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
-              <p className="text-sm text-slate-700 font-korean text-lg">
+              <p className="text-sm text-slate-700 font-korean text-lg text-right">
                 <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
               </p>
             </div>
