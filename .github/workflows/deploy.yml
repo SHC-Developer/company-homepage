@@ -36,8 +36,24 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Copy .nojekyll to dist
-        run: cp public/.nojekyll dist/.nojekyll || echo "" > dist/.nojekyll
+      - name: Ensure .nojekyll exists
+        run: |
+          if [ -f public/.nojekyll ]; then
+            cp public/.nojekyll dist/.nojekyll
+            echo "✓ Copied .nojekyll from public"
+          else
+            touch dist/.nojekyll
+            echo "✓ Created .nojekyll in dist"
+          fi
+          ls -la dist/.nojekyll || (echo "ERROR: .nojekyll not found!" && exit 1)
+
+      - name: Verify dist contents
+        run: |
+          echo "Dist folder contents:"
+          ls -la dist/ | head -20
+          echo ""
+          echo "Checking for .nojekyll:"
+          test -f dist/.nojekyll && echo "✓ .nojekyll exists" || (echo "✗ .nojekyll missing!" && exit 1)
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

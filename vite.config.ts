@@ -10,7 +10,15 @@ const copyNoJekyll = () => ({
   closeBundle() {
     const src = path.resolve(__dirname, "public/.nojekyll");
     const dest = path.resolve(__dirname, "dist/.nojekyll");
+    const distDir = path.resolve(__dirname, "dist");
+    
     try {
+      // Ensure dist directory exists
+      if (!fs.existsSync(distDir)) {
+        fs.mkdirSync(distDir, { recursive: true });
+      }
+      
+      // Copy or create .nojekyll file
       if (fs.existsSync(src)) {
         fs.copyFileSync(src, dest);
         console.log("✓ Copied .nojekyll to dist");
@@ -19,8 +27,15 @@ const copyNoJekyll = () => ({
         fs.writeFileSync(dest, "");
         console.log("✓ Created .nojekyll in dist");
       }
+      
+      // Verify it was created
+      if (!fs.existsSync(dest)) {
+        throw new Error("Failed to create .nojekyll file");
+      }
+      console.log("✓ Verified .nojekyll exists in dist");
     } catch (error) {
-      console.error("Error copying .nojekyll:", error);
+      console.error("❌ Error copying .nojekyll:", error);
+      // Don't fail the build, but log the error
     }
   },
 });
