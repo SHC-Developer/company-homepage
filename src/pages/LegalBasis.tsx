@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
+import { ScrollToTop } from '@/components/ScrollToTop';
 import { BookOpen } from 'lucide-react';
 
 const legalText = `수의계약 체결 가능한 법률조항 : 
@@ -79,6 +80,7 @@ const LegalBasis = () => {
       </main>
 
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

@@ -407,21 +407,11 @@ export const GreetingSection = () => {
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-16">
-            <div 
-              ref={philosophyTitleRef}
-              className={`text-sm font-medium text-[#1e40af] mb-3 tracking-wider transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              MANAGEMENT PHILOSOPHY
-            </div>
-            
             <div className="mb-6">
               <div 
-                className={`space-y-2 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-              >
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
-                  경영이념
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-600 mt-4 max-w-3xl">
+                ref={philosophyTitleRef}
+                className={`space-y-2 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+                <p className="text-2xl sm:text-3xl text-gray-600 mt-4 max-w-3xl font-bold">
                   국가와 사회에 헌신한 국가유공자의 높은 이상과 뜻을 모아<br />
                   공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
                 </p>
@@ -576,7 +566,7 @@ export const GreetingSection = () => {
                 className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
               >
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
-                  大韓民國 傷痍軍警會
+                  大韓民國傷痍軍警會
                 </h1>
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight">
                   Engineering Safety. Inspiring Innovation.
@@ -594,29 +584,17 @@ export const GreetingSection = () => {
 
           {/* 하단 섹션 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 items-start">
-            {/* 이미지 영역 */}
-            <div 
-              ref={imageRef}
-              className={`relative transition-all duration-1000 ${visibleImage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              <div className="aspect-[4/3] bg-gradient-to-br from-green-400 to-blue-500 rounded-lg overflow-hidden shadow-lg max-w-xl">
-                <img 
-                  src={`${import.meta.env.BASE_URL}profile.jpg`}
-                  alt="시설사업소 소장님 사진" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+            {/* 이미지 영역 - 제거됨 */}
 
             {/* 텍스트 영역 */}
-            <div className="space-y-4" style={{ marginLeft: '-8rem' }}>
+            <div className="space-y-4 col-span-1 lg:col-span-2" style={{ marginLeft: '0' }}>
               <div className="max-w-none">
                 <div 
                   ref={el => paragraphRefs.current[0] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
-                  <b>대한민국상이군경회</b>는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 공명정대하고 투명한 조직운영과 회원 상호간의 상부상조 및 유대관계를 기본으로 하고 있으며, 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>대한민국상이군경회</span>는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 공명정대하고 투명한 조직운영과 회원 상호간의 상부상조 및 유대관계를 기본으로 하고 있으며, 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
 
                   </p>
                 </div>
@@ -625,7 +603,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[1] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
                   이러한 근간의 정신을 바탕으로 저희 <b>대한민국상이군경회</b>에서는 <b>『 국가유공자등단체설립에관한법률 』</b> 제7조의 2 및 <b>『 국가유공자단체의수익사업에관한규칙 』</b> 제5조의 규정에 의하여 국가보훈처장의 승인을 받아 시행하던 수익사업 중 시설물유지관리 및 토목 건축설계 등에 대하여 집중적으로 기술용역사업을 확대 시행하게 되었습니다.
                   </p>
                 </div>
@@ -634,8 +612,8 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[2] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: '14pt' }}>본 시설사업소</span>는 <b>『엔지니어링산업진흥법』</b> <b>『건설산업기본법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>본 시설사업소</span>는 <b>『엔지니어링산업진흥법』</b> <b>『건설산업기본법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
                   </p>
                 </div>
 
@@ -643,7 +621,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[3] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
                   사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <span style={{ color: '#3B2FFF' }}>설계용역</span> 및 <span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span>, 그리고 각종 <span style={{ color: '#3B2FFF' }}>감리용역</span>분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
                   </p>
                 </div>
@@ -652,7 +630,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[4] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-md" style={{ color: '#27292B', marginBottom: '1.0rem' }}>
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
                   지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회시설사업소</b>에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
                   </p>
                 </div>
@@ -661,7 +639,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[5] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-base sm:text-lg font-semibold" style={{ color: '#27292B' }}>
+                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold" style={{ color: '#27292B' }}>
                     대한민국상이군경회시설사업소장
                   </p>
                 </div>
@@ -967,41 +945,6 @@ export const GreetingSection = () => {
           {/* 제목 */}
           <div className="mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent py-4 border-l-4 border-blue-600 pl-6">보유기술</h2>
-          </div>
-
-          {/* 특허 테이블 */}
-          <div className="mb-16 overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-yellow-50 border-y-2 border-gray-400">
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900 w-12" rowSpan={2}>구분</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>출원일자</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>출원번호</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>특허명칭</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>등록일자</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" rowSpan={2}>등록번호</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900" colSpan={2}>활용실적</th>
-                </tr>
-                <tr className="bg-yellow-50 border-b-2 border-gray-400">
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">2024년도</th>
-                  <th className="border border-gray-400 px-4 py-3 text-center text-sm font-korean font-bold text-gray-900">2025년도</th>
-                </tr>
-              </thead>
-              <tbody>
-                {patents.map((patent, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.division}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.applicationDate}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.applicationNo}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-left text-sm font-korean text-gray-900">{patent.name}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationDate}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.registrationNo}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.performance2024}</td>
-                    <td className="border border-gray-400 px-4 py-3 text-center text-sm font-korean text-gray-900">{patent.performance2025}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
 
           {/* 특허증 갤러리 */}

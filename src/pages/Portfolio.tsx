@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigation } from '../components/Navigation';
 import { Footer } from '../components/Footer';
+import { ScrollToTop } from '../components/ScrollToTop';
 
 interface PortfolioData {
   year: number;
@@ -21,6 +22,7 @@ const portfolioData: PortfolioData[] = [
   { year: 2008, '정밀안전진단': 17, '정밀안전검검': 11, '설계': 3, '감리': 0, '기타': 2, '합계': 33 },
   { year: 2009, '정밀안전진단': 9, '정밀안전검검': 19, '설계': 3, '감리': 0, '기타': 1, '합계': 32 },
   { year: 2010, '정밀안전진단': 6, '정밀안전검검': 21, '설계': 5, '감리': 10, '기타': 0, '합계': 42 },
+  
   { year: 2011, '정밀안전진단': 11, '정밀안전검검': 14, '설계': 6, '감리': 21, '기타': 0, '합계': 52 },
   { year: 2012, '정밀안전진단': 7, '정밀안전검검': 21, '설계': 10, '감리': 23, '기타': 0, '합계': 61 },
   { year: 2013, '정밀안전진단': 12, '정밀안전검검': 16, '설계': 8, '감리': 13, '기타': 0, '합계': 49 },
@@ -44,10 +46,10 @@ const Portfolio = () => {
       <Navigation variant="default" forceLightTheme={true} />
       
       <div className="pt-32 pb-20">
-        <div className="w-[90%] md:w-[85%] mx-auto">
+        <div className="w-[60%] mx-auto">
           {/* 제목 섹션 */}
           <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 font-korean">
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 font-korean">
               분야별 수행실적
             </h1>
             <p className="text-lg text-slate-600 font-korean">
@@ -86,13 +88,13 @@ const Portfolio = () => {
                 {/* 헤더 */}
                 <thead>
                   <tr className="bg-gradient-to-r from-slate-900 to-slate-800">
-                    <th className="px-6 py-4 text-left text-white font-korean font-semibold">연도</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold">정밀안전진단</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold">정밀안전검검</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold">설계</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold">감리</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold">기타</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold bg-gradient-to-r from-orange-600 to-orange-500">합계</th>
+                    <th className="px-6 py-4 text-left text-white font-korean font-semibold text-lg border-r border-gray-500">연도</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg bg-blue-900">정밀안전진단</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg border-r border-gray-500 bg-blue-900">정밀안전검검</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">설계</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">감리</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">기타</th>
+                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg bg-gradient-to-r from-orange-600 to-orange-500">합계</th>
                   </tr>
                 </thead>
 
@@ -105,13 +107,13 @@ const Portfolio = () => {
                         row.year % 2 === 2003 % 2 ? 'bg-slate-50' : 'bg-white'
                       }`}
                     >
-                      <td className="px-6 py-4 font-bold text-slate-900 font-korean">{row.year}</td>
-                      <td className="px-6 py-4 text-center text-blue-600 font-semibold">{row['정밀안전진단']}</td>
-                      <td className="px-6 py-4 text-center text-cyan-600 font-semibold">{row['정밀안전검검']}</td>
-                      <td className="px-6 py-4 text-center text-green-600 font-semibold">{row['설계']}</td>
-                      <td className="px-6 py-4 text-center text-purple-600 font-semibold">{row['감리']}</td>
-                      <td className="px-6 py-4 text-center text-slate-600">{row['기타']}</td>
-                      <td className="px-6 py-4 text-center font-bold text-orange-600 bg-gradient-to-r from-orange-50 to-transparent">{row['합계']}</td>
+                      <td className="px-6 py-4 font-bold text-slate-900 font-korean text-lg border-r border-gray-300">{row.year}</td>
+                      <td className="px-6 py-4 text-center text-blue-600 font-semibold text-lg border-r border-gray-200 bg-blue-50">{row['정밀안전진단']}</td>
+                      <td className="px-6 py-4 text-center text-cyan-600 font-semibold text-lg border-r border-gray-200 bg-blue-50">{row['정밀안전검검']}</td>
+                      <td className="px-6 py-4 text-center text-green-600 font-semibold text-lg border-r border-gray-300 bg-green-50">{row['설계']}</td>
+                      <td className="px-6 py-4 text-center text-purple-600 font-semibold text-lg border-r border-gray-300 bg-purple-50">{row['감리']}</td>
+                      <td className="px-6 py-4 text-center text-slate-600 text-lg border-r border-gray-300">{row['기타']}</td>
+                      <td className="px-6 py-4 text-center font-bold text-orange-600 bg-gradient-to-r from-orange-50 to-transparent text-lg">{row['합계']}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -120,7 +122,7 @@ const Portfolio = () => {
             
             {/* 표 하단 설명 */}
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
-              <p className="text-sm text-slate-700 font-korean">
+              <p className="text-sm text-slate-700 font-korean text-lg">
                 <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
               </p>
             </div>
@@ -129,6 +131,7 @@ const Portfolio = () => {
       </div>
 
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

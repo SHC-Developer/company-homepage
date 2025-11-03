@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigation } from '../components/Navigation';
 import { GreetingSection } from '../components/GreetingSection';
 import { Footer } from '../components/Footer';
+import { ScrollToTop } from '../components/ScrollToTop';
 
 const Greeting = () => {
   React.useEffect(() => {
@@ -63,6 +64,7 @@ const Greeting = () => {
         <GreetingSection />
       </div>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

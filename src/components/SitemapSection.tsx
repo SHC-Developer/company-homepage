@@ -1,56 +1,111 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Building2, 
+  Lightbulb, 
+  CheckSquare2, 
+  Shield, 
+  Users, 
+  Search, 
+  MapPin 
+} from 'lucide-react';
 
-const partnerLogos = [
-  { name: '해양수산부', url: '#' },
-  { name: '한국시설안전공단', url: '#' },
-  { name: '한국지반환경공학회', url: '#' },
-  { name: '한국지하안전협회', url: '#' },
-  { name: '국토교통부', url: '#' },
-  { name: '한국시설물안전진단협회', url: '#' }
-];
+interface CategoryItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+}
 
 export const SitemapSection = () => {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (path: string, hash?: string) => {
+    if (hash) {
+      navigate(path);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    } else {
+      navigate(path);
+    }
+  };
+
+  const categories: CategoryItem[] = [
+    {
+      id: 'ceo',
+      label: 'CEO인사말',
+      icon: <Building2 className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting', 'management-philosophy'),
+    },
+    {
+      id: 'vision',
+      label: '비전 및 경영이념',
+      icon: <Lightbulb className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting', 'management-philosophy'),
+    },
+    {
+      id: 'history',
+      label: '회사연혁',
+      icon: <CheckSquare2 className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting', 'company-history'),
+    },
+    {
+      id: 'license',
+      label: '보유 면허 및 자격증',
+      icon: <Shield className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting', 'license'),
+    },
+    {
+      id: 'organization',
+      label: '조직도',
+      icon: <Users className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting'),
+    },
+    {
+      id: 'portfolio',
+      label: '포트폴리오',
+      icon: <Search className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/portfolio'),
+    },
+    {
+      id: 'directions',
+      label: '오시는 길',
+      icon: <MapPin className="w-8 h-8" />,
+      onClick: () => handleCategoryClick('/greeting', 'directions'),
+    },
+  ];
+
   return (
-    <section className="py-16 bg-muted/30 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 className="text-2xl font-bold text-center mb-8 font-korean">유관 기관</h3>
+    <section className="py-32 bg-muted/30 overflow-hidden min-h-[calc(100vh-200px)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+        <h3 className="text-4xl font-bold text-center mb-4 font-korean">대한민국상이군경회시설사업소</h3>
+        <p className="text-center text-gray-600 font-korean mb-24 text-base max-w-3xl mx-auto leading-relaxed">
+          대한민국상이군경회시설사업소는 시설물의 안전과 유지관리를 책임지는 엔지니어링 전문기관입니다.(수정 필요)
+        </p>
         
-        {/* 자동 슬라이드 컨테이너 */}
-        <div className="relative">
-          <div className="flex animate-scroll">
-            {/* 첫 번째 세트 */}
-            {partnerLogos.map((partner, index) => (
-              <div 
-                key={`first-${index}`}
-                className="flex-shrink-0 mx-8"
-              >
-                <a 
-                  href={partner.url}
-                  className="block w-40 h-20 bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center justify-center border border-border"
-                >
-                  <span className="text-sm font-medium text-foreground font-korean text-center px-4">
-                    {partner.name}
-                  </span>
-                </a>
+        {/* 카테고리 그리드 */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-8 sm:gap-10">
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={category.onClick}
+              className="flex flex-col items-center gap-6 p-8 rounded-lg transition-all duration-200 hover:bg-card hover:shadow-lg group"
+            >
+              {/* 아이콘 */}
+              <div className="text-foreground/60 group-hover:text-primary transition-colors">
+                {React.cloneElement(category.icon as React.ReactElement, { className: "w-16 h-16" })}
               </div>
-            ))}
-            {/* 두 번째 세트 (무한 루프용) */}
-            {partnerLogos.map((partner, index) => (
-              <div 
-                key={`second-${index}`}
-                className="flex-shrink-0 mx-8"
-              >
-                <a 
-                  href={partner.url}
-                  className="block w-40 h-20 bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center justify-center border border-border"
-                >
-                  <span className="text-sm font-medium text-foreground font-korean text-center px-4">
-                    {partner.name}
-                  </span>
-                </a>
-              </div>
-            ))}
-          </div>
+              
+              {/* 라벨 */}
+              <span className="text-base sm:text-lg font-medium text-center font-korean text-foreground/70 group-hover:text-foreground transition-colors">
+                {category.label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </section>
