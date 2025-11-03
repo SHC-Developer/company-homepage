@@ -2,36 +2,63 @@
   publish = "dist"
   command = "npm run build"
 
+# MIME type headers for JavaScript files
 [[headers]]
   for = "/*.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/*.mjs"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/assets/*.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
-  for = "/assets/*.mjs"
+  for = "/company-homepage/assets/*.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
+[[headers]]
+  for = "/company-homepage/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+# MIME type headers for CSS files
 [[headers]]
   for = "/*.css"
   [headers.values]
     Content-Type = "text/css; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/assets/*.css"
   [headers.values]
     Content-Type = "text/css; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
 
+[[headers]]
+  for = "/company-homepage/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/company-homepage/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+# Redirects
 [[redirects]]
   from = "/*"
   to = "/index.html"
