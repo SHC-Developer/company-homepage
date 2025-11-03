@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 import fs from "fs";
 
 // Plugin to copy .nojekyll and _headers file to dist after build
+// Also ensures public folder files are copied
 const copyNetlifyFiles = () => ({
   name: "copy-netlify-files",
   closeBundle() {
@@ -33,6 +34,18 @@ const copyNetlifyFiles = () => ({
       if (fs.existsSync(headersSrc)) {
         fs.copyFileSync(headersSrc, headersDest);
         console.log("✓ Copied _headers to dist");
+      }
+      
+      // Verify logo.ico exists (Vite should copy it automatically, but verify)
+      const logoIcoDest = path.resolve(__dirname, "dist/logo.ico");
+      const logoIcoSrc = path.resolve(__dirname, "public/logo.ico");
+      if (!fs.existsSync(logoIcoDest) && fs.existsSync(logoIcoSrc)) {
+        fs.copyFileSync(logoIcoSrc, logoIcoDest);
+        console.log("✓ Copied logo.ico to dist");
+      } else if (fs.existsSync(logoIcoDest)) {
+        console.log("✓ logo.ico exists in dist");
+      } else {
+        console.warn("⚠ logo.ico not found in public folder");
       }
       
     } catch (error) {
