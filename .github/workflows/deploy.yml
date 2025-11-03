@@ -63,6 +63,9 @@ jobs:
           echo "Checking for .nojekyll:"
           test -f dist/.nojekyll && echo "✓ .nojekyll exists" || (echo "✗ .nojekyll missing!" && exit 1)
           echo ""
+          echo "Checking for logo.ico:"
+          test -f dist/logo.ico && echo "✓ logo.ico exists" || (echo "✗ logo.ico missing!" && exit 1)
+          echo ""
           echo "Verifying JavaScript file exists:"
           JS_FILE=$(find dist/assets -name "*.js" -type f | head -1)
           if [ -z "$JS_FILE" ]; then
@@ -73,6 +76,11 @@ jobs:
             echo "File size: $(stat -f%z "$JS_FILE" 2>/dev/null || stat -c%s "$JS_FILE" 2>/dev/null) bytes"
             echo "File type: $(file "$JS_FILE" 2>/dev/null || echo 'unknown')"
           fi
+          echo ""
+          echo "Verifying all public assets:"
+          test -f dist/logo.ico && echo "✓ logo.ico" || echo "✗ logo.ico"
+          test -f dist/logo.svg && echo "✓ logo.svg" || echo "✗ logo.svg"
+          test -f dist/robots.txt && echo "✓ robots.txt" || echo "✗ robots.txt"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
