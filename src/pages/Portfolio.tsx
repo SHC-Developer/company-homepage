@@ -42,7 +42,7 @@ const portfolioData: PortfolioData[] = [
 
 const Portfolio = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-white">
       <Navigation variant="default" forceLightTheme={true} />
       
       <div className="pt-32 pb-20">
@@ -82,19 +82,29 @@ const Portfolio = () => {
           </div>
 
           {/* 테이블 */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 {/* 헤더 */}
                 <thead>
-                  <tr className="bg-gradient-to-r from-slate-900 to-slate-800">
-                    <th className="px-6 py-4 text-left text-white font-korean font-semibold text-lg border-r border-gray-500">연도</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg bg-blue-900">정밀안전진단</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg border-r border-gray-500 bg-blue-900">정밀안전검검</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">설계</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">감리</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg">기타</th>
-                    <th className="px-6 py-4 text-center text-white font-korean font-semibold text-lg bg-gradient-to-r from-orange-600 to-orange-500">합계</th>
+                  {/* 첫 번째 행: 대주제 */}
+                  <tr>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-white"></th>
+                    <th colSpan={2} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">안전진단</th>
+                    <th colSpan={1} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">엔지니어링</th>
+                    <th colSpan={1} className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300 bg-yellow-400">설계/사업관리</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg bg-white"></th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg bg-white"></th>
+                  </tr>
+                  {/* 두 번째 행: 세부 항목 */}
+                  <tr className="bg-gradient-to-r from-slate-200 to-slate-300">
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">구분</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">정밀안전진단</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">정밀안전점검</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">설계</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">감리</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg border-r border-gray-300">기타</th>
+                    <th className="px-6 py-4 text-center text-black font-korean font-semibold text-lg">합계</th>
                   </tr>
                 </thead>
 
@@ -107,7 +117,7 @@ const Portfolio = () => {
                         row.year % 2 === 2003 % 2 ? 'bg-slate-50' : 'bg-white'
                       }`}
                     >
-                      <td className="px-6 py-4 font-bold text-slate-900 font-korean text-lg border-r border-gray-300">{row.year}</td>
+                      <td className="px-6 py-4 text-center font-bold text-slate-900 font-korean text-lg border-r border-gray-300">{row.year}</td>
                       <td className="px-6 py-4 text-center text-blue-600 font-semibold text-lg border-r border-gray-200 bg-blue-50">{row['정밀안전진단']}</td>
                       <td className="px-6 py-4 text-center text-cyan-600 font-semibold text-lg border-r border-gray-200 bg-blue-50">{row['정밀안전검검']}</td>
                       <td className="px-6 py-4 text-center text-green-600 font-semibold text-lg border-r border-gray-300 bg-green-50">{row['설계']}</td>

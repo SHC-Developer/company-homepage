@@ -410,9 +410,11 @@ export const GreetingSection = () => {
             <div className="mb-6">
               <div 
                 ref={philosophyTitleRef}
-                className={`space-y-2 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
-                <p className="text-2xl sm:text-3xl text-gray-600 mt-4 max-w-3xl font-bold">
-                  국가와 사회에 헌신한 국가유공자의 높은 이상과 뜻을 모아<br />
+                className={`space-y-10 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+                <p className="text-2xl sm:text-3xl text-gray-600 mt-4 font-bold" style={{ paddingLeft: '17%' }}>
+                  국가와 사회에 헌신한 국가유공자의 높은 이상과 뜻을 모아
+                </p>
+                <p className="text-2xl sm:text-3xl text-gray-600 font-bold" style={{ paddingLeft: '37%' }}>
                   공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
                 </p>
               </div>
@@ -622,7 +624,7 @@ export const GreetingSection = () => {
                   className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <span style={{ color: '#3B2FFF' }}>설계용역</span> 및 <span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span>, 그리고 각종 <span style={{ color: '#3B2FFF' }}>감리용역</span>분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
+                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <b><span style={{ color: '#3B2FFF' }}>설계용역</span></b> 및 <b><span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span></b>, 그리고 각종 <b><span style={{ color: '#3B2FFF' }}>감리용역</span></b>분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
                   </p>
                 </div>
 
