@@ -615,7 +615,7 @@ export const GreetingSection = () => {
                   className={`transition-all duration-1000 ${visibleParagraphs[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>본 시설사업소</span>는 <b>『엔지니어링산업진흥법』</b> <b>『건설산업기본법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
+                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>본 시설사업소</span>는 <b>『건설산업기본법』</b> <b>『엔지니어링산업진흥법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
                   </p>
                 </div>
 
