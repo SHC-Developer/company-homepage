@@ -30,6 +30,8 @@ const copyNetlifyFiles = () => ({
       
       // Copy _headers
       const headersSrc = path.resolve(__dirname, "public/_headers");
+
+      
       const headersDest = path.resolve(__dirname, "dist/_headers");
       if (fs.existsSync(headersSrc)) {
         fs.copyFileSync(headersSrc, headersDest);

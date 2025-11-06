@@ -175,6 +175,15 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
   const handlePortfolioClick = (e: React.MouseEvent) => {
     e.preventDefault();
     navigate('/portfolio');
+    window.scrollTo(0, 0);
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLegalBasisClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/legal-basis');
+    window.scrollTo(0, 0);
     setActiveMenu(null);
     setIsMobileMenuOpen(false);
   };
@@ -273,10 +282,10 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
             <Link to="/" onClick={() => window.scrollTo(0, 0)} className={`text-xl sm:text-3xl md:text-4xl font-medium font-logo transition-colors duration-300 ${
               location.pathname === '/greeting'
                 ? (isOverLightBackground
-                    ? 'text-[#1e40af] hover:text-[#1e40af]/80'
+                    ? 'text-[#2C3E5E] hover:text-[#2C3E5E]/80'
                     : 'text-white hover:text-white/80 drop-shadow-lg')
                 : isOverLightBackground 
-                  ? 'text-[#1e40af] hover:text-[#1e40af]/80' 
+                  ? 'text-[#2C3E5E] hover:text-[#2C3E5E]/80' 
                   : 'text-white hover:text-white/80 drop-shadow-lg'
             }`}>
               대한민국상이군경회시설사업소
@@ -314,7 +323,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             : 'text-white hover:text-white/80 hover:bg-white/10'
                           }`
                   }`}
-                  onClick={menu === '회사소개' ? handleCompanyIntroClick : menu === '분야별 수행실적' ? handlePortfolioClick : undefined}
+                  onClick={menu === '회사소개' ? handleCompanyIntroClick : menu === '분야별 수행실적' ? handlePortfolioClick : menu === '관계법령' ? handleLegalBasisClick : undefined}
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
                 >
@@ -350,9 +359,29 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           {subMenu}
                         </Link>
                       ) : subMenu === '인사말' ? (
-                        <Link
+                        <a
                           key={subMenu}
-                          to="/greeting"
+                          href="#ceo-message"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (location.pathname === '/greeting') {
+                              const element = document.getElementById('ceo-message');
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                window.history.pushState(null, '', '#ceo-message');
+                              }
+                            } else {
+                              navigate('/greeting#ceo-message');
+                              setTimeout(() => {
+                                const element = document.getElementById('ceo-message');
+                                if (element) {
+                                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                              }, 300);
+                            }
+                            setActiveMenu(null);
+                            setIsMobileMenuOpen(false);
+                          }}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             location.pathname === '/greeting'
                               ? (isOverLightBackground
@@ -364,7 +393,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           }`}
                         >
                           {subMenu}
-                        </Link>
+                        </a>
                       ) : subMenu === '회사연혁' ? (
                         <a
                           key={subMenu}
@@ -474,6 +503,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                     onClick={() => {
                       if (menu === '분야별 수행실적') {
                         handlePortfolioClick({} as React.MouseEvent);
+                      } else if (menu === '관계법령') {
+                        handleLegalBasisClick({} as React.MouseEvent);
                       } else {
                         toggleMobileMenu(menu);
                       }
@@ -489,6 +520,11 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                     }`}
                   >
                     {menu}
+                    {menu !== '분야별 수행실적' && menu !== '관계법령' && (
+                      <span className={`ml-2 transition-transform ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}>
+                        ▼
+                      </span>
+                    )}
                   </button>
                   
                   {mobileExpandedMenus.includes(menu) && (
@@ -511,9 +547,29 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             {subMenu}
                           </Link>
                         ) : subMenu === '인사말' ? (
-                          <Link
+                          <a
                             key={subMenu}
-                            to="/greeting"
+                            href="#ceo-message"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (location.pathname === '/greeting') {
+                                const element = document.getElementById('ceo-message');
+                                if (element) {
+                                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                  window.history.pushState(null, '', '#ceo-message');
+                                }
+                              } else {
+                                navigate('/greeting#ceo-message');
+                                setTimeout(() => {
+                                  const element = document.getElementById('ceo-message');
+                                  if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                  }
+                                }, 300);
+                              }
+                              setActiveMenu(null);
+                              setIsMobileMenuOpen(false);
+                            }}
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground
@@ -525,7 +581,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             }`}
                           >
                             {subMenu}
-                          </Link>
+                          </a>
                         ) : subMenu === '회사연혁' ? (
                           <a
                             key={subMenu}

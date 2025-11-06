@@ -396,153 +396,160 @@ export const GreetingSection = () => {
               25.10.25 올림픽대교 전경
             </p>
             <p className="text-[10pt] text-white/80 font-korean drop-shadow-md mt-2">
-              © 대한민국 상이군경회 시설사업소. All rights reserved.
+              © 대한민국상이군경회시설사업소. All rights reserved.
             </p>
           </div>
         )}
       </section>
 
-      {/* 경영이념 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-10" id="management-philosophy" style={{ backgroundColor: '#F8F8FF' }}>
-        <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* 경영이념 콘텐츠 섹션 (리디자인) */}
+      <div className="relative min-h-screen py-20 bg-gradient-to-b from-slate-50 via-white to-white" id="management-philosophy">
+
+        <div className="relative w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
-          <div className="mb-16">
-            <div className="mb-6">
-              <div 
-                ref={philosophyTitleRef}
-                className={`space-y-10 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
-                <p className="text-2xl sm:text-3xl text-gray-600 mt-4 font-bold" style={{ paddingLeft: '17%' }}>
-                  국가와 사회에 헌신한 국가유공자의 높은 이상과 뜻을 모아
-                </p>
-                <p className="text-2xl sm:text-3xl text-gray-600 font-bold" style={{ paddingLeft: '37%' }}>
-                  공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
-                </p>
+          <div className="mb-14">
+            <div 
+              ref={philosophyTitleRef}
+              className={`space-y-4 transition-all duration-1000 ${visiblePhilosophyTitle ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}
+            >
+              <div className="flex justify-center">
+                <span className="inline-block h-1.5 w-12 rounded-full bg-[#1e40af]" />
               </div>
+              <h2 className="text-center font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight bg-gradient-to-r from-[#1e40af] to-slate-900 bg-clip-text text-transparent">
+                국가유공자의 높은 이상을 바탕으로,
+                <br className="hidden sm:block" />
+                공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
+              </h2>
+              <p className="text-center text-slate-600 text-base sm:text-lg">
+                Veterans-first ethics. Transparent governance. Impact for national infrastructure.
+              </p>
             </div>
           </div>
 
-          {/* 주요 정보 카드 섹션 */}
+          {/* 주요 정보 카드 섹션 - 건설업계 톤다운 스타일 */}
           <div 
             ref={philosophyContentRef}
-            className={`mb-20 transition-all duration-1000 ${visiblePhilosophyContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            className={`mb-20 transition-all duration-1000 ${visiblePhilosophyContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 국가 보훈의 이념 카드 */}
               <div 
                 ref={el => philosophyCardRefs.current[1] = el}
-                className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-blue-500 transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-700 ${visiblePhilosophyCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <h3 className="text-2xl font-bold text-blue-600 mb-4">
-                  국가 보훈의 이념
-                </h3>
-                <p className="leading-relaxed text-gray-700 text-base">
-                  대한민국의 오늘은 국가의 존립과 발전을 위해 공헌하거나 이를 위해 자신을 희생한 국가유공자의 공헌과 희생 위에 이룩되었으므로 이러한 국가유공자의 공헌과 희생의 정도에 대응하여 국가 유공자와 그 유족의 영예로운 생활이 유지-보장될 수 있도록 실질적인 보상을 행하고 국가유공자의 공헌과 희생이 우리와 우리의 후손들에게 숭고한 애국정신의 귀감으로서 항구적으로 존중되도록 함으로써 이를 통해 국민들의 애국심을 고취하고 공동체의식을 함양하는데 있음.
-                </p>
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-full bg-[#1e40af]/10 ring-1 ring-[#1e40af]/20 flex items-center justify-center text-[#1e40af] font-bold">Ⅰ</div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900">국가 보훈의 이념</h3>
+                    <p className="mt-2 leading-7 text-slate-700 text-base">
+                      대한민국의 오늘은 국가의 존립과 발전을 위해 공헌하거나 이를 위해 자신을 희생한 국가유공자의 공헌과 희생 위에 이룩되었습니다. 국가유공자의 공헌과 희생이 숭고한 애국정신의 귀감으로서 항구적으로 존중되도록 하며, 그에 상응하는 명예와 보상이 유지되도록 합니다.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* 단체설립근거 카드 */}
               <div 
                 ref={el => philosophyCardRefs.current[2] = el}
-                className={`bg-white rounded-xl shadow-md p-8 border-l-4 border-indigo-500 transition-all duration-1000 hover:shadow-lg hover:scale-105 ${visiblePhilosophyCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-700 ${visiblePhilosophyCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <h3 className="text-2xl font-bold text-indigo-600 mb-4">
-                  단체설립근거
-                </h3>
-                <p className="leading-relaxed text-gray-700 text-base">
-                  대한민국상이군경회의 단체설립 근거는 『국가유공자 등 단체설립에 관한법률』에 있으며 법 제1조(목적) : 『이 법은 대한민국상이군경회·대한민국전몰군경유족회·대한민국전몰군경미망인회·광복회·4.19민주혁명회·4.19혁명희생자유족회·4.19혁명공로자회·재일학도의용군동지회 및 대한민국무공수훈자회를 설립함으로써 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 한다』고 되어 있음
-                </p>
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-full bg-indigo-600/10 ring-1 ring-indigo-600/20 flex items-center justify-center text-indigo-700 font-bold">Ⅱ</div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900">단체설립근거</h3>
+                    <p className="mt-2 leading-7 text-slate-700 text-base">
+                      『국가유공자 등 단체설립에 관한 법률』 제1조에 근거하여 설립되었으며, 국가유공자와 유족의 상부상조, 자활능력 배양, 민족정기 선양, 자유민주주의 수호 및 평화적 통일과 국제평화 유지에 이바지함을 목적으로 합니다.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* 핵심 가치 섹션 - 개선 버전 */}
-          <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 text-center">핵심 가치</h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-[#1e40af] to-blue-500 mx-auto mb-12 rounded-full"></div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {/* 핵심 가치 섹션 - 미니멀 기업형 카드 */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">핵심 가치</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
               {/* 상부상조 카드 */}
               <div 
                 ref={el => coreValueRefs.current[0] = el}
-                className={`group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${visibleCoreValues[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-700 ${visibleCoreValues[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                    <HandHeart className="w-7 h-7" />
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center text-slate-700">
+                    <HandHeart className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">상부상조</h3>
-                  <p className="text-gray-500 mb-3 text-sm font-medium">相扶相助</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">형제애로 서로를 돕고 함께 성장한다</p>
-                  <div className="mt-4 w-10 h-1 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">상부상조</h3>
+                    <p className="text-sm text-slate-600">서로 돕고 함께 성장</p>
+                  </div>
                 </div>
               </div>
 
               {/* 자활자립 카드 */}
               <div 
                 ref={el => coreValueRefs.current[1] = el}
-                className={`group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${visibleCoreValues[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-700 ${visibleCoreValues[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-400 to-green-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-green-400 to-green-500 text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                    <Target className="w-7 h-7" />
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center text-slate-700">
+                    <Target className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">자활자립</h3>
-                  <p className="text-gray-500 mb-3 text-sm font-medium">自活自立</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">스스로의 역량으로 재활과 자립을 이룬다</p>
-                  <div className="mt-4 w-10 h-1 bg-gradient-to-r from-green-400 to-green-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">자활자립</h3>
+                    <p className="text-sm text-slate-600">스스로 역량으로 자립</p>
+                  </div>
                 </div>
               </div>
 
               {/* 명예선양 카드 */}
               <div 
                 ref={el => coreValueRefs.current[2] = el}
-                className={`group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${visibleCoreValues[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-700 ${visibleCoreValues[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-400 to-purple-500 text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                    <Award className="w-7 h-7" />
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center text-slate-700">
+                    <Award className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">명예선양</h3>
-                  <p className="text-gray-500 mb-3 text-sm font-medium">名譽宣揚</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">국가유공자의 숭고한 희생을 기리고 본받는다</p>
-                  <div className="mt-4 w-10 h-1 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">명예선양</h3>
+                    <p className="text-sm text-slate-600">숭고한 희생을 기림</p>
+                  </div>
                 </div>
               </div>
 
               {/* 국가발전 카드 */}
               <div 
                 ref={el => coreValueRefs.current[3] = el}
-                className={`group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${visibleCoreValues[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-700 ${visibleCoreValues[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-400 to-red-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-red-400 to-red-500 text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                    <TrendingUp className="w-7 h-7" />
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center text-slate-700">
+                    <TrendingUp className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">국가발전</h3>
-                  <p className="text-gray-500 mb-3 text-sm font-medium">國家發展</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">국가 발전과 국민 통합에 기여한다</p>
-                  <div className="mt-4 w-10 h-1 bg-gradient-to-r from-red-400 to-red-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">국가발전</h3>
+                    <p className="text-sm text-slate-600">인프라 발전 기여</p>
+                  </div>
                 </div>
               </div>
 
               {/* 세계평화 카드 */}
               <div 
                 ref={el => coreValueRefs.current[4] = el}
-                className={`group relative bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${visibleCoreValues[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-700 ${visibleCoreValues[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="w-14 h-14 mb-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 text-white shadow-md group-hover:scale-110 transition-transform duration-500">
-                    <Globe className="w-7 h-7" />
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 ring-1 ring-slate-200 flex items-center justify-center text-slate-700">
+                    <Globe className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">세계평화</h3>
-                  <p className="text-gray-500 mb-3 text-sm font-medium">世界平和</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">인류 공동번영과 평화를 위해 협력한다</p>
-                  <div className="mt-4 w-10 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">세계평화</h3>
+                    <p className="text-sm text-slate-600">공동번영과 협력</p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -198,7 +198,7 @@ export const HeroSection = () => {
             25.10.25 올림픽대교 전경
           </p>
           <p className="text-[10pt] text-white/80 font-korean drop-shadow-md mt-2">
-            © 대한민국 상이군경회 시설사업소. All rights reserved.
+            © 대한민국상이군경회시설사업소. All rights reserved.
           </p>
         </div>
       )}

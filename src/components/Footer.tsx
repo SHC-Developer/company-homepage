@@ -14,7 +14,7 @@ export const Footer = () => {
             {/* 왼쪽: 회사명과 소개 */}
             <div>
               <h3 className="text-lg font-bold mb-3 font-korean">
-                대한민국 상이군경회 시설사업소
+                대한민국상이군경회시설사업소
               </h3>
               <p className="text-primary-foreground/80 leading-relaxed font-korean text-sm">
                 25년간 축적된 전문성과 신뢰를 바탕으로 공공시설과 산업시설의 
@@ -59,7 +59,7 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-2">
             <div className="text-xs text-primary-foreground/60">
               <span className="font-korean">
-                © {currentYear} 대한민국 상이군경회 시설사업소. All rights reserved.
+                © {currentYear} 대한민국상이군경회시설사업소. All rights reserved.
               </span>
             </div>
             
