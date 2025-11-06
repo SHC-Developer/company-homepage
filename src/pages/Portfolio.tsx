@@ -78,13 +78,16 @@ const Portfolio = () => {
                 const t = e.currentTarget as HTMLImageElement;
                 const attempt = parseInt(t.dataset.attempt || '0', 10);
                 const attempts = [
+                  '/portfolio/performance4.jpg',
                   '/portfolio/performance4.JPG',
                   '/portfolio/performance1.jpg',
                   '/portfolio/performance1.JPG',
+                  '/portfolio/performance5.jpg',
+                  '/portfolio/performance5.JPG',
                   '/logo3.png',
                 ];
-                if (attempt < attempts.length) {
-                  t.src = attempts[attempt];
+                if (attempt < attempts.length - 1) {
+                  t.src = attempts[attempt + 1];
                   t.dataset.attempt = String(attempt + 1);
                 }
               }}
@@ -126,12 +129,10 @@ const Portfolio = () => {
                         onError={(e) => {
                           const t = e.currentTarget as HTMLImageElement;
                           const attemptCount = parseInt(t.dataset.attempt || '0', 10);
+                          // 실제 파일 확장자에 맞게 시도: .jpg -> .JPG
                           const attempts = [
                             `/portfolio/performance${idx}.jpg`,
                             `/portfolio/performance${idx}.JPG`,
-                            `/portfolio/performance${idx}.png`,
-                            `/portfolio/performance${idx}.PNG`,
-                            `/portfolio/performance${idx}.webp`,
                           ];
                           if (attemptCount < attempts.length - 1) {
                             t.src = attempts[attemptCount + 1];

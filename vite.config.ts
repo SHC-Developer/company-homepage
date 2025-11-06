@@ -50,6 +50,29 @@ const copyNetlifyFiles = () => ({
         console.warn("⚠ logo.ico not found in public folder");
       }
       
+      // Copy portfolio folder
+      const portfolioSrc = path.resolve(__dirname, "public/portfolio");
+      const portfolioDest = path.resolve(__dirname, "dist/portfolio");
+      if (fs.existsSync(portfolioSrc)) {
+        // Ensure dist/portfolio directory exists
+        if (!fs.existsSync(portfolioDest)) {
+          fs.mkdirSync(portfolioDest, { recursive: true });
+        }
+        
+        // Copy all files in portfolio folder
+        const files = fs.readdirSync(portfolioSrc);
+        files.forEach((file) => {
+          const srcFile = path.join(portfolioSrc, file);
+          const destFile = path.join(portfolioDest, file);
+          if (fs.statSync(srcFile).isFile()) {
+            fs.copyFileSync(srcFile, destFile);
+          }
+        });
+        console.log(`✓ Copied ${files.length} portfolio images to dist`);
+      } else {
+        console.warn("⚠ portfolio folder not found in public");
+      }
+      
     } catch (error) {
       console.error("❌ Error copying netlify files:", error);
       // Don't fail the build, but log the error
