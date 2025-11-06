@@ -61,6 +61,16 @@ const Portfolio = () => {
     return { totalProjects, diagnosis, inspection, design, supervision, years, avgPerYear, lastYear, yoy };
   }, []);
 
+  // 이미지 경로 헬퍼 함수 (certification과 동일한 패턴)
+  const getImagePath = (filename: string) => {
+    const baseUrl = import.meta.env.BASE_URL;
+    const path = `${baseUrl}portfolio/${filename}`;
+    // 개발 환경에서만 로그 출력
+    if (import.meta.env.DEV) {
+      console.log('Image path:', path, 'BASE_URL:', baseUrl);
+    }
+    return path;
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -71,21 +81,22 @@ const Portfolio = () => {
         <section className="relative overflow-hidden text-white mb-40">
           <div className="absolute inset-0">
             <img
-              src={`${import.meta.env.BASE_URL}portfolio/performance4.jpg`}
+              src={getImagePath('performance4.jpg')}
               alt="Portfolio hero background"
               className="h-full w-full object-cover"
               onError={(e) => {
                 const t = e.currentTarget as HTMLImageElement;
                 const attempt = parseInt(t.dataset.attempt || '0', 10);
                 const attempts = [
-                  `${import.meta.env.BASE_URL}portfolio/performance4.jpg`,
-                  `${import.meta.env.BASE_URL}portfolio/performance4.JPG`,
-                  `${import.meta.env.BASE_URL}portfolio/performance1.jpg`,
-                  `${import.meta.env.BASE_URL}portfolio/performance1.JPG`,
-                  `${import.meta.env.BASE_URL}portfolio/performance5.jpg`,
-                  `${import.meta.env.BASE_URL}portfolio/performance5.JPG`,
+                  getImagePath('performance4.jpg'),
+                  getImagePath('performance4.JPG'),
+                  getImagePath('performance1.jpg'),
+                  getImagePath('performance1.JPG'),
+                  getImagePath('performance5.jpg'),
+                  getImagePath('performance5.JPG'),
                   `${import.meta.env.BASE_URL}logo3.png`,
                 ];
+                console.log('Image load error, attempting:', attempts[attempt + 1]);
                 if (attempt < attempts.length - 1) {
                   t.src = attempts[attempt + 1];
                   t.dataset.attempt = String(attempt + 1);
@@ -123,7 +134,7 @@ const Portfolio = () => {
                   {[1,2,3,4,5,6].map((idx) => (
                     <figure key={idx} className="relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-slate-200 bg-slate-100">
                       <img
-                        src={`${import.meta.env.BASE_URL}portfolio/performance${idx}.jpg`}
+                        src={getImagePath(`performance${idx}.jpg`)}
                         alt={`정밀안전진단 사례 ${idx}`}
                         className="h-full w-full object-cover"
                         onError={(e) => {
@@ -131,9 +142,10 @@ const Portfolio = () => {
                           const attemptCount = parseInt(t.dataset.attempt || '0', 10);
                           // 실제 파일 확장자에 맞게 시도: .jpg -> .JPG
                           const attempts = [
-                            `${import.meta.env.BASE_URL}portfolio/performance${idx}.jpg`,
-                            `${import.meta.env.BASE_URL}portfolio/performance${idx}.JPG`,
+                            getImagePath(`performance${idx}.jpg`),
+                            getImagePath(`performance${idx}.JPG`),
                           ];
+                          console.log(`Image ${idx} load error, attempting:`, attempts[attemptCount + 1]);
                           if (attemptCount < attempts.length - 1) {
                             t.src = attempts[attemptCount + 1];
                             t.dataset.attempt = String(attemptCount + 1);
