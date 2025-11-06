@@ -71,20 +71,20 @@ const Portfolio = () => {
         <section className="relative overflow-hidden text-white mb-40">
           <div className="absolute inset-0">
             <img
-              src="/portfolio/performance4.jpg"
+              src={`${import.meta.env.BASE_URL}portfolio/performance4.jpg`}
               alt="Portfolio hero background"
               className="h-full w-full object-cover"
               onError={(e) => {
                 const t = e.currentTarget as HTMLImageElement;
                 const attempt = parseInt(t.dataset.attempt || '0', 10);
                 const attempts = [
-                  '/portfolio/performance4.jpg',
-                  '/portfolio/performance4.JPG',
-                  '/portfolio/performance1.jpg',
-                  '/portfolio/performance1.JPG',
-                  '/portfolio/performance5.jpg',
-                  '/portfolio/performance5.JPG',
-                  '/logo3.png',
+                  `${import.meta.env.BASE_URL}portfolio/performance4.jpg`,
+                  `${import.meta.env.BASE_URL}portfolio/performance4.JPG`,
+                  `${import.meta.env.BASE_URL}portfolio/performance1.jpg`,
+                  `${import.meta.env.BASE_URL}portfolio/performance1.JPG`,
+                  `${import.meta.env.BASE_URL}portfolio/performance5.jpg`,
+                  `${import.meta.env.BASE_URL}portfolio/performance5.JPG`,
+                  `${import.meta.env.BASE_URL}logo3.png`,
                 ];
                 if (attempt < attempts.length - 1) {
                   t.src = attempts[attempt + 1];
@@ -123,7 +123,7 @@ const Portfolio = () => {
                   {[1,2,3,4,5,6].map((idx) => (
                     <figure key={idx} className="relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-slate-200 bg-slate-100">
                       <img
-                        src={`/portfolio/performance${idx}.jpg`}
+                        src={`${import.meta.env.BASE_URL}portfolio/performance${idx}.jpg`}
                         alt={`정밀안전진단 사례 ${idx}`}
                         className="h-full w-full object-cover"
                         onError={(e) => {
@@ -131,8 +131,8 @@ const Portfolio = () => {
                           const attemptCount = parseInt(t.dataset.attempt || '0', 10);
                           // 실제 파일 확장자에 맞게 시도: .jpg -> .JPG
                           const attempts = [
-                            `/portfolio/performance${idx}.jpg`,
-                            `/portfolio/performance${idx}.JPG`,
+                            `${import.meta.env.BASE_URL}portfolio/performance${idx}.jpg`,
+                            `${import.meta.env.BASE_URL}portfolio/performance${idx}.JPG`,
                           ];
                           if (attemptCount < attempts.length - 1) {
                             t.src = attempts[attemptCount + 1];
