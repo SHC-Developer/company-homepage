@@ -65,11 +65,16 @@ const Portfolio = () => {
   const getImagePath = (filename: string) => {
     const baseUrl = import.meta.env.BASE_URL;
     const path = `${baseUrl}portfolio/${filename}`;
-    // 개발 환경에서만 로그 출력
-    if (import.meta.env.DEV) {
-      console.log('Image path:', path, 'BASE_URL:', baseUrl);
-    }
     return path;
+  };
+
+  // 실제 파일 확장자 매핑 (1-3: JPG, 4-11: jpg)
+  const getImageExtensions = (idx: number): string[] => {
+    if (idx >= 1 && idx <= 3) {
+      return ['JPG', 'jpg']; // 대문자 우선
+    } else {
+      return ['jpg', 'JPG']; // 소문자 우선
+    }
   };
 
   return (
@@ -87,19 +92,22 @@ const Portfolio = () => {
               onError={(e) => {
                 const t = e.currentTarget as HTMLImageElement;
                 const attempt = parseInt(t.dataset.attempt || '0', 10);
+                // 실제 존재하는 파일만 시도: performance4 (jpg/JPG), performance1 (JPG/jpg), performance5 (jpg/JPG)
                 const attempts = [
                   getImagePath('performance4.jpg'),
                   getImagePath('performance4.JPG'),
-                  getImagePath('performance1.jpg'),
                   getImagePath('performance1.JPG'),
+                  getImagePath('performance1.jpg'),
                   getImagePath('performance5.jpg'),
                   getImagePath('performance5.JPG'),
-                  `${import.meta.env.BASE_URL}logo3.png`,
                 ];
-                console.log('Image load error, attempting:', attempts[attempt + 1]);
                 if (attempt < attempts.length - 1) {
                   t.src = attempts[attempt + 1];
                   t.dataset.attempt = String(attempt + 1);
+                } else {
+                  // 모든 시도 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                  t.onerror = null;
+                  t.style.display = 'none';
                 }
               }}
               data-attempt="0"
@@ -134,21 +142,22 @@ const Portfolio = () => {
                   {[1,2,3,4,5,6].map((idx) => (
                     <figure key={idx} className="relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-slate-200 bg-slate-100">
                       <img
-                        src={getImagePath(`performance${idx}.jpg`)}
+                        src={getImagePath(`performance${idx}.${getImageExtensions(idx)[0]}`)}
                         alt={`정밀안전진단 사례 ${idx}`}
                         className="h-full w-full object-cover"
                         onError={(e) => {
                           const t = e.currentTarget as HTMLImageElement;
                           const attemptCount = parseInt(t.dataset.attempt || '0', 10);
-                          // 실제 파일 확장자에 맞게 시도: .jpg -> .JPG
-                          const attempts = [
-                            getImagePath(`performance${idx}.jpg`),
-                            getImagePath(`performance${idx}.JPG`),
-                          ];
-                          console.log(`Image ${idx} load error, attempting:`, attempts[attemptCount + 1]);
-                          if (attemptCount < attempts.length - 1) {
-                            t.src = attempts[attemptCount + 1];
-                            t.dataset.attempt = String(attemptCount + 1);
+                          // 실제 파일 확장자에 맞게 시도 (1-3: JPG 우선, 4-6: jpg 우선)
+                          const extensions = getImageExtensions(idx);
+                          // 첫 번째 확장자는 이미 src에 있으므로, 두 번째 확장자부터 시도
+                          if (attemptCount === 0 && extensions.length > 1) {
+                            t.src = getImagePath(`performance${idx}.${extensions[1]}`);
+                            t.dataset.attempt = '1';
+                          } else {
+                            // 모든 시도 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                            t.onerror = null;
+                            t.style.display = 'none';
                           }
                         }}
                         data-attempt="0"
