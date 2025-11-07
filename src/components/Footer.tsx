@@ -14,15 +14,20 @@ export const Footer = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1.5fr),minmax(0,1fr)] items-start">
           {/* 회사명 + 로고 */}
           <div className="space-y-6">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               <img
                 src={logo2}
                 alt="대한민국상이군경회시설사업소 로고"
-                className="w-16 h-16 md:w-20 md:h-20 object-contain"
+                className="w-20 h-20 md:w-24 md:h-24 object-contain"
               />
-              <h3 className="text-2xl md:text-3xl font-bold font-korean">
-                대한민국상이군경회시설사업소
-              </h3>
+              <div className="space-y-1">
+                <h3 className="text-3xl md:text-4xl font-bold font-korean leading-tight">
+                  대한민국상이군경회시설사업소
+                </h3>
+                <p className="text-lg md:text-xl text-primary-foreground/80 font-korean tracking-wide leading-tight">
+                  大韓民國傷痍軍警會
+                </p>
+              </div>
             </div>
           </div>
 
