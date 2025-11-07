@@ -21,10 +21,10 @@ export const Footer = () => {
                 className="w-20 h-20 md:w-24 md:h-24 object-contain"
               />
               <div className="space-y-1">
-                <h3 className="text-3xl md:text-4xl font-bold font-korean leading-tight">
+                <h3 className="text-3xl md:text-4xl font-bold font-logo leading-tight">
                   대한민국상이군경회시설사업소
                 </h3>
-                <p className="text-lg md:text-xl text-primary-foreground/80 font-korean tracking-wide leading-tight">
+                <p className="text-lg md:text-xl text-primary-foreground/80 font-logo tracking-wide leading-tight">
                   大韓民國傷痍軍警會
                 </p>
               </div>

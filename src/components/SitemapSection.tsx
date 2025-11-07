@@ -82,7 +82,7 @@ export const SitemapSection = () => {
   return (
     <section className="py-36 bg-muted/30 overflow-hidden min-h-[calc(100vh-200px)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-        <h3 className="text-4xl font-bold text-center mb-4 font-korean">대한민국상이군경회시설사업소</h3>
+        <h3 className="text-4xl font-bold text-center mb-4 font-logo">대한민국상이군경회시설사업소</h3>
         <p className="text-center text-gray-600 font-korean mb-24 text-base max-w-3xl mx-auto leading-relaxed">
           대한민국상이군경회시설사업소는 시설물의 안전과 유지관리를 책임지는 엔지니어링 전문기관입니다.(수정 필요)
         </p>

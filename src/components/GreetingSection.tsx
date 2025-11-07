@@ -28,6 +28,15 @@ export const GreetingSection = () => {
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [focusedHistoryIndex, setFocusedHistoryIndex] = useState<number | null>(null);
+  
+  const scrollToHistory = (anchorId: string) => {
+    const element = document.getElementById(anchorId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // COMPANY HISTORY: no range filtering, continuous timeline (latest first)
 
   // 인증서 목록 (특허증 제외)
   const certifications = [
@@ -365,7 +374,7 @@ export const GreetingSection = () => {
             <div className="relative w-full h-full">
               <iframe
                 className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2"
-                src="https://www.youtube-nocookie.com/embed/mc51O-lceUc?autoplay=1&mute=1&loop=1&playlist=mc51O-lceUc&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1"
+                src="https://www.youtube-nocookie.com/embed/ZTk_00Kto1o?autoplay=1&mute=1&loop=1&playlist=ZTk_00Kto1o&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1"
                 title="대한민국 상이군경회 시설사업소 배경 영상"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -376,7 +385,7 @@ export const GreetingSection = () => {
                 }}
               />
               {/* 비디오 위에 오버레이 */}
-              <div className="absolute inset-0 bg-black/30 z-10"></div>
+              <div className="absolute inset-0 bg-black/10 z-10"></div>
             </div>
           ) : (
             /* 대체 배경 */
@@ -677,10 +686,32 @@ export const GreetingSection = () => {
                   HIGHLIGHTS
                 </h1>
                 <div className="space-y-3 text-gray-600 text-sm leading-relaxed">
-                  <p>대한민국상이군경회 시설사업소의</p>
+                  <p>대한민국상이군경회시설사업소의</p>
                   <p>역사와 발전 과정을 소개합니다.</p>
                   <p>기술혁신과 국가 발전을 위한</p>
                   <p>저희의 지속적인 노력을 확인하세요.</p>
+                </div>
+
+                {/* 연도 범위 네비게이션 - 클릭 시 해당 구간 첫 항목으로 스크롤 */}
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                  <button
+                    onClick={() => scrollToHistory('history-1951')}
+                    className="px-6 py-3 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-colors font-korean shadow-sm"
+                  >
+                    1951-2001
+                  </button>
+                  <button
+                    onClick={() => scrollToHistory('history-2002')}
+                    className="px-6 py-3 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-colors font-korean shadow-sm"
+                  >
+                    2002-2009
+                  </button>
+                  <button
+                    onClick={() => scrollToHistory('history-2010')}
+                    className="px-6 py-3 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-colors font-korean shadow-sm"
+                  >
+                    2010-2021
+                  </button>
                 </div>
               </div>
 
@@ -690,89 +721,89 @@ export const GreetingSection = () => {
                   {/* 타임라인 세로줄 */}
                   <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-[#3B2FFF] to-blue-400"></div>
 
-                  {/* 타임라인 아이템들 */}
+                  {/* 타임라인 아이템들 (최신 연도 순) */}
                   <div className="space-y-36">
-                    {/* 1951년 - 좌측 */}
+                    {/* 2021년 - 좌측 */}
                     <div 
-                      ref={el => historyItemRefs.current[0] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[0] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      ref={el => historyItemRefs.current[10] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[10] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 0 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1951년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 0 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>부산에서 사단법인 대한상이군경회 설립</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 10 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2021년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 10 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>유을상 회장님 취임</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[0] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[0] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[10] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[10] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
                     </div>
 
-                    {/* 1953년 - 우측 */}
+                    {/* 2015년 - 우측 (앵커: 2010-2021) */}
                     <div 
-                      ref={el => historyItemRefs.current[1] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[1] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                      id="history-2010"
+                      ref={el => historyItemRefs.current[9] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[9] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16"></div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[1] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[1] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[9] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[9] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 1 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1953년</h3>
-                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 1 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>서울환도 후 이승만대통령 총재 / 사단법인 대한상이용사회</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 9 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2015년</h3>
+                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 9 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>건설기술용역업(설계·사업관리)일반 등록</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* 1988년 - 좌측 */}
+                    {/* 2009년 - 좌측 */}
                     <div 
-                      ref={el => historyItemRefs.current[2] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[2] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      ref={el => historyItemRefs.current[8] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[8] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 2 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1988년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 2 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>국가유공자등단체설립에관한법률 대한민국상이군경회 개칭</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 8 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2009년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 8 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>감리전문회사(종합) 등록</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[2] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[2] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[8] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[8] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
                     </div>
 
-                    {/* 2002년 - 우측 */}
+                    {/* 2007년 - 우측 */}
                     <div 
-                      ref={el => historyItemRefs.current[3] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[3] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                      ref={el => historyItemRefs.current[7] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[7] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16"></div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[3] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[3] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[7] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[7] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2002년</h3>
-                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회 시설관리사업`소 설립 / 소장 김양명</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 7 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2007년</h3>
+                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 7 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회시설사업소 명칭 변경</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* 2003년 - 좌측 */}
+                    {/* 2005년 - 좌측 */}
                     <div 
-                      ref={el => historyItemRefs.current[4] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[4] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      ref={el => historyItemRefs.current[6] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[6] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2003년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>총괄본부장 나경준 / 기술인력 수급 및 면허신청</p>
-                          <p className={`mt-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>안전진단전문기관 등록 / 엔지니어링활동주체 등록</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 6 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2005년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 6 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>엔지니어링활동주체등록사항 5개 분야 등록완료</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[4] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[4] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[6] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[6] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
@@ -795,86 +826,89 @@ export const GreetingSection = () => {
                       </div>
                     </div>
 
-                    {/* 2005년 - 좌측 */}
+                    {/* 2003년 - 좌측 */}
                     <div 
-                      ref={el => historyItemRefs.current[6] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[6] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      ref={el => historyItemRefs.current[4] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[4] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 6 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2005년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 6 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>엔지니어링활동주체등록사항 5개 분야 등록완료</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2003년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>총괄본부장 나경준 / 기술인력 수급 및 면허신청</p>
+                          <p className={`mt-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 4 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>안전진단전문기관 등록 / 엔지니어링활동주체 등록</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[6] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[6] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[4] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[4] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
                     </div>
 
-                    {/* 2007년 - 우측 */}
+                    {/* 2002년 - 우측 (앵커: 2002-2009) */}
                     <div 
-                      ref={el => historyItemRefs.current[7] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[7] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                      id="history-2002"
+                      ref={el => historyItemRefs.current[3] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[3] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16"></div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[7] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[7] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[3] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[3] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 7 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2007년</h3>
-                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 7 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회 시설사업소 명칭 변경</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2002년</h3>
+                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 3 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>대한민국상이군경회시설관리사업`소 설립 / 소장 김양명</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* 2009년 - 좌측 */}
+                    {/* 1988년 - 좌측 */}
                     <div 
-                      ref={el => historyItemRefs.current[8] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[8] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      ref={el => historyItemRefs.current[2] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[2] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 8 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2009년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 8 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>감리전문회사(종합) 등록</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 2 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1988년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 2 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>국가유공자등단체설립에관한법률 대한민국상이군경회 개칭</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[8] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[8] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[2] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[2] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
                     </div>
 
-                    {/* 2015년 - 우측 */}
+                    {/* 1953년 - 우측 */}
                     <div 
-                      ref={el => historyItemRefs.current[9] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[9] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                      ref={el => historyItemRefs.current[1] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[1] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16"></div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[9] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[9] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[1] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[1] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 9 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2015년</h3>
-                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 9 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>건설기술용역업(설계·사업관리)일반 등록</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-left ${focusedHistoryIndex === 1 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1953년</h3>
+                          <p className={`transition-all duration-500 origin-left ${focusedHistoryIndex === 1 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>서울환도 후 이승만대통령 총재 / 사단법인 대한상이용사회</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* 2021년 - 좌측 */}
+                    {/* 1951년 - 좌측 (앵커: 1951-2001) */}
                     <div 
-                      ref={el => historyItemRefs.current[10] = el}
-                      className={`relative transition-all duration-1000 ${visibleHistoryItems[10] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                      id="history-1951"
+                      ref={el => historyItemRefs.current[0] = el}
+                      className={`relative transition-all duration-1000 ${visibleHistoryItems[0] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     >
                       <div className="flex items-center">
                         <div className="w-1/2 pr-16 text-right">
-                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 10 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>2021년</h3>
-                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 10 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>유을상 회장님 취임</p>
+                          <h3 className={`font-bold mb-2 transition-all duration-500 origin-right ${focusedHistoryIndex === 0 ? 'text-3xl scale-150 text-[#3B2FFF]' : 'text-2xl scale-100 text-[#504EFF]'}`}>1951년</h3>
+                          <p className={`transition-all duration-500 origin-right ${focusedHistoryIndex === 0 ? 'scale-150 text-[#3B2FFF]' : 'scale-100 text-gray-700'}`}>부산에서 사단법인 대한상이군경회 설립</p>
                         </div>
-                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[10] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
-                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[10] ? 'text-white' : 'text-gray-400'}`}>●</span>
+                        <div className={`absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-gray-200 flex items-center justify-center transition-all duration-500 ${visibleHistoryItems[0] ? 'bg-[#3B2FFF] border-[#3B2FFF] shadow-lg shadow-[#3B2FFF]/50' : 'bg-white'}`}>
+                          <span className={`text-sm font-bold transition-colors duration-500 ${visibleHistoryItems[0] ? 'text-white' : 'text-gray-400'}`}>●</span>
                         </div>
                         <div className="w-1/2 pl-16"></div>
                       </div>
@@ -910,7 +944,7 @@ export const GreetingSection = () => {
                       alt={cert.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                       <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                         <p className="text-sm font-semibold">이미지 확대</p>
                       </div>
@@ -934,7 +968,7 @@ export const GreetingSection = () => {
                       alt={cert.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                       <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                         <p className="text-sm font-semibold">이미지 확대</p>
                       </div>
@@ -969,7 +1003,7 @@ export const GreetingSection = () => {
                     alt={patent.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                     <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                       <p className="text-sm font-semibold">이미지 확대</p>
                     </div>
