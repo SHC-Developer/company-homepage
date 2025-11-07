@@ -444,4 +444,28 @@ All colors MUST be HSL.
   .logo-container:hover .logo-glow {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
+
+  /* Footer wave animation */
+  .footer-wave {
+    position: absolute;
+    inset: 0;
+  }
+
+  @keyframes waveSlide {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-wave {
+    animation: waveSlide 12s linear infinite;
+  }
+
+  .animate-wave-slow {
+    animation: waveSlide 18s linear infinite;
+    opacity: 0.6;
+  }
 }
