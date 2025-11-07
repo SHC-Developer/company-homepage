@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logo2 from '@/assets/logo2.png';
+import logo3 from '@/assets/logo3.png';
 
 interface MenuStructure {
   [key: string]: string[];
@@ -270,11 +272,9 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
           <div className="flex-shrink-0 flex items-center gap-3 sm:gap-4">
             <img 
               src={
-                location.pathname === '/greeting' && isOverLightBackground
-                  ? `${import.meta.env.BASE_URL}logo3.png`
-                  : isOverLightBackground 
-                    ? `${import.meta.env.BASE_URL}logo3.png` 
-                    : (location.pathname === '/' || location.pathname === '/greeting' ? `${import.meta.env.BASE_URL}logo2.png` : `${import.meta.env.BASE_URL}logo3.png`)
+                isOverLightBackground
+                  ? logo3
+                  : (location.pathname === '/' || location.pathname === '/greeting' ? logo2 : logo3)
               } 
               alt="회사 로고" 
               className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
