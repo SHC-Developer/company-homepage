@@ -15,7 +15,7 @@ export const Footer = () => {
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <img
-                src="/logo2.png"
+                src={`${import.meta.env.BASE_URL}logo2.png`}
                 alt="대한민국상이군경회시설사업소 로고"
                 className="w-16 h-16 md:w-20 md:h-20 object-contain"
               />
