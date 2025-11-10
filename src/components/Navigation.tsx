@@ -18,9 +18,10 @@ const menuStructure = {
 interface NavigationProps {
   variant?: 'default' | 'legal';
   forceLightTheme?: boolean;
+  autoHideOnMount?: boolean;
 }
 
-export const Navigation = ({ variant = 'default', forceLightTheme = false }: NavigationProps) => {
+export const Navigation = ({ variant = 'default', forceLightTheme = false, autoHideOnMount = false }: NavigationProps) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpandedMenus, setMobileExpandedMenus] = useState<string[]>([]);
@@ -279,8 +280,16 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
     }
   }, [forceLightTheme]);
 
+  // 페이지 진입 시 자동 숨김 (히어로 집중용)
+  useEffect(() => {
+    if (autoHideOnMount) {
+      const timer = setTimeout(() => setIsNavVisible(false), 400);
+      return () => clearTimeout(timer);
+    }
+  }, [autoHideOnMount]);
+
   return (
-    <nav className={`fixed -top-4 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0' : '-translate-y-full'} ${
+    <nav className={`fixed -top-4 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'} ${
       location.pathname === '/greeting'
         ? (isOverLightBackground ? 'bg-white' : 'bg-transparent')
         : isOverLightBackground ? 'bg-white' : 'bg-transparent'
@@ -367,6 +376,27 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         <Link
                           key={subMenu}
                           to="/legal-basis"
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </Link>
+                      ) : subMenu === '채용공고' ? (
+                        <Link
+                          key={subMenu}
+                          to="/recruit"
+                          onClick={() => {
+                            window.scrollTo(0, 0);
+                            setActiveMenu(null);
+                            setIsMobileMenuOpen(false);
+                          }}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             location.pathname === '/greeting'
                               ? (isOverLightBackground
@@ -572,6 +602,27 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                           <Link
                             key={subMenu}
                             to="/legal-basis"
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </Link>
+                        ) : subMenu === '채용공고' ? (
+                          <Link
+                            key={subMenu}
+                            to="/recruit"
+                            onClick={() => {
+                              window.scrollTo(0, 0);
+                              setActiveMenu(null);
+                              setIsMobileMenuOpen(false);
+                            }}
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground
