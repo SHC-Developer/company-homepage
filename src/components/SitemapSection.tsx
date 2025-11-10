@@ -63,7 +63,7 @@ export const SitemapSection = () => {
       id: 'organization',
       label: '조직도',
       icon: <Users className="w-8 h-8" />,
-      onClick: () => handleCategoryClick('/greeting'),
+      onClick: () => handleCategoryClick('/greeting', 'organization'),
     },
     {
       id: 'portfolio',

@@ -150,6 +150,27 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
     setIsMobileMenuOpen(false);
   };
 
+  const handleOrganizationClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/greeting') {
+      const element = document.getElementById('organization');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '#organization');
+      }
+    } else {
+      navigate('/greeting#organization');
+      setTimeout(() => {
+        const element = document.getElementById('organization');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
   const handleCompanyIntroClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (location.pathname === '/greeting') {
@@ -445,6 +466,23 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                         >
                           {subMenu}
                         </a>
+                      ) : subMenu === '조직구성' ? (
+                        <a
+                          key={subMenu}
+                          href="#"
+                          onClick={handleOrganizationClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
                       ) : (
                         <Link
                           key={subMenu}
@@ -621,6 +659,23 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false }: Nav
                             key={subMenu}
                             href="#"
                             onClick={handleDirectionsClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '조직구성' ? (
+                          <a
+                            key={subMenu}
+                            href="#"
+                            onClick={handleOrganizationClick}
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground
