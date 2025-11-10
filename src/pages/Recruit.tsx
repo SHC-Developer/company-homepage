@@ -32,7 +32,7 @@ const Recruit = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      <Navigation variant="default" forceLightTheme={true} />
+      <Navigation variant="default" forceLightTheme={true} autoHideOnMount />
 
       <main>
         {/* Fullscreen Hero */}

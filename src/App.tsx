@@ -9,6 +9,7 @@ import Greeting from "./pages/Greeting";
 import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
 import Recruit from "./pages/Recruit";
+import CursorTrail from "./components/CursorTrail";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <CursorTrail />
       <BrowserRouter 
         basename={basename}
         future={{
