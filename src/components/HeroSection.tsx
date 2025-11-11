@@ -12,8 +12,11 @@ export const HeroSection = () => {
   const [showSecondMessages, setShowSecondMessages] = useState(true);
   const [isCurrentSentenceVisible, setIsCurrentSentenceVisible] = useState(true);
   const [showBottomText, setShowBottomText] = useState(false);
+  const [isScrollUnlocked, setIsScrollUnlocked] = useState(false);
   const charIndexRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const originalOverflowRef = useRef<string | null>(null);
+  const originalTouchActionRef = useRef<string | null>(null);
 
   const firstMessage = '당신의 오늘은 안전하셨습니까?';
   const secondMessages = [
@@ -22,10 +25,98 @@ export const HeroSection = () => {
     '사람과 사랑으로 융합된 성장의 발자국을 남기는 시설사업소가 되겠습니다'
   ];
 
-  const scrollToNext = () => {
-    const nextSection = document.getElementById('services');
-    nextSection?.scrollIntoView({ behavior: 'smooth' });
+  const handleArrowClick = () => {
+    setIsScrollUnlocked(true);
+
+    requestAnimationFrame(() => {
+      const outerCircles = Array.from(
+        document.querySelectorAll<HTMLElement>('#sitemap-animation-container .outer-circle')
+      );
+      const centralCircle = document.getElementById('sitemap-central-circle');
+
+      const clusterElements = [
+        ...(centralCircle ? [centralCircle] : []),
+        ...outerCircles
+      ];
+
+      const centerOffset = 80; // move cluster slightly higher than exact center
+
+      if (clusterElements.length > 0) {
+        let minTop = Infinity;
+        let maxBottom = -Infinity;
+
+        clusterElements.forEach((element) => {
+          const rect = element.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+          const bottom = rect.bottom + window.scrollY;
+
+          if (top < minTop) minTop = top;
+          if (bottom > maxBottom) maxBottom = bottom;
+        });
+
+        if (Number.isFinite(minTop) && Number.isFinite(maxBottom)) {
+          const clusterHeight = maxBottom - minTop;
+          const targetScrollTop = minTop + clusterHeight / 2 - window.innerHeight / 2 - centerOffset;
+
+          window.scrollTo({
+            top: targetScrollTop,
+            behavior: 'smooth'
+          });
+          return;
+        }
+      }
+
+      const animationContainer = document.getElementById('sitemap-animation-container');
+      const fallbackTarget = animationContainer || centralCircle;
+
+      if (fallbackTarget) {
+        const rect = fallbackTarget.getBoundingClientRect();
+        const targetScrollTop = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2 - centerOffset;
+        window.scrollTo({
+          top: targetScrollTop,
+          behavior: 'smooth'
+        });
+      }
+    });
   };
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    if (originalOverflowRef.current === null) {
+      originalOverflowRef.current = document.body.style.overflow || '';
+    }
+
+    if (originalTouchActionRef.current === null) {
+      const currentTouchAction = document.body.style.getPropertyValue('touch-action');
+      originalTouchActionRef.current = currentTouchAction || '';
+    }
+
+    if (!isScrollUnlocked) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.setProperty('touch-action', 'none');
+    } else {
+      document.body.style.overflow = originalOverflowRef.current || '';
+      if (originalTouchActionRef.current) {
+        document.body.style.setProperty('touch-action', originalTouchActionRef.current);
+      } else {
+        document.body.style.removeProperty('touch-action');
+      }
+    }
+
+    return () => {
+      if (originalOverflowRef.current !== null) {
+        document.body.style.overflow = originalOverflowRef.current;
+      }
+      if (originalTouchActionRef.current !== null) {
+        if (originalTouchActionRef.current) {
+          document.body.style.setProperty('touch-action', originalTouchActionRef.current);
+        } else {
+          document.body.style.removeProperty('touch-action');
+        }
+      }
+    };
+  }, [isScrollUnlocked]);
 
   // 페이지 로드 후 2초 대기 후 첫 번째 메시지 시작
   useEffect(() => {
@@ -205,10 +296,13 @@ export const HeroSection = () => {
 
       {/* 스크롤 인디케이터 */}
       <button 
-        onClick={scrollToNext}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 hover:text-white transition-colors animate-bounce z-20"
+        onClick={handleArrowClick}
+        className="absolute bottom-8 left-1/2 flex flex-col items-center gap-2 transform -translate-x-1/2 text-white/80 hover:text-white transition-colors animate-bounce z-20"
         aria-label="다음 섹션으로 스크롤"
       >
+        <span className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
+          Click me!
+        </span>
         <ChevronDown className="h-8 w-8" />
       </button>
 
