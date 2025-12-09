@@ -6,8 +6,14 @@ export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-primary text-primary-foreground">
-      {/* 상단을 깔끔한 직선으로 유지 (추가 오버레이 없음) */}
+    <footer 
+      className="relative overflow-hidden text-primary-foreground"
+      style={{ 
+        backgroundColor: '#0b1c2b'
+      }}
+    >
+      {/* 상단 흰색 가로선 */}
+      <div className="w-full h-[2px] bg-white/30"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-14 pb-16">
         {/* 좌: 로고+회사명 | 우: 연락처+주소 */}

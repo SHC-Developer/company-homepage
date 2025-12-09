@@ -169,7 +169,7 @@ const Recruit = () => {
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                   <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">서류접수</p>
                   <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
-                    2026.01.01 ~ 2026.01.31
+                    2026.02.01 ~ 2026.03.31
                   </p>
                   <p className="mt-2 text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
                 </div>
@@ -177,7 +177,7 @@ const Recruit = () => {
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                   <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">전형절차</p>
                   <p className="mt-3 text-sm text-white/80 leading-6">
-                    1차 서류전형 · 2차 실무면접 · 3차 임원면접 · 4차 최종합격
+                    1차 서류전형 · 2차 실무면접 · 3차 최종합격
                   </p>
                   <p className="mt-2 text-sm text-white/70">
                     제출서류: 이력서, 자기소개서, 관련 자격증 사본

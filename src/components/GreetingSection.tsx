@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { HandHeart, Target, Award, TrendingUp, Globe, Users, BadgeCheck, IdCard } from 'lucide-react';
+import { HandHeart, Target, Award, TrendingUp, Globe, Users } from 'lucide-react';
 
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -454,10 +454,12 @@ export const GreetingSection = () => {
               <div className="flex justify-center">
                 <span className="inline-block h-1.5 w-12 rounded-full bg-[#1e40af]" />
               </div>
-              <h2 className="text-center font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight bg-gradient-to-r from-[#1e40af] to-slate-900 bg-clip-text text-transparent">
-                국가유공자의 높은 이상을 바탕으로,
-                <br className="hidden sm:block" />
-                공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
+              <h2 className="text-center font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-[1.3] tracking-tight" style={{ paddingBottom: '0.15em', overflow: 'visible' }}>
+                <span className="bg-gradient-to-r from-[#1e40af] to-slate-900 bg-clip-text text-transparent" style={{ display: 'inline-block' }}>
+                  국가유공자의 높은 이상을 바탕으로,
+                  <br className="hidden sm:block" />
+                  공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
+                </span>
               </h2>
               <p className="text-center text-slate-600 text-base sm:text-lg">
                 Veterans-first ethics. Transparent governance. Impact for national infrastructure.
@@ -1145,92 +1147,100 @@ export const GreetingSection = () => {
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">조직구성</h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-            <div className="lg:col-span-8">
-              <div className="rounded-2xl border border-border bg-white p-10 shadow-sm h-full flex flex-col">
-                <div className="relative">
-                  {/* 최상단: 좌/중앙(2단)/우 */}
-                  <div className="flex items-start justify-center gap-8 md:gap-12">
-                    {/* 고문 */}
-                    <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border-2 border-black">
-                      <p className="text-base font-semibold font-korean">고 문</p>
-                    </div>
+          <div className="w-full">
+            <div className="rounded-2xl border border-border bg-white p-10 shadow-sm h-full flex flex-col">
+              <div className="flex flex-col items-center space-y-4">
+                {/* 최상단: 시설사업소장 (중앙) */}
+                <div className="flex flex-col items-center">
+                  <div className="rounded-lg bg-blue-600 text-white px-8 py-4 min-w-[260px] text-center shadow-sm border-2 border-black">
+                    <p className="text-lg font-semibold font-korean">시설사업소장 나 경 준</p>
+                  </div>
+                  <div className="mt-3 h-8 w-px bg-blue-200" />
+                  <div className="w-[195px] h-px bg-blue-200 my-1" />
+                </div>
 
-                    {/* 중앙: 시설사업소장 */}
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[260px] text-center shadow-sm border-2 border-black">
-                        <p className="text-lg font-semibold font-korean">시설사업소장 나 경 준</p>
+                {/* 고문 / 자문위원 – 한 단계 아래 */}
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="flex items-start justify-center gap-8 md:gap-12">
+                    <div className="flex flex-col items-center">
+                      <div className="h-5 w-px bg-blue-200 mb-2" />
+                      <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border border-blue-700">
+                        <p className="text-base font-semibold font-korean">고 문</p>
                       </div>
                     </div>
-
-                    {/* 자문위원 */}
-                    <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border-2 border-black">
-                      <p className="text-base font-semibold font-korean">자문위원</p>
+                    <div className="flex flex-col items-center">
+                      <div className="h-5 w-px bg-blue-200 mb-2" />
+                      <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border border-blue-700">
+                        <p className="text-base font-semibold font-korean">자문위원</p>
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* 중앙에서 부서로 내려가는 화살표 (박스 상단 중앙에 정확히 도달) */}
-                  <div className="flex flex-col items-center mt-6">
-                    <div className="w-px h-10 bg-blue-600"></div>
-                  </div>
-                  {/* 수평 분기선: 좌/우 부서로 가지치는 메인 라인 */}
-                  <div className="relative w-full mt-2">
-                    <div className="absolute left-[6%] right-[6%] top-0 h-0.5 bg-blue-600" />
-                  </div>
+                {/* 부서들로 내려가는 메인 연결선 */}
+                <div className="flex flex-col items-center w-full max-w-4xl">
+                  <div className="h-8 w-px bg-blue-200" />
+                  <div className="w-[620px] h-px bg-blue-200 my-3" />
 
                   {/* 3개 부서 */}
-                  <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full">
                     {/* 설계기술부 */}
                     <div className="flex flex-col items-center">
-                      {/* 길고 직선형 아래 화살표 */}
-                      <div className="flex flex-col items-center mb-1">
-                        <div className="w-px h-8 bg-blue-600"></div>
-                      </div>
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border-2 border-black">
+                      <div className="h-6 w-px bg-blue-300 mb-2" />
+                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
                         <p className="text-lg font-semibold font-korean">설계기술부</p>
                       </div>
-                      {/* 하위 */}
-                      <div className="relative w-full mt-5">
-                        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-8 w-0.5 bg-blue-300" />
-                        <div className="absolute left-[6%] right-[6%] top-8 h-0.5 bg-blue-300" />
-                      </div>
-                      {/* 세로형 글자 박스 */}
-                      <div className="mt-10 flex items-stretch justify-center gap-4">
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                      <div className="mt-6 flex items-stretch justify-center gap-3">
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">지반공학부</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">토목구조부</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">수자원개발</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">기술지원부</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* 진단부 */}
+                    {/* 진단기술부 */}
                     <div className="flex flex-col items-center">
-                      <div className="flex flex-col items-center mb-1">
-                        <div className="w-px h-8 bg-blue-600"></div>
+                      <div className="h-6 w-px bg-blue-300 mb-2" />
+                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
+                        <p className="text-lg font-semibold font-korean">진단기술부</p>
                       </div>
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border-2 border-black">
-                        <p className="text-lg font-semibold font-korean">진단부</p>
-                      </div>
-                      <div className="relative w-full mt-5">
-                        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-8 w-0.5 bg-blue-300" />
-                        <div className="absolute left-[15%] right-[15%] top-8 h-0.5 bg-blue-300" />
-                      </div>
-                      <div className="mt-10 flex items-stretch justify-center gap-4">
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                      <div className="mt-6 flex items-stretch justify-center gap-3">
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">교량및터널진단</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">수리및항만진단</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">건축진단</span>
                         </div>
                       </div>
@@ -1238,108 +1248,26 @@ export const GreetingSection = () => {
 
                     {/* 감리부 */}
                     <div className="flex flex-col items-center">
-                      <div className="flex flex-col items-center mb-1">
-                        <div className="w-px h-8 bg-blue-600"></div>
-                      </div>
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border-2 border-black">
+                      <div className="h-6 w-px bg-blue-300 mb-2" />
+                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
                         <p className="text-lg font-semibold font-korean">감리부</p>
                       </div>
-                      <div className="relative w-full mt-5">
-                        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-8 w-0.5 bg-blue-300" />
-                        <div className="absolute left-[20%] right-[20%] top-8 h-0.5 bg-blue-300" />
-                      </div>
-                      <div className="mt-10 flex items-stretch justify-center gap-4">
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                      <div className="mt-6 flex items-stretch justify-center gap-3">
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">토목감리</span>
                         </div>
-                        <div className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[130px] min-w-[56px] flex items-center justify-center" style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}>
+                        <div
+                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
+                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
+                        >
                           <span className="font-korean text-base">건축감리</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 space-y-8">
-              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <IdCard className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold tracking-tight font-korean">보유인력</h3>
-                </div>
-                <div className="overflow-hidden rounded-lg border border-gray-200">
-                  <table className="w-full text-sm font-korean">
-                    <thead className="bg-slate-50">
-                      <tr className="text-left text-gray-600">
-                        <th className="px-4 py-2 w-24">구분</th>
-                        <th className="px-4 py-2 w-20">인원 수</th>
-                        <th className="px-4 py-2">비고</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">기술사</td>
-                        <td className="px-4 py-2">2</td>
-                        <td className="px-4 py-2">토목시공기술사, 건설안전기술사</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">기사</td>
-                        <td className="px-4 py-2">10</td>
-                        <td className="px-4 py-2">토목기사(9), 건축기사(1)</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">산업기사</td>
-                        <td className="px-4 py-2">1</td>
-                        <td className="px-4 py-2">토목산업기사</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">기능사</td>
-                        <td className="px-4 py-2">1</td>
-                        <td className="px-4 py-2">전산응용건축제도기능사</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <BadgeCheck className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold tracking-tight font-korean">자격증 현황</h3>
-                </div>
-                <div className="overflow-hidden rounded-lg border border-gray-200">
-                  <table className="w-full text-sm font-korean">
-                    <thead className="bg-slate-50">
-                      <tr className="text-left text-gray-600">
-                        <th className="px-4 py-2 w-28">기술인등급</th>
-                        <th className="px-4 py-2 w-20">토목</th>
-                        <th className="px-4 py-2 w-20">건축</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">특급</td>
-                        <td className="px-4 py-2">10</td>
-                        <td className="px-4 py-2">2</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">고급</td>
-                        <td className="px-4 py-2">2</td>
-                        <td className="px-4 py-2">-</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">중급</td>
-                        <td className="px-4 py-2">2</td>
-                        <td className="px-4 py-2">-</td>
-                      </tr>
-                      <tr className="border-t">
-                        <td className="px-4 py-2">초급</td>
-                        <td className="px-4 py-2">2</td>
-                        <td className="px-4 py-2">1</td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
               </div>
             </div>

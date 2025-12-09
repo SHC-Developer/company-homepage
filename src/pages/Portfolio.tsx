@@ -3,7 +3,6 @@ import { Navigation } from '../components/Navigation';
 import { Footer } from '../components/Footer';
 import { ScrollToTop } from '../components/ScrollToTop';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface PortfolioData {
   year: number;
@@ -13,6 +12,13 @@ interface PortfolioData {
   '감리': number;
   '기타': number;
   '합계': number;
+}
+
+interface PerformanceRecord {
+  year: string;
+  contractName: string;
+  client: string;
+  method: string;
 }
 
 const portfolioData: PortfolioData[] = [
@@ -43,6 +49,11 @@ const portfolioData: PortfolioData[] = [
 ];
 
 const Portfolio = () => {
+  const [tunnelRecords, setTunnelRecords] = React.useState<PerformanceRecord[]>([]);
+  const [suriRecords, setSuriRecords] = React.useState<PerformanceRecord[]>([]);
+  const [designRecords, setDesignRecords] = React.useState<PerformanceRecord[]>([]);
+  const [gamRiRecords, setGamRiRecords] = React.useState<PerformanceRecord[]>([]);
+
   const totals = React.useMemo(() => {
     const totalProjects = portfolioData.reduce((sum, d) => sum + d['합계'], 0);
     const diagnosis = portfolioData.reduce((sum, d) => sum + d['정밀안전진단'], 0);
@@ -76,6 +87,63 @@ const Portfolio = () => {
       return ['jpg', 'JPG']; // 소문자 우선
     }
   };
+
+  // 텍스트 기반 수행실적 데이터 로드 (교량/터널, 수리, 설계, 감리)
+  React.useEffect(() => {
+    const loadRecords = async (filename: string): Promise<PerformanceRecord[]> => {
+      try {
+        const baseUrl = import.meta.env.BASE_URL;
+        const response = await fetch(`${baseUrl}portfolio/${filename}`);
+        if (!response.ok) {
+          return [];
+        }
+        const text = await response.text();
+        const lines = text.split(/\r?\n/);
+
+        const records: PerformanceRecord[] = lines
+          .map((line) => line.trim())
+          .filter((line) => line.length > 0)
+          .map((line) => {
+            const parts = line.split('/');
+            const year = (parts[0] ?? '').trim();
+            const contractName = (parts[1] ?? '').trim();
+            const client = (parts[2] ?? '').trim();
+            let method = (parts[3] ?? '').trim();
+
+            // 양쪽 따옴표 제거 등 간단 정리
+            method = method.replace(/^"+|"+$/g, '').trim();
+
+            return {
+              year,
+              contractName,
+              client,
+              method,
+            };
+          });
+
+        return records;
+      } catch (error) {
+        console.error('Failed to load tunnel performance data:', error);
+        return [];
+      }
+    };
+
+    const loadAll = async () => {
+      const [tunnel, suri, design, gamri] = await Promise.all([
+        loadRecords('tunnel.txt'),
+        loadRecords('Suri.txt'),
+        loadRecords('Construction.txt'),
+        loadRecords('GamRi.txt'),
+      ]);
+
+      setTunnelRecords(tunnel);
+      setSuriRecords(suri);
+      setDesignRecords(design);
+      setGamRiRecords(gamri);
+    };
+
+    loadAll();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -122,55 +190,6 @@ const Portfolio = () => {
           </div>
         </section>
         <div className="w-[75%] mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-300 pt-12">
-          {/* 정밀안전진단 섹션 (좌측 설명 + 우측 6장 그리드) */}
-          <section className="mb-40 pb-12 border-b border-slate-300">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <aside className="lg:col-span-4">
-                <h2 className="text-2xl md:text-3xl font-extrabold font-korean tracking-tight">정밀안전진단</h2>
-                <p className="mt-3 text-sm text-slate-600 font-korean">예시 문구: 2003년부터 2025년까지 전국 주요 구조물에 대해 수행된 정밀안전진단 용역의 일부 사례입니다.</p>
-                <ul className="mt-6 space-y-3 text-sm font-korean">
-                  <li className="flex items-center justify-between border-b border-slate-200 pb-2"><span>2025 · ○○교 정밀안전진단</span><span className="text-slate-400">서울</span></li>
-                  <li className="flex items-center justify-between border-b border-slate-200 pb-2"><span>2024 · △△ 터널 정밀안전진단</span><span className="text-slate-400">부산</span></li>
-                  <li className="flex items-center justify-between border-b border-slate-200 pb-2"><span>2023 · □□댐 정밀안전진단</span><span className="text-slate-400">강원</span></li>
-                  <li className="flex items-center justify-between border-b border-slate-200 pb-2"><span>2022 · ○○교차로 램프 정밀안전진단</span><span className="text-slate-400">대전</span></li>
-                  <li className="flex items-center justify-between border-b border-slate-200 pb-2"><span>2021 · 해상교량 케이블 점검</span><span className="text-slate-400">인천</span></li>
-                  <li className="flex items-center justify-between"><span>2020 · 광역철도 구조물 조사</span><span className="text-slate-400">경기</span></li>
-                </ul>
-              </aside>
-              <div className="lg:col-span-8">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {[1,2,3,4,5,6].map((idx) => (
-                    <figure key={idx} className="relative aspect-[4/3] overflow-hidden rounded-xl ring-1 ring-slate-200 bg-slate-100">
-                      <img
-                        src={getImagePath(`performance${idx}.${getImageExtensions(idx)[0]}`)}
-                        alt={`정밀안전진단 사례 ${idx}`}
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          const t = e.currentTarget as HTMLImageElement;
-                          const attemptCount = parseInt(t.dataset.attempt || '0', 10);
-                          // 실제 파일 확장자에 맞게 시도 (1-3: JPG 우선, 4-6: jpg 우선)
-                          const extensions = getImageExtensions(idx);
-                          // 첫 번째 확장자는 이미 src에 있으므로, 두 번째 확장자부터 시도
-                          if (attemptCount === 0 && extensions.length > 1) {
-                            t.src = getImagePath(`performance${idx}.${extensions[1]}`);
-                            t.dataset.attempt = '1';
-                          } else {
-                            // 모든 시도 실패 시 에러 핸들러 제거하여 무한 루프 방지
-                            t.onerror = null;
-                            t.style.display = 'none';
-                          }
-                        }}
-                        data-attempt="0"
-                      />
-                    </figure>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          
-
           {/* KPI 카드 */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
             <Card className="border-blue-100">
@@ -178,16 +197,9 @@ const Portfolio = () => {
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">총 수행건수</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="flex items-end justify-between">
-                  <div className="text-3xl font-bold text-slate-900 tabular-nums">{totals.totalProjects.toLocaleString()}</div>
-                  <div className={`flex items-center gap-1 text-xs ${totals.yoy >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {totals.yoy >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                    <span className="font-medium">
-                      {Math.abs(totals.yoy).toFixed(1)}%
-                    </span>
-                  </div>
+                <div className="text-3xl font-bold text-slate-900 tabular-nums">
+                  {totals.totalProjects.toLocaleString()}
                 </div>
-                <p className="mt-1 text-xs text-slate-500">전년 대비 (기준년도 {totals.lastYear})</p>
               </CardContent>
             </Card>
 
@@ -233,46 +245,330 @@ const Portfolio = () => {
           </div>
 
           {/* 세부 표 */}
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base font-korean">연도별 상세 내역</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-base" style={{ tableLayout: 'fixed' }}>
-                      <thead className="sticky top-0 z-10">
-                        <tr className="bg-slate-100/80 backdrop-blur supports-[backdrop-filter]:bg-slate-100/60">
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>구분</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전진단</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전점검</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>엔지니어링 설계</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>설계/사업관리(감리)</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '10%' }}>기타</th>
-                          <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold" style={{ width: '10%' }}>합계</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {portfolioData.map((row) => (
-                          <tr key={row.year} className="border-b hover:bg-slate-50">
-                            <td className="px-4 py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
-                            <td className="px-4 py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
-                            <td className="px-4 py-4 text-center text-cyan-700 font-medium border-r border-slate-200">{row['정밀안전검검']}</td>
-                            <td className="px-4 py-4 text-center text-green-700 font-medium border-r border-slate-200">{row['설계']}</td>
-                            <td className="px-4 py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
-                            <td className="px-4 py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
-                            <td className="px-4 py-4 text-center font-bold text-orange-600">{row['합계']}</td>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-korean">연도별 상세 내역</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-base" style={{ tableLayout: 'fixed' }}>
+                  <thead className="sticky top-0 z-10">
+                    <tr className="bg-slate-100/80 backdrop-blur supports-[backdrop-filter]:bg-slate-100/60">
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>구분</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전진단</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전점검</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>엔지니어링 설계</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>설계/사업관리(감리)</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '10%' }}>기타</th>
+                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold" style={{ width: '10%' }}>합계</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {portfolioData.map((row) => (
+                      <tr key={row.year} className="border-b hover:bg-slate-50">
+                        <td className="px-4 py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
+                        <td className="px-4 py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
+                        <td className="px-4 py-4 text-center text-cyan-700 font-medium border-r border-slate-200">{row['정밀안전검검']}</td>
+                        <td className="px-4 py-4 text-center text-green-700 font-medium border-r border-slate-200">{row['설계']}</td>
+                        <td className="px-4 py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
+                        <td className="px-4 py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
+                        <td className="px-4 py-4 text-center font-bold text-orange-600">{row['합계']}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="px-1 pt-3">
+                <p className="text-xs text-slate-500 font-korean text-right">
+                  <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 안전진단 수행실적 - 교량및터널 */}
+          {tunnelRecords.length > 0 && (
+            <section id="portfolio-safety-bridge-tunnel" className="mt-16 scroll-mt-32">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
+                  안전진단 수행실적 - 교량및터널
+                </h2>
+                <p className="text-xs md:text-sm text-slate-500 font-korean">
+                  {tunnelRecords.length.toLocaleString()}건의 교량 및 터널 관련 수행실적
+                </p>
+              </div>
+              <Card className="shadow-sm border-slate-200">
+                <CardContent className="pt-4">
+                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
+                        <thead>
+                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                              년도
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                              계약명
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                              발주처
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                              계약방법
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="px-1 pt-3">
-                    <p className="text-xs text-slate-500 font-korean text-right">
-                      <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
-                    </p>
+                        </thead>
+                        <tbody>
+                          {tunnelRecords.map((row, index) => (
+                            <tr
+                              key={`${row.year}-${index}`}
+                              className={
+                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
+                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                                ' hover:bg-blue-50/60'
+                              }
+                            >
+                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
+                                {row.year}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.contractName}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.client}
+                              </td>
+                              <td className="px-3 py-2 text-center font-korean text-slate-900">
+                                {row.method ? (
+                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+                                    {row.method}
+                                  </span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+            </section>
+          )}
+
+          {/* 안전진단 수행실적 - 수리 */}
+          {suriRecords.length > 0 && (
+            <section id="portfolio-safety-suri" className="mt-16 scroll-mt-32">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
+                  안전진단 수행실적 - 수리
+                </h2>
+                <p className="text-xs md:text-sm text-slate-500 font-korean">
+                  {suriRecords.length.toLocaleString()}건의 수리 관련 수행실적
+                </p>
+              </div>
+              <Card className="shadow-sm border-slate-200">
+                <CardContent className="pt-4">
+                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
+                        <thead>
+                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                              년도
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                              계약명
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                              발주처
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                              계약방법
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {suriRecords.map((row, index) => (
+                            <tr
+                              key={`${row.year}-${index}`}
+                              className={
+                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
+                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                                ' hover:bg-blue-50/60'
+                              }
+                            >
+                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
+                                {row.year}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.contractName}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.client}
+                              </td>
+                              <td className="px-3 py-2 text-center font-korean text-slate-900">
+                                {row.method ? (
+                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+                                    {row.method}
+                                  </span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          )}
+
+          {/* 설계 수행실적 */}
+          {designRecords.length > 0 && (
+            <section id="portfolio-design" className="mt-16 scroll-mt-32">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
+                  설계 수행실적
+                </h2>
+                <p className="text-xs md:text-sm text-slate-500 font-korean">
+                  {designRecords.length.toLocaleString()}건의 설계 관련 수행실적
+                </p>
+              </div>
+              <Card className="shadow-sm border-slate-200">
+                <CardContent className="pt-4">
+                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
+                        <thead>
+                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                              년도
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                              계약명
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                              발주처
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                              계약방법
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {designRecords.map((row, index) => (
+                            <tr
+                              key={`${row.year}-${index}`}
+                              className={
+                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
+                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                                ' hover:bg-blue-50/60'
+                              }
+                            >
+                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
+                                {row.year}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.contractName}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.client}
+                              </td>
+                              <td className="px-3 py-2 text-center font-korean text-slate-900">
+                                {row.method ? (
+                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+                                    {row.method}
+                                  </span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          )}
+
+          {/* 감리 실적 */}
+          {gamRiRecords.length > 0 && (
+            <section id="portfolio-supervision" className="mt-16 scroll-mt-32">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
+                  감리 실적
+                </h2>
+                <p className="text-xs md:text-sm text-slate-500 font-korean">
+                  {gamRiRecords.length.toLocaleString()}건의 감리 관련 수행실적
+                </p>
+              </div>
+              <Card className="shadow-sm border-slate-200">
+                <CardContent className="pt-4">
+                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
+                        <thead>
+                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                              년도
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                              계약명
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                              발주처
+                            </th>
+                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                              계약방법
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {gamRiRecords.map((row, index) => (
+                            <tr
+                              key={`${row.year}-${index}`}
+                              className={
+                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
+                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                                ' hover:bg-blue-50/60'
+                              }
+                            >
+                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
+                                {row.year}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.contractName}
+                              </td>
+                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                                {row.client}
+                              </td>
+                              <td className="px-3 py-2 text-center font-korean text-slate-900">
+                                {row.method ? (
+                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+                                    {row.method}
+                                  </span>
+                                ) : (
+                                  ''
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          )}
         </div>
       </div>
 

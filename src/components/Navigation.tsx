@@ -11,8 +11,8 @@ interface MenuStructure {
 const menuStructure = {
   '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성', '오시는길'],
   '관계법령': ['수의계약근거'],
-  '분야별 수행실적': ['안전진단', '엔지니어링', '설계/사업관리'],
-  '자료실': ['채용공고', '이력서 양식']
+  '분야별 수행실적': ['안전진단', '설계', '감리'],
+  '자료실': ['채용공고']
 };
 
 interface NavigationProps {
@@ -204,6 +204,77 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     setIsMobileMenuOpen(false);
   };
 
+  const handlePortfolioBridgeTunnelClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/portfolio') {
+      const element = document.getElementById('portfolio-safety-bridge-tunnel');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '#portfolio-safety-bridge-tunnel');
+      }
+    } else {
+      navigate('/portfolio#portfolio-safety-bridge-tunnel');
+      setTimeout(() => {
+        const element = document.getElementById('portfolio-safety-bridge-tunnel');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handlePortfolioDesignClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/portfolio') {
+      const element = document.getElementById('portfolio-design');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '#portfolio-design');
+      }
+    } else {
+      navigate('/portfolio#portfolio-design');
+      setTimeout(() => {
+        const element = document.getElementById('portfolio-design');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handlePortfolioSupervisionClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/portfolio') {
+      const element = document.getElementById('portfolio-supervision');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '#portfolio-supervision');
+      }
+    } else {
+      navigate('/portfolio#portfolio-supervision');
+      setTimeout(() => {
+        const element = document.getElementById('portfolio-supervision');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleRecruitClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/recruit');
+    window.scrollTo(0, 0);
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
   const handleLegalBasisClick = (e: React.MouseEvent) => {
     e.preventDefault();
     navigate('/legal-basis');
@@ -353,7 +424,17 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             : 'text-white hover:text-white/80 hover:bg-white/10'
                           }`
                   }`}
-                  onClick={menu === '회사소개' ? handleCompanyIntroClick : menu === '분야별 수행실적' ? handlePortfolioClick : menu === '관계법령' ? handleLegalBasisClick : undefined}
+                  onClick={
+                    menu === '회사소개'
+                      ? handleCompanyIntroClick
+                      : menu === '분야별 수행실적'
+                        ? handlePortfolioClick
+                        : menu === '관계법령'
+                          ? handleLegalBasisClick
+                          : menu === '자료실'
+                            ? handleRecruitClick
+                            : undefined
+                  }
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
                 >
@@ -513,6 +594,57 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         >
                           {subMenu}
                         </a>
+                      ) : subMenu === '안전진단' ? (
+                        <a
+                          key={subMenu}
+                          href="/portfolio#portfolio-safety-bridge-tunnel"
+                          onClick={handlePortfolioBridgeTunnelClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
+                      ) : subMenu === '설계' ? (
+                        <a
+                          key={subMenu}
+                          href="/portfolio#portfolio-design"
+                          onClick={handlePortfolioDesignClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
+                      ) : subMenu === '감리' ? (
+                        <a
+                          key={subMenu}
+                          href="/portfolio#portfolio-supervision"
+                          onClick={handlePortfolioSupervisionClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            location.pathname === '/greeting'
+                              ? (isOverLightBackground
+                                  ? 'text-gray-700 hover:text-black'
+                                  : 'text-gray-300 hover:text-white')
+                              : isOverLightBackground 
+                                ? 'text-gray-700 hover:text-black' 
+                                : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
                       ) : (
                         <Link
                           key={subMenu}
@@ -573,6 +705,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         handlePortfolioClick({} as React.MouseEvent);
                       } else if (menu === '관계법령') {
                         handleLegalBasisClick({} as React.MouseEvent);
+                      } else if (menu === '자료실') {
+                        handleRecruitClick({} as React.MouseEvent);
                       } else {
                         toggleMobileMenu(menu);
                       }
@@ -727,6 +861,57 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             key={subMenu}
                             href="#"
                             onClick={handleOrganizationClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '안전진단' ? (
+                          <a
+                            key={subMenu}
+                            href="/portfolio#portfolio-safety-bridge-tunnel"
+                            onClick={handlePortfolioBridgeTunnelClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '설계' ? (
+                          <a
+                            key={subMenu}
+                            href="/portfolio#portfolio-design"
+                            onClick={handlePortfolioDesignClick}
+                            className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                              location.pathname === '/greeting'
+                                ? (isOverLightBackground
+                                    ? 'text-gray-700 hover:text-black'
+                                    : 'text-gray-300 hover:text-white')
+                                : isOverLightBackground 
+                                  ? 'text-gray-700 hover:text-black' 
+                                  : 'text-gray-300 hover:text-white'
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '감리' ? (
+                          <a
+                            key={subMenu}
+                            href="/portfolio#portfolio-supervision"
+                            onClick={handlePortfolioSupervisionClick}
                             className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground
