@@ -30,36 +30,43 @@ export const SitemapSection = () => {
   const sitemapRef = useRef<HTMLDivElement>(null);
   const [sitemapOpacity, setSitemapOpacity] = useState(0);
 
+  // 이미지 경로 헬퍼 함수 (Portfolio.tsx와 동일한 패턴)
+  const getImagePath = (filename: string) => {
+    const baseUrl = import.meta.env.BASE_URL;
+    const path = `${baseUrl}portfolio/${filename}`;
+    return path;
+  };
+
   const slides: SlideItem[] = [
     {
       id: 'slide-1',
       text: '당신의 오늘은 안전하셨습니까?',
       align: 'right',
-      imageSrc: '/portfolio/performance1.JPG',
+      imageSrc: getImagePath('performance1.JPG'),
     },
     {
       id: 'slide-2',
       text: '국민들의 안전하고 쾌적한',
       align: 'left',
-      imageSrc: '/portfolio/performance3.JPG',
+      imageSrc: getImagePath('performance3.JPG'),
     },
     {
       id: 'slide-3',
       text: '아름다운 생활을 영위하는 나라건설',
       align: 'right',
-      imageSrc: '/portfolio/performance5.jpg',
+      imageSrc: getImagePath('performance5.jpg'),
     },
     {
       id: 'slide-4',
       text: '사람과 사랑으로 융합된',
       align: 'left',
-      imageSrc: '/portfolio/performance8.jpg',
+      imageSrc: getImagePath('performance8.jpg'),
     },
     {
       id: 'slide-5',
       text: '성장의 발자국을 남기는 시설사업소가 되겠습니다.',
       align: 'right',
-      imageSrc: '/portfolio/performance12.jpg',
+      imageSrc: getImagePath('performance12.jpg'),
     },
   ];
 
