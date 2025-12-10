@@ -308,6 +308,26 @@ export const SitemapSection = () => {
                               alt="포트폴리오 이미지"
                               className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
                               style={{ minHeight: '320px', maxHeight: '600px' }}
+                              onError={(e) => {
+                                const t = e.currentTarget as HTMLImageElement;
+                                const attempt = parseInt(t.dataset.attempt || '0', 10);
+                                const filename = slide.imageSrc.split('/').pop() || '';
+                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
+                                // 대소문자 변형 시도
+                                const attempts = [
+                                  getImagePath(filename),
+                                  getImagePath(`${baseName}.jpg`),
+                                  getImagePath(`${baseName}.JPG`),
+                                ];
+                                if (attempt < attempts.length - 1) {
+                                  t.src = attempts[attempt + 1];
+                                  t.dataset.attempt = String(attempt + 1);
+                                } else {
+                                  t.onerror = null;
+                                  t.style.display = 'none';
+                                }
+                              }}
+                              data-attempt="0"
                             />
                           </div>
                           <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
@@ -332,6 +352,26 @@ export const SitemapSection = () => {
                               alt="포트폴리오 이미지"
                               className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
                               style={{ minHeight: '320px', maxHeight: '600px' }}
+                              onError={(e) => {
+                                const t = e.currentTarget as HTMLImageElement;
+                                const attempt = parseInt(t.dataset.attempt || '0', 10);
+                                const filename = slide.imageSrc.split('/').pop() || '';
+                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
+                                // 대소문자 변형 시도
+                                const attempts = [
+                                  getImagePath(filename),
+                                  getImagePath(`${baseName}.jpg`),
+                                  getImagePath(`${baseName}.JPG`),
+                                ];
+                                if (attempt < attempts.length - 1) {
+                                  t.src = attempts[attempt + 1];
+                                  t.dataset.attempt = String(attempt + 1);
+                                } else {
+                                  t.onerror = null;
+                                  t.style.display = 'none';
+                                }
+                              }}
+                              data-attempt="0"
                             />
                           </div>
                           <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
