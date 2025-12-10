@@ -96,15 +96,12 @@ const Recruit = () => {
                         We are
                       </div>
                       <div className="font-extrabold text-[90px] sm:text-[150px] md:text-[220px] lg:text-[280px]">
-                        <span className="text-blue-600">HI</span>
+                        <span className="text-[#1D66B3]">Hi</span>
                         <span className="text-foreground">ring!</span>
                       </div>
                       <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-10 justify-center w-[70%]">
-                        <div className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-green-500 text-white font-semibold text-xl sm:text-2xl shadow text-center">
-                          신입/경력 모집
-                        </div>
-                        <div className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-blue-600 text-white font-semibold text-xl sm:text-2xl shadow text-center">
-                          안전진단 부문 기술자
+                        <div className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#1D66B3] text-white font-semibold text-xl sm:text-2xl shadow text-center">
+                          안전진단 부문 기술자 신입/경력 모집
                         </div>
                       </div>
                     </div>
@@ -123,24 +120,30 @@ const Recruit = () => {
           </div>
           <div style={{ width: `${CONTENT_WIDTH}%`, margin: '0 auto' }} className="relative px-4 sm:px-6 lg:px-8">
             <div className="text-center text-white">
-              <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
-                TRUST.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
-                신뢰
-              </p>
-              <p className="mt-10 text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english text-emerald-300">
-                FLEXIBILITY.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-emerald-200 font-korean mt-1">
-                유연함
-              </p>
-              <p className="mt-10 text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
-                PASSION.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
-                열정
-              </p>
+              <div className="flex flex-col items-center">
+                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+                  TRUST
+                </p>
+                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                  신뢰
+                </p>
+              </div>
+              <div className="mt-10 flex flex-col items-center">
+                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+                  FLEXIBILITY
+                </p>
+                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                  유연함
+                </p>
+              </div>
+              <div className="mt-10 flex flex-col items-center">
+                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+                  PASSION
+                </p>
+                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                  열정
+                </p>
+              </div>
               <p className="mt-10 text-white/80 text-base md:text-lg font-korean">
                 함께 성장하는 기업, 대한민국상이군경회시설사업소
               </p>

@@ -185,61 +185,73 @@ const Portfolio = () => {
           <div className="relative px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
             <div className="w-[75%] mx-auto text-center">
               <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight font-korean">분야별 수행실적</h1>
-              <p className="mt-3 text-sm md:text-base text-white/85 font-korean">정밀안전진단•정밀안전점검•엔지니어링 설계•설계/사업관리</p>
+              <p className="mt-3 text-sm md:text-base text-white/85 font-korean">정밀안전진단•정밀안전점검•엔지니어링 설계•건설사업관리</p>
             </div>
           </div>
         </section>
         <div className="w-[75%] mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-300 pt-12">
           {/* KPI 카드 */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
-            <Card className="border-blue-100">
+            <Card className="border-2 border-[#0C2B4B]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">총 수행건수</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-slate-900 tabular-nums">
+                <div className="text-3xl font-bold text-slate-900 tabular-nums flex items-baseline gap-2">
                   {totals.totalProjects.toLocaleString()}
+                  <span className="text-sm font-medium text-slate-600 font-korean">건</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-[#0C2B4B]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">정밀안전진단</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-blue-600 tabular-nums">{totals.diagnosis.toLocaleString()}</div>
-                <p className="mt-1 text-xs text-slate-500">누적</p>
+                <div className="text-3xl font-bold text-blue-600 tabular-nums flex items-baseline gap-2">
+                  {totals.diagnosis.toLocaleString()}
+                  <span className="text-sm font-medium text-slate-600 font-korean">건</span>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-[#0C2B4B]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">정밀안전점검</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-cyan-600 tabular-nums">{totals.inspection.toLocaleString()}</div>
-                <p className="mt-1 text-xs text-slate-500">누적</p>
+                <div className="text-3xl font-bold text-cyan-600 tabular-nums flex items-baseline gap-2">
+                  {totals.inspection.toLocaleString()}
+                  <span className="text-sm font-medium text-slate-600 font-korean">건</span>
+                </div>
+                
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-[#0C2B4B]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">엔지니어링 설계</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-green-600 tabular-nums">{totals.design.toLocaleString()}</div>
-                <p className="mt-1 text-xs text-slate-500">누적</p>
+                <div className="text-3xl font-bold text-green-600 tabular-nums flex items-baseline gap-2">
+                  {totals.design.toLocaleString()}
+                  <span className="text-sm font-medium text-slate-600 font-korean">건</span>
+                </div>
+                
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-[#0C2B4B]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600 font-korean">설계/사업관리(감리)</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600 font-korean">건설사업관리</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-purple-600 tabular-nums">{totals.supervision.toLocaleString()}</div>
-                <p className="mt-1 text-xs text-slate-500">누적</p>
+                <div className="text-3xl font-bold text-purple-600 tabular-nums flex items-baseline gap-2">
+                  {totals.supervision.toLocaleString()}
+                  <span className="text-sm font-medium text-slate-600 font-korean">건</span>
+                </div>
+                
               </CardContent>
             </Card>
           </div>
@@ -253,14 +265,14 @@ const Portfolio = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-base" style={{ tableLayout: 'fixed' }}>
                   <thead className="sticky top-0 z-10">
-                    <tr className="bg-slate-100/80 backdrop-blur supports-[backdrop-filter]:bg-slate-100/60">
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>구분</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전진단</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>정밀안전점검</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>엔지니어링 설계</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '18%' }}>설계/사업관리(감리)</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '10%' }}>기타</th>
-                      <th className="px-4 py-4 text-center text-slate-700 font-korean font-semibold" style={{ width: '10%' }}>합계</th>
+                    <tr>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>구분</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '18%', backgroundColor: '#0C2B4B' }}>정밀안전진단</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '18%', backgroundColor: '#0C2B4B' }}>정밀안전점검</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '18%', backgroundColor: '#0C2B4B' }}>엔지니어링 설계</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '18%', backgroundColor: '#0C2B4B' }}>건설사업관리</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '10%', backgroundColor: '#0C2B4B' }}>기타</th>
+                      <th className="px-4 py-4 text-center text-white font-korean font-semibold" style={{ width: '10%', backgroundColor: '#0C2B4B' }}>합계</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -303,17 +315,17 @@ const Portfolio = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
                         <thead>
-                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                          <tr>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
                               년도
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
                               계약명
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
                               발주처
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
                               계약방법
                             </th>
                           </tr>
@@ -374,17 +386,17 @@ const Portfolio = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
                         <thead>
-                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                          <tr>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
                               년도
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
                               계약명
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
                               발주처
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
                               계약방법
                             </th>
                           </tr>
@@ -445,17 +457,17 @@ const Portfolio = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
                         <thead>
-                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                          <tr>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
                               년도
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
                               계약명
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
                               발주처
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
                               계약방법
                             </th>
                           </tr>
@@ -499,15 +511,15 @@ const Portfolio = () => {
             </section>
           )}
 
-          {/* 감리 실적 */}
+          {/* 건설사업관리 실적 */}
           {gamRiRecords.length > 0 && (
             <section id="portfolio-supervision" className="mt-16 scroll-mt-32">
               <div className="flex items-baseline justify-between mb-3">
                 <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-                  감리 실적
+                  건설사업관리 실적
                 </h2>
                 <p className="text-xs md:text-sm text-slate-500 font-korean">
-                  {gamRiRecords.length.toLocaleString()}건의 감리 관련 수행실적
+                  {gamRiRecords.length.toLocaleString()}건의 건설사업관리 관련 수행실적
                 </p>
               </div>
               <Card className="shadow-sm border-slate-200">
@@ -516,17 +528,17 @@ const Portfolio = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
                         <thead>
-                          <tr className="bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100">
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '8%' }}>
+                          <tr>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
                               년도
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '42%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
                               계약명
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold border-r border-slate-200" style={{ width: '30%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
                               발주처
                             </th>
-                            <th className="px-3 py-3 text-center text-slate-700 font-korean font-semibold" style={{ width: '20%' }}>
+                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
                               계약방법
                             </th>
                           </tr>

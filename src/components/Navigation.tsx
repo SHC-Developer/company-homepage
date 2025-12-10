@@ -10,8 +10,8 @@ interface MenuStructure {
 
 const menuStructure = {
   '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성', '오시는길'],
-  '관계법령': ['수의계약근거'],
-  '분야별 수행실적': ['안전진단', '설계', '감리'],
+  '관계법령': [],
+  '분야별 수행실적': ['안전진단', '설계', '건설사업관리'],
   '자료실': ['채용공고']
 };
 
@@ -25,8 +25,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpandedMenus, setMobileExpandedMenus] = useState<string[]>([]);
-  const [isNavVisible, setIsNavVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isOverLightBackground, setIsOverLightBackground] = useState(forceLightTheme);
   
   const menuRef = useRef<HTMLDivElement>(null);
@@ -308,7 +306,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // 스크롤 감지로 네비게이션 숨기기/보이기 및 배경 감지
+  // 스크롤 감지로 배경 감지
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -322,27 +320,11 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
         const heroSectionHeight = window.innerHeight;
         setIsOverLightBackground(currentScrollY > heroSectionHeight * 0.8);
       }
-      
-      // 스크롤이 맨 위에 있거나 매우 적을 때는 항상 보이기
-      if (currentScrollY < 10) {
-        setIsNavVisible(true);
-      } else {
-        // 스크롤 방향에 따라 네비게이션 숨기기/보이기
-        if (currentScrollY > lastScrollY && currentScrollY > 50) {
-          // 아래로 스크롤하고 100px 이상일 때 숨기기
-          setIsNavVisible(false);
-        } else if (currentScrollY < lastScrollY) {
-          // 위로 스크롤할 때 보이기
-          setIsNavVisible(true);
-        }
-      }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, forceLightTheme]);
+  }, [forceLightTheme]);
 
   // forceLightTheme prop이 변경될 때 상태 업데이트
   useEffect(() => {
@@ -351,16 +333,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     }
   }, [forceLightTheme]);
 
-  // 페이지 진입 시 자동 숨김 (히어로 집중용)
-  useEffect(() => {
-    if (autoHideOnMount) {
-      const timer = setTimeout(() => setIsNavVisible(false), 400);
-      return () => clearTimeout(timer);
-    }
-  }, [autoHideOnMount]);
-
   return (
-    <nav className={`fixed -top-4 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isNavVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'} ${
+    <nav className={`fixed -top-4 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
       location.pathname === '/greeting'
         ? (isOverLightBackground ? 'bg-white' : 'bg-transparent')
         : isOverLightBackground ? 'bg-white' : 'bg-transparent'
@@ -380,13 +354,13 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
               alt="회사 로고" 
               className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
             />
-            <Link to="/" onClick={() => window.scrollTo(0, 0)} className={`text-xl sm:text-3xl md:text-4xl font-medium font-logo transition-colors duration-300 ${
+            <Link to="/" onClick={() => window.scrollTo(0, 0)} className={`text-xl sm:text-3xl md:text-4xl font-bold font-logo transition-colors duration-300 ${
               location.pathname === '/greeting'
                 ? (isOverLightBackground
-                    ? 'text-[#2C3E5E] hover:text-[#2C3E5E]/80'
+                    ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80'
                     : 'text-white hover:text-white/80 drop-shadow-lg')
                 : isOverLightBackground 
-                  ? 'text-[#2C3E5E] hover:text-[#2C3E5E]/80' 
+                  ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80' 
                   : 'text-white hover:text-white/80 drop-shadow-lg'
             }`}>
               대한민국상이군경회시설사업소
@@ -407,8 +381,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                     location.pathname === '/greeting'
                       ? (isOverLightBackground
                           ? `drop-shadow-none ${activeMenu === menu 
-                              ? 'bg-gray-200 text-black' 
-                              : 'text-black hover:text-black/80 hover:bg-gray-100'
+                              ? 'bg-gray-200 text-[#0B1C2B]' 
+                              : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
                             }`
                           : `drop-shadow-md ${activeMenu === menu 
                               ? 'bg-white/20 text-white' 
@@ -416,8 +390,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             }`)
                       : isOverLightBackground 
                         ? `drop-shadow-none ${activeMenu === menu 
-                            ? 'bg-gray-200 text-black' 
-                            : 'text-black hover:text-black/80 hover:bg-gray-100'
+                            ? 'bg-gray-200 text-[#0B1C2B]' 
+                            : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
                           }`
                         : `drop-shadow-md ${activeMenu === menu 
                             ? 'bg-white/20 text-white' 
@@ -628,7 +602,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         >
                           {subMenu}
                         </a>
-                      ) : subMenu === '감리' ? (
+                      ) : subMenu === '건설사업관리' ? (
                         <a
                           key={subMenu}
                           href="/portfolio#portfolio-supervision"
@@ -675,7 +649,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`p-2 transition-colors duration-300 ${
                 isOverLightBackground 
-                  ? 'text-black hover:text-black/80' 
+                  ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80' 
                   : 'text-white hover:text-white/80 drop-shadow-md'
               }`}
               aria-label="메뉴 열기"
@@ -714,10 +688,10 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                     className={`w-full text-left px-4 py-2 text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 ${
                       location.pathname === '/greeting'
                         ? (isOverLightBackground
-                            ? 'text-black hover:bg-gray-100'
+                            ? 'text-[#0B1C2B] hover:bg-gray-100'
                             : 'text-white hover:bg-white/20')
                         : isOverLightBackground 
-                          ? 'text-black hover:bg-gray-100' 
+                          ? 'text-[#0B1C2B] hover:bg-gray-100' 
                           : 'text-white hover:bg-white/20'
                     }`}
                   >
@@ -907,7 +881,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           >
                             {subMenu}
                           </a>
-                        ) : subMenu === '감리' ? (
+                        ) : subMenu === '건설사업관리' ? (
                           <a
                             key={subMenu}
                             href="/portfolio#portfolio-supervision"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import logo2 from '@/assets/logo2.png';
 
 export const Footer = () => {
@@ -12,9 +12,6 @@ export const Footer = () => {
         backgroundColor: '#0b1c2b'
       }}
     >
-      {/* 상단 흰색 가로선 */}
-      <div className="w-full h-[2px] bg-white/30"></div>
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-14 pb-16">
         {/* 좌: 로고+회사명 | 우: 연락처+주소 */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1.5fr),minmax(0,1fr)] items-start">
@@ -43,26 +40,19 @@ export const Footer = () => {
               연락처
             </h4>
             <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-accent flex-shrink-0" />
-                <div className="text-sm text-primary-foreground/80 font-korean">
-                  TEL&nbsp;
-                  <span className="font-english text-primary-foreground">02)572-6218</span>
-                </div>
+              <div className="text-sm text-primary-foreground/80 font-korean">
+                TEL&nbsp;
+                <span className="font-english text-primary-foreground">02)572-6218</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-accent flex-shrink-0" />
-                <div className="text-sm text-primary-foreground/80 font-korean">
-                  FAX&nbsp;
-                  <span className="font-english text-primary-foreground">02)571-9274</span>
-                </div>
+              <div className="text-sm text-primary-foreground/80 font-korean">
+                FAX&nbsp;
+                <span className="font-english text-primary-foreground">02)571-9274</span>
               </div>
               {/* 주소 */}
               <div className="flex items-start gap-3 pt-2">
-                <MapPin className="mt-1 h-5 w-5 text-accent flex-shrink-0" />
+                <MapPin className="mt-1 h-5 w-5 text-primary-foreground flex-shrink-0" />
                 <div className="text-sm leading-relaxed text-primary-foreground/80 font-korean">
-                  경기도 성남시 분당구 판교역로 230<br />
-                  삼환하이펙스 B동 9층 907호
+                  경기도 성남시 분당구 판교역로 230 삼환하이펙스 B동 9층 907호
                 </div>
               </div>
             </div>

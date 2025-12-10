@@ -11,8 +11,6 @@ All colors MUST be HSL.
     /* Korean Engineering Corporate Design System */
     --background: 0 0% 100%;
     --foreground: 210 17% 16%; /* #0D2A4A 계열 */
-    --cursor-default-url: url('/mugungwha32.png');
-    --cursor-pointer-url: url('/mugungwha32-2.png');
 
     --card: 0 0% 100%;
     --card-foreground: 210 17% 16%;
@@ -125,53 +123,6 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-korean);
-    cursor: var(--cursor-default-url) 16 16, auto;
-  }
-
-  a,
-  button,
-  [role="button"],
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  input[type="checkbox"],
-  input[type="radio"],
-  summary,
-  label,
-  select,
-  textarea {
-    cursor: var(--cursor-pointer-url) 12 2, pointer;
-  }
-
-  .cursor-trail-dot {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 9999px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(236, 72, 153, 0.35) 45%, rgba(236, 72, 153, 0) 70%);
-    pointer-events: none;
-    opacity: 0;
-    --cursor-x: -999px;
-    --cursor-y: -999px;
-    --cursor-scale: 1;
-    transform: translate3d(var(--cursor-x), var(--cursor-y), 0) scale(var(--cursor-scale));
-    will-change: transform, opacity;
-    transition: transform 0.12s ease-out, opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-    z-index: 9999;
-  }
-
-  @media (pointer: coarse) {
-    .cursor-trail-dot {
-      display: none;
-    }
-  }
-
-  body.cursor-interactive .cursor-trail-dot {
-    --cursor-scale: 1.35;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(251, 113, 133, 0.6) 40%, rgba(251, 113, 133, 0) 75%);
-    box-shadow: 0 0 24px rgba(251, 113, 133, 0.45);
   }
   
   /* Korean typography utilities */
