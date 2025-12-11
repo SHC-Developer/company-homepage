@@ -14,7 +14,7 @@ export const GreetingSection = () => {
   const [visiblePhilosophyCards, setVisiblePhilosophyCards] = useState<boolean[]>([false, false, false, false]);
   const [visibleCoreValues, setVisibleCoreValues] = useState<boolean[]>([false, false, false, false, false]);
   const [visibleHistoryTitle, setVisibleHistoryTitle] = useState(false);
-  const [visibleHistoryItems, setVisibleHistoryItems] = useState<boolean[]>([false, false, false, false, false, false, false, false, false, false, false, false, false]);
+  const [visibleHistoryItems, setVisibleHistoryItems] = useState<boolean[]>([false, false, false, false, false, false, false, false, false, false, false, false]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -28,55 +28,15 @@ export const GreetingSection = () => {
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [focusedHistoryIndex, setFocusedHistoryIndex] = useState<number | null>(null);
-  const historyNavContainerRef = useRef<HTMLDivElement>(null);
-  const [showHistorySidebar, setShowHistorySidebar] = useState(false);
-  
-  const scrollToHistory = (anchorId: string) => {
-    const element = document.getElementById(anchorId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  // 클릭 박스가 화면에서 사라지면 좌측 사이드바 표시, 보유면허 섹션 근처에서 fade out
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!historyNavContainerRef.current) return;
-      
-      const navRect = historyNavContainerRef.current.getBoundingClientRect();
-      const licenseSection = document.getElementById('license');
-      
-      // 네비게이션 박스가 화면 상단 위로 완전히 사라지면 사이드바 표시
-      const showNav = navRect.bottom < 0;
-      
-      // 보유면허 섹션이 화면에 가까워지면 사이드바 숨김
-      let hideNav = false;
-      if (licenseSection) {
-        const licenseRect = licenseSection.getBoundingClientRect();
-        // 보유면허 섹션 상단이 화면의 중간에 닿으면 숨기기 시작
-        if (licenseRect.top < window.innerHeight * 0.7) {
-          hideNav = true;
-        }
-      }
-      
-      setShowHistorySidebar(showNav && !hideNav);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // COMPANY HISTORY: no range filtering, continuous timeline (latest first)
 
   // 인증서 목록 (특허증 제외)
   const certifications = [
-    { name: '건설기술용역업등록증', path: 'certification/건설기술용역업등록증.jpg' },
-    { name: '사업자등록증', path: 'certification/사업자등록증.jpg' },
-    { name: '수익사업승인서', path: 'certification/수익사업승인서.jpg' },
-    { name: '안전진단전문기관등록증', path: 'certification/안전진단전문기관등록증.jpg' },
-    { name: '엔지니어링사업자신고증_1', path: 'certification/엔지니어링사업자신고증_1.jpg' },
-    { name: '엔지니어링사업자신고증_2', path: 'certification/엔지니어링사업자신고증_2.jpg' },
-    { name: '중소기업확인서', path: 'certification/중소기업확인서.jpg' },
+    { name: '수익사업승인서', date: '2024-23호', path: 'certification/01.수익사업 승인서.jpg' },
+    { name: '안전진단전문기관등록증', date: '2021.06.02.', path: 'certification/02.안전진단전문기관등록증.jpg' },
+    { name: '엔지니어링사업자신고증', date: '2022.01.13.', path: 'certification/03.엔지니어링사업자신고증.jpg' },
+    { name: '건설엔지니어링업등록증', date: '2021.11.15.', path: 'certification/04.건설엔지니어링업등록증.jpg' },
   ];
 
   // 보유기술 (특허) 목록
@@ -115,9 +75,9 @@ export const GreetingSection = () => {
 
   // 특허증 이미지 목록
   const patentImages = [
-    { name: '특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템', path: 'certification/특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템.jpg' },
-    { name: '특허증_제10-2654629호_교량의 3차원 거동 측정 방법', path: 'certification/특허증_제10-2654629호_교량의 3차원 거동 측정 방법.jpg' },
-    { name: '특허증_제10-2654632호_교량의 3차원 거동 측정 시스템', path: 'certification/특허증_제10-2654632호_교량의 3차원 거동 측정 시스템_.jpg' },
+    { title: '특허증_제10-2654625호', description: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템', path: 'certification/특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템.jpg' },
+    { title: '특허증_제10-2654629호', description: '교량의 3차원 거동 측정 방법', path: 'certification/특허증_제10-2654629호_교량의 3차원 거동 측정 방법.jpg' },
+    { title: '특허증_제10-2654632호', description: '교량의 3차원 거동 측정 시스템', path: 'certification/특허증_제10-2654632호_교량의 3차원 거동 측정 시스템_.jpg' },
   ];
 
   useEffect(() => {
@@ -454,8 +414,8 @@ export const GreetingSection = () => {
               <div className="flex justify-center">
                 <span className="inline-block h-1.5 w-12 rounded-full bg-[#1e40af]" />
               </div>
-              <h2 className="text-center font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-[1.3] tracking-tight" style={{ paddingBottom: '0.15em', overflow: 'visible' }}>
-                <span className="bg-gradient-to-r from-[#1e40af] to-slate-900 bg-clip-text text-transparent" style={{ display: 'inline-block' }}>
+              <h2 className="text-center font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-[1.4] tracking-tight" style={{ paddingBottom: '0.3em', overflow: 'visible' }}>
+                <span className="bg-gradient-to-r from-[#1D66B3] to-slate-900 bg-clip-text text-transparent" style={{ display: 'inline-block', lineHeight: '1.4' }}>
                   국가유공자의 높은 이상을 바탕으로,
                   <br className="hidden sm:block" />
                   공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.
@@ -603,22 +563,15 @@ export const GreetingSection = () => {
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-12">
-            <div 
-              ref={ceoMessageRef}
-              className={`text-sm font-medium text-[#1e40af] mb-3 tracking-wider transition-all duration-1000 ${visibleCEOMessage ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
-              CEO'S MESSAGE
-            </div>
-            
             <div className="mb-4">
               <div 
                 ref={titleRef}
                 className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
               >
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
-                  大韓民國傷痍軍警會
+                  大韓民國傷痍軍警會 시설사업소
                 </h1>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight" style={{ letterSpacing: '0.04em' }}>
                   Engineering Safety. Inspiring Innovation.
                 </h1>
               </div>
@@ -626,7 +579,8 @@ export const GreetingSection = () => {
             
             <div 
               ref={subtitleRef}
-              className={`space-y-2 text- sm:text-base text-[#000000] font-medium transition-all duration-1000 ${visibleSubtitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+              className={`text-center text-[#000000] font-medium transition-all duration-1000 mt-12 ${visibleSubtitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+              style={{ fontSize: '16pt' }}
             >
               <p>기술혁신의 창의를 바탕으로, 보다 안전하고 편의로운 국가를 완성하다.</p>
             </div>
@@ -643,8 +597,8 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[0] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>대한민국상이군경회</span>는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 공명정대하고 투명한 조직운영과 회원 상호간의 상부상조 및 유대관계를 기본으로 하고 있으며, 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#0C2B4B', marginBottom: '1.5rem', wordBreak: 'keep-all', textAlign: 'justify' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>대한민국상이군경회</span>는 국가와 사회에 헌신 봉사하고 참여했던 국가유공자들의 높은 이상과 뜻을 한데 모아 국가유공자단체법에 의거하여 설립된 단체로 국가유공자와 그 유족이 상부상조하여 자활능력을 배양하고 순국선열과 호국전몰장병의 유지를 이어 민족정기를 선양하고 국민의 애국정신을 함양시키며 자유민주주의의 수호 및 조국의 평화적 통일과 국제평화의 유지에 이바지함을 목적으로 하는 단체입니다.
 
                   </p>
                 </div>
@@ -653,8 +607,8 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[1] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  이러한 근간의 정신을 바탕으로 저희 <b>대한민국상이군경회</b>에서는 <b>『 국가유공자등단체설립에관한법률 』</b> 제7조의 2 및 <b>『 국가유공자단체의수익사업에관한규칙 』</b> 제5조의 규정에 의하여 국가보훈처장의 승인을 받아 시행하던 수익사업 중 시설물유지관리 및 토목 건축설계 등에 대하여 집중적으로 기술용역사업을 확대 시행하게 되었습니다.
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#0C2B4B', marginBottom: '1.5rem', wordBreak: 'keep-all', textAlign: 'justify' }}>
+                  이러한 근간의 정신을 바탕으로 저희 <b>대한민국상이군경회</b>에서는 <b>『 국가유공자등단체설립에관한법률 』</b> 제7조의 2 및 <b>『 국가유공자단체의수익사업에관한규칙 』</b> 제5조의 규정에 의하여 국가보훈부의 승인을 받은 수익사업 중 토목 및 건축 등 건설기술용역을 <b>대한민국상이군경회시설사업소</b>를 설립하여 전문적으로 수행하게 되었습니다.
                   </p>
                 </div>
                 
@@ -662,8 +616,8 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[2] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>본 시설사업소</span>는 <b>『건설산업기본법』</b> <b>『엔지니어링산업진흥법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술자들로 구성되어 국가시설물의 설계단계부터 시공, 감리 및 유지관리차원의 안전진단 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다. 
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#0C2B4B', marginBottom: '1.5rem', wordBreak: 'keep-all', textAlign: 'justify' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '17pt' }}>본 시설사업소</span>는 <b>『건설산업기본법』</b> <b>『엔지니어링산업진흥법』</b> <b>『건설기술진흥법』</b> <b>『시설물의 안전 및 유지관리에 관한 특별법』</b>에 근거하여 업면허를 보유하고 있으며, 각 분야별 다년간의 다양한 경험과 전문 기술력을 가진 기술인들로 구성하여 국가시설물의 설계단계부터 시공, 건설사업관리 및 유지관리차원의 안전진단 및 안전점검 업무에 이르기까지 어느 분야를 담당하여도 신뢰할 수 있는 성과를 제시할 수 있다고 자부하는 바입니다.
                   </p>
                 </div>
 
@@ -671,25 +625,16 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[3] = el}
                   className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. <b>토목 및 건축시설물</b>의 <b><span style={{ color: '#3B2FFF' }}>설계용역</span></b> 및 <b><span style={{ color: '#3B2FFF' }}>정밀안전진단용역</span></b>, 그리고 각종 <b><span style={{ color: '#3B2FFF' }}>감리용역</span></b>분야에 그 동안의 지식과 경험을 토대로 성실하고 최선을 다해 한 걸음씩 성장하여 전문인의 자세로 자리매김 할 것입니다.
-                  </p>
-                </div>
-
-                <div 
-                  ref={el => paragraphRefs.current[4] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                >
-                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#27292B', marginBottom: '1.5rem', wordBreak: 'keep-all' }}>
-                  지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회시설사업소</b>에 많은 일을 맡겨주실 것을 삼가 부탁말씀 드립니다.<br />감사합니다.
+                  <p className="leading-relaxed text-lg sm:text-xl" style={{ color: '#0C2B4B', marginBottom: '1.5rem', wordBreak: 'keep-all', textAlign: 'justify' }}>
+                  사람의 걸음에는 그 걸음마다 자국이 남게 마련입니다. 저희는 사람과 사랑으로 융합된 성장의 발자국을 남기려 합니다. 지금까지 국가를 위하여 헌신 봉사하였던 마음가짐을 그대로 이어 건설 분야의 기술용역사업 수행을 통하여 다시 한번 봉사하고자 하오니 많은 협조와 조언을 부탁드리며 저희 <b>대한민국상이군경회시설사업소</b>에 많은 일을 맡겨주실 것을 부탁말씀 드립니다.<br />
                   </p>
                 </div>
                 
                 <div 
                   ref={el => paragraphRefs.current[5] = el}
-                  className={`transition-all duration-1000 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                  className={`transition-all duration-1000 mt-8 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold text-right" style={{ color: '#27292B' }}>
+                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold text-right" style={{ color: '#0C2B4B' }}>
                     대한민국상이군경회시설사업소장
                   </p>
                 </div>
@@ -709,7 +654,7 @@ export const GreetingSection = () => {
               className={`transition-all duration-1000 ${visibleHistoryTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
             >
               <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight mb-4 tracking-tight">
-                YEARLY <span style={{ color: '#3B2FFF' }} className="font-black">GROWTH</span> HIGHLIGHTS
+                YEARLY <span style={{ color: '#1D66B3' }} className="font-black">GROWTH</span> HIGHLIGHTS
               </h1>
               <p className="text-gray-600 text-base sm:text-lg">
                 국가 인프라 발전에 기여해온 여정의 주요 순간들
@@ -717,66 +662,48 @@ export const GreetingSection = () => {
             </div>
           </div>
 
-          {/* 상단 연도 범위 빠른 이동 */}
-          <div className="mb-10" ref={historyNavContainerRef}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <style>{`
-                .history-btn {
-                  background-color: #C5DDF8;
-                  color: #000;
-                  transition: background-color 500ms ease-in-out, color 500ms ease-in-out, background-image 500ms ease-in-out;
-                }
-                .history-btn:hover {
-                  background-image: linear-gradient(to right, rgba(59, 47, 255, 0.7), #3B2FFF);
-                  background-color: transparent;
-                  color: #fff;
-                }
-              `}</style>
-              <button
-                className="history-btn w-full px-4 py-6 rounded-full font-korean text-lg sm:text-2xl font-semibold"
-              >
-                현재-2021
-              </button>
-              <button
-                onClick={() => scrollToHistory('history-2021')}
-                className="history-btn w-full px-4 py-6 rounded-full font-korean text-lg sm:text-2xl font-semibold"
-              >
-                2020-2011
-              </button>
-              <button
-                onClick={() => scrollToHistory('history-2009')}
-                className="history-btn w-full px-4 py-6 rounded-full font-korean text-lg sm:text-2xl font-semibold"
-              >
-                2010-2001
-              </button>
-              <button
-                onClick={() => scrollToHistory('history-1988')}
-                className="history-btn w-full px-4 py-6 rounded-full font-korean text-lg sm:text-2xl font-semibold"
-              >
-                2000-1951
-              </button>
-            </div>
-          </div>
 
           {/* 리스트형 타임라인 */}
           <div className="space-y-24 relative">
-            {/* 연결된 세로줄 */}
-            <div className="hidden md:block absolute left-[160px] top-0 bottom-0 w-px bg-slate-300"></div>
-            {/* 2021 */}
+          {/* 연결된 세로줄 */}
+          <div className="hidden md:block absolute left-[240px] top-0 bottom-0 w-px bg-slate-300"></div>
+            {/* 2026.01 */}
+            <div
+              id="history-2026"
+              ref={el => historyItemRefs.current[11] = el}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            >
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2026.01</h3>
+              </div>
+              <div className="relative md:pl-10">
+                <ul className="divide-y divide-slate-200">
+                  <li className="relative py-3 pl-6">
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 11 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                    <div>
+                      <p className="text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
+                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* 2021.11 */}
             <div
               id="history-2021"
               ref={el => historyItemRefs.current[10] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2021</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2021.11</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 10 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 10 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">유을상 회장님 취임</p>
+                      <p className="text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -784,21 +711,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2015 */}
+            {/* 2017.03 */}
             <div
-              id="history-2010"
+              id="history-2017"
               ref={el => historyItemRefs.current[9] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2015</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2017.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 9 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 9 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">건설기술용역업(설계·사업관리)일반 등록</p>
+                      <p className="text-lg text-gray-700">기업부설연구소 등록 (시설사업소 휴먼테크연구부)</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -806,21 +733,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2009 */}
+            {/* 2015.02 */}
             <div
-              id="history-2009"
+              id="history-2015"
               ref={el => historyItemRefs.current[8] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2009</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2015.02</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 8 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 8 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">감리전문회사(종합) 등록</p>
+                      <p className="text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -828,21 +755,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2007 */}
+            {/* 2014.03 */}
             <div
-              id="history-2007"
+              id="history-2014"
               ref={el => historyItemRefs.current[7] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2007</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2014.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 7 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 7 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">대한민국상이군경회시설사업소 명칭 변경</p>
+                      <p className="text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 부임</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -850,21 +777,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2005 */}
+            {/* 2012.05 */}
             <div
-              id="history-2005"
+              id="history-2012"
               ref={el => historyItemRefs.current[6] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2005</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2012.05</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 6 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 6 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">엔지니어링활동주체등록사항 5개 분야 등록완료</p>
+                      <p className="text-lg text-gray-700">엔지니어링사업자 신고</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -872,21 +799,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2004 */}
+            {/* 2009.10 */}
             <div
-              id="history-2004"
+              id="history-2009-10"
               ref={el => historyItemRefs.current[5] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2004</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2009.10</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 5 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 5 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">건축분야 진단면허 추가등록</p>
+                      <p className="text-lg text-gray-700">감리전문회사 등록</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -894,28 +821,21 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2003 */}
+            {/* 2009.07 */}
             <div
-              id="history-2003"
+              id="history-2009-07"
               ref={el => historyItemRefs.current[4] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2003</h3>
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2009.07</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 4 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 4 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">총괄본부장 나경준 / 기술인력 수급 및 면허신청</p>
-                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
-                    </div>
-                  </li>
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 4 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
-                    <div>
-                      <p className="text-lg text-gray-700">안전진단전문기관 등록 / 엔지니어링활동주체 등록</p>
+                      <p className="text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -923,87 +843,55 @@ export const GreetingSection = () => {
               </div>
             </div>
 
-            {/* 2002 */}
+            {/* 2003.06 */}
+            <div
+              id="history-2003-06"
+              ref={el => historyItemRefs.current[3] = el}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            >
+              <div className="md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2003.06</h3>
+              </div>
+              <div className="relative md:pl-10">
+                <ul className="divide-y divide-slate-200">
+                  <li className="relative py-3 pl-6">
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                    <div>
+                      <p className="text-lg text-gray-700">안전진단전문기관 등록</p>
+                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
+                    </div>
+                  </li>
+                  <li className="relative py-3 pl-6">
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                    <div>
+                      <p className="text-lg text-gray-700">엔지니어링활동주체 신고</p>
+                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* 2002.12 */}
             <div
               id="history-2002"
-              ref={el => historyItemRefs.current[3] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-            >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>2002</h3>
-              </div>
-              <div className="relative md:pl-10">
-                <ul className="divide-y divide-slate-200">
-                  <li className="relative py-6 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
-                    <div>
-                      <p className="text-lg text-gray-700">대한민국상이군경회시설관리사업`소 설립 / 소장 김양명</p>
-                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* 1988 */}
-            <div
-              id="history-1988"
               ref={el => historyItemRefs.current[2] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>1988</h3>
+              <div className="md:text-right md:pr-6">
+                <h3
+                  className="font-extrabold leading-tight"
+                  style={{ color: '#0C2B4B', fontSize: 'clamp(2.7rem, 4.32vw, 3.6rem)', wordBreak: 'break-word' }}
+                >
+                  2002.12.03
+                </h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="relative py-6 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 2 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
+                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 2 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
-                      <p className="text-lg text-gray-700">국가유공자등단체설립에관한법률 대한민국상이군경회 개칭</p>
-                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* 1953 */}
-            <div
-              id="history-1953"
-              ref={el => historyItemRefs.current[1] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-            >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>1953</h3>
-              </div>
-              <div className="relative md:pl-10">
-                <ul className="divide-y divide-slate-200">
-                  <li className="relative py-6 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 1 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
-                    <div>
-                      <p className="text-lg text-gray-700">서울환도 후 이승만대통령 총재 / 사단법인 대한상이용사회</p>
-                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* 1951 */}
-            <div
-              id="history-1951"
-              ref={el => historyItemRefs.current[0] = el}
-              className={`grid grid-cols-1 md:grid-cols-[130px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[0] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-            >
-              <div className="md:text-right">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#3B2FFF' }}>1951</h3>
-              </div>
-              <div className="relative md:pl-10">
-                <ul className="divide-y divide-slate-200">
-                  <li className="relative py-6 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 0 ? 'bg-[#3B2FFF] border-[#3B2FFF]' : 'bg-white border-[#3B2FFF]'}`}></span>
-                    <div>
-                      <p className="text-lg text-gray-700">부산에서 사단법인 대한상이군경회 설립</p>
+                      <p className="text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
@@ -1019,58 +907,34 @@ export const GreetingSection = () => {
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent py-4 border-l-4 border-blue-600 pl-6">국가승인서 및 등록증</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">국가승인서 및 등록증</h2>
           </div>
 
-          {/* 인증서 갤러리 - 4+3 그리드 */}
-          <div className="space-y-8">
-            {/* 첫 번째 줄 - 4개 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {certifications.slice(0, 4).map((cert, index) => (
-                <div key={index} className="flex flex-col items-center cursor-pointer group">
-                  <div 
-                    className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${cert.path}`}
-                      alt={cert.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
-                        <p className="text-sm font-semibold">이미지 확대</p>
-                      </div>
+          {/* 인증서 갤러리 - 4개 그리드 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {certifications.map((cert, index) => (
+              <div key={index} className="flex flex-col items-center cursor-pointer group">
+                <div 
+                  className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
+                >
+                  <img
+                    src={`${import.meta.env.BASE_URL}${cert.path}`}
+                    alt={cert.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                      <p className="text-sm font-semibold">이미지 확대</p>
                     </div>
                   </div>
-                  <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{cert.name}</p>
                 </div>
-              ))}
-            </div>
-
-            {/* 두 번째 줄 - 3개 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {certifications.slice(4, 7).map((cert, index) => (
-                <div key={index + 4} className="flex flex-col items-center cursor-pointer group">
-                  <div 
-                    className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${cert.path}`}
-                      alt={cert.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
-                        <p className="text-sm font-semibold">이미지 확대</p>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{cert.name}</p>
+                <div className="mt-3 text-center w-full px-2">
+                  <p className="text-base text-gray-700 font-korean break-words">{cert.name}</p>
+                  <p className="text-sm text-gray-500 font-korean mt-1">{cert.date}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -1080,11 +944,11 @@ export const GreetingSection = () => {
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent py-4 border-l-4 border-blue-600 pl-6">보유기술</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">보유기술</h2>
           </div>
 
           {/* 특허증 갤러리 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {patentImages.map((patent, index) => (
               <div key={index} className="flex flex-col items-center cursor-pointer group">
                 <div 
@@ -1093,7 +957,7 @@ export const GreetingSection = () => {
                 >
                   <img
                     src={`${import.meta.env.BASE_URL}${patent.path}`}
-                    alt={patent.name}
+                    alt={patent.title}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
@@ -1102,7 +966,10 @@ export const GreetingSection = () => {
                     </div>
                   </div>
                 </div>
-                <p className="mt-3 text-center text-base text-gray-700 font-korean break-words w-full px-2">{patent.name}</p>
+                <div className="mt-3 text-center w-full px-2">
+                  <p className="text-base text-gray-700 font-korean break-words">{patent.title}</p>
+                  <p className="text-sm text-gray-500 font-korean mt-1 break-words">{patent.description}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -1131,7 +998,7 @@ export const GreetingSection = () => {
 
               {/* 이미지 */}
               <img
-                src={selectedImage}
+                src={selectedImage || ''}
                 alt="확대된 이미지"
                 className="w-full h-auto"
               />
@@ -1144,131 +1011,17 @@ export const GreetingSection = () => {
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="mb-10 flex items-center gap-3">
             <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">조직구성</h2>
+            <h2 className="text-4xl sm:text-5xl font-bold" style={{ color: '#1D66B3' }}>조직구성</h2>
           </div>
 
           <div className="w-full">
             <div className="rounded-2xl border border-border bg-white p-10 shadow-sm h-full flex flex-col">
-              <div className="flex flex-col items-center space-y-4">
-                {/* 최상단: 시설사업소장 (중앙) */}
-                <div className="flex flex-col items-center">
-                  <div className="rounded-lg bg-blue-600 text-white px-8 py-4 min-w-[260px] text-center shadow-sm border-2 border-black">
-                    <p className="text-lg font-semibold font-korean">시설사업소장 나 경 준</p>
-                  </div>
-                  <div className="mt-3 h-8 w-px bg-blue-200" />
-                  <div className="w-[195px] h-px bg-blue-200 my-1" />
-                </div>
-
-                {/* 고문 / 자문위원 – 한 단계 아래 */}
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="flex items-start justify-center gap-8 md:gap-12">
-                    <div className="flex flex-col items-center">
-                      <div className="h-5 w-px bg-blue-200 mb-2" />
-                      <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border border-blue-700">
-                        <p className="text-base font-semibold font-korean">고 문</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="h-5 w-px bg-blue-200 mb-2" />
-                      <div className="rounded-lg bg-blue-500 text-white px-6 py-3.5 min-w-[140px] text-center shadow-sm border border-blue-700">
-                        <p className="text-base font-semibold font-korean">자문위원</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 부서들로 내려가는 메인 연결선 */}
-                <div className="flex flex-col items-center w-full max-w-4xl">
-                  <div className="h-8 w-px bg-blue-200" />
-                  <div className="w-[620px] h-px bg-blue-200 my-3" />
-
-                  {/* 3개 부서 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full">
-                    {/* 설계기술부 */}
-                    <div className="flex flex-col items-center">
-                      <div className="h-6 w-px bg-blue-300 mb-2" />
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
-                        <p className="text-lg font-semibold font-korean">설계기술부</p>
-                      </div>
-                      <div className="mt-6 flex items-stretch justify-center gap-3">
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">지반공학부</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">토목구조부</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">수자원개발</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">기술지원부</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 진단기술부 */}
-                    <div className="flex flex-col items-center">
-                      <div className="h-6 w-px bg-blue-300 mb-2" />
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
-                        <p className="text-lg font-semibold font-korean">진단기술부</p>
-                      </div>
-                      <div className="mt-6 flex items-stretch justify-center gap-3">
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">교량및터널진단</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">수리및항만진단</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">건축진단</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 감리부 */}
-                    <div className="flex flex-col items-center">
-                      <div className="h-6 w-px bg-blue-300 mb-2" />
-                      <div className="rounded-lg bg-blue-600 text-white px-6 py-3.5 min-w-[200px] text-center shadow-sm border border-blue-800">
-                        <p className="text-lg font-semibold font-korean">감리부</p>
-                      </div>
-                      <div className="mt-6 flex items-stretch justify-center gap-3">
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">토목감리</span>
-                        </div>
-                        <div
-                          className="rounded-lg bg-blue-50 text-blue-900 border border-blue-200 px-2 py-3 text-center min-h-[120px] min-w-[56px] flex items-center justify-center"
-                          style={{ writingMode: 'vertical-rl', textOrientation: 'upright' as any }}
-                        >
-                          <span className="font-korean text-base">건축감리</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="w-full flex justify-center items-center">
+                <img
+                  src={`${import.meta.env.BASE_URL}organization chart.png`}
+                  alt="조직구성도"
+                  className="w-full h-auto max-w-6xl object-contain"
+                />
               </div>
             </div>
           </div>
@@ -1369,61 +1122,8 @@ export const GreetingSection = () => {
         </div>
       </div>
 
-      {/* 좌측 사이드바 목차 (스크롤 시 나타남) */}
-      <div
-        className={`fixed left-[5%] top-[50%] -translate-y-1/2 z-50 transition-opacity duration-300 ${
-          showHistorySidebar ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="p-0">
-          <h4 className="text-lg font-bold text-gray-800 mb-4 font-korean" style={{ color: '#727780' }}>연혁 목차</h4>
-          <div className="space-y-3">
-            <style>{`
-              .history-item {
-                transition: color 300ms ease-in-out;
-              }
-              .history-item:hover {
-                color: #1F2937 !important;
-              }
-              .history-item:hover .history-dot {
-                background-color: #1F2937 !important;
-              }
-            `}</style>
-            <button
-              className="history-item w-full text-left flex items-center gap-3 py-1 pb-2 border-b border-slate-300 font-korean font-semibold"
-              style={{ color: '#9CA3AF' }}
-            >
-              <span className="history-dot w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#9CA3AF', transition: 'background-color 300ms ease-in-out' }}></span>
-              현재-2021
-            </button>
-            <button
-              onClick={() => scrollToHistory('history-2021')}
-              className="history-item w-full text-left flex items-center gap-3 py-1 pb-2 border-b border-slate-300 font-korean font-semibold"
-              style={{ color: '#9CA3AF' }}
-            >
-              <span className="history-dot w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#9CA3AF', transition: 'background-color 300ms ease-in-out' }}></span>
-              2020-2011
-            </button>
-            <button
-              onClick={() => scrollToHistory('history-2009')}
-              className="history-item w-full text-left flex items-center gap-3 py-1 pb-2 border-b border-slate-300 font-korean font-semibold"
-              style={{ color: '#9CA3AF' }}
-            >
-              <span className="history-dot w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#9CA3AF', transition: 'background-color 300ms ease-in-out' }}></span>
-              2010-2001
-            </button>
-            <button
-              onClick={() => scrollToHistory('history-1988')}
-              className="history-item w-full text-left flex items-center gap-3 py-1 pb-2 border-b border-slate-300 font-korean font-semibold"
-              style={{ color: '#9CA3AF' }}
-            >
-              <span className="history-dot w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: '#9CA3AF', transition: 'background-color 300ms ease-in-out' }}></span>
-              2000-1951
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
+
 

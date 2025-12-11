@@ -82,7 +82,7 @@ const LegalBasis = () => {
                     {/* Summary Callout */}
                     <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
                       <p className="text-sm font-semibold text-blue-900 mb-2">핵심 요약</p>
-                      <p className="text-blue-900/90">상이군경 등으로 구성된 단체가 직접 수행하는 용역·물품에 대하여, 국가·지자체 및 공공기관은 관련 법률 및 시행령에 근거하여 수의계약 체결이 가능합니다.</p>
+                      <p className="text-blue-900/90">상이군경 등으로 구성된 단체가 직접 수행하는 용역·물품에 대하여, 국가·지자체 및 공공기관은 관련 법률 및 시행령에 근거하여 수의계약 체결이 가능함.</p>
                     </div>
 
                     {/* List of laws */}
