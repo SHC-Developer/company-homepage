@@ -363,7 +363,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                   ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80' 
                   : 'text-white hover:text-white/80 drop-shadow-lg'
             }`}>
-              대한민국상이군경회시설사
+              대한민국상이군경회시설사업소
             </Link>
           </div>
 
