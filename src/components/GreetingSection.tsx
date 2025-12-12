@@ -666,15 +666,15 @@ export const GreetingSection = () => {
           {/* 리스트형 타임라인 */}
           <div className="space-y-24 relative">
           {/* 연결된 세로줄 */}
-          <div className="hidden md:block absolute left-[240px] top-0 bottom-0 w-px bg-slate-300"></div>
+          <div className="hidden md:block absolute left-[304px] top-0 bottom-0 w-px bg-slate-300"></div>
             {/* 2026.01 */}
             <div
               id="history-2026"
               ref={el => historyItemRefs.current[11] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2026.01</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2026.01</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -695,8 +695,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[10] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2021.11</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2021.11</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -717,8 +717,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[9] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2017.03</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2017.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -739,8 +739,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[8] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2015.02</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2015.02</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -761,8 +761,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[7] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2014.03</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2014.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -783,8 +783,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[6] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2012.05</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2012.05</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -805,8 +805,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[5] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2009.10</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2009.10</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -827,8 +827,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[4] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2009.07</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2009.07</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -849,8 +849,8 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[3] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3' }}>2003.06</h3>
+              <div className="md:w-[240px] md:text-right md:pr-6">
+                <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2003.06</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
@@ -878,24 +878,24 @@ export const GreetingSection = () => {
               ref={el => historyItemRefs.current[2] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              <div className="md:text-right md:pr-6">
+              <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3
-                  className="font-extrabold leading-tight"
-                  style={{ color: '#0C2B4B', fontSize: 'clamp(2.7rem, 4.32vw, 3.6rem)', wordBreak: 'break-word' }}
+                  className="text-4xl sm:text-5xl font-extrabold"
+                  style={{ color: '#0C2B4B', whiteSpace: 'nowrap', width: '256px' }}
                 >
                   2002.12.03
                 </h3>
               </div>
               <div className="relative md:pl-10">
-                <ul className="divide-y divide-slate-200">
-                  <li className="relative py-6 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 2 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
-                    <div>
-                      <p className="text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
-                      <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
-                    </div>
-                  </li>
-                </ul>
+                  <ul className="divide-y divide-slate-200">
+                    <li className="relative py-3 pl-6">
+                      <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 2 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                      <div>
+                        <p className="text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
+                        <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
+                      </div>
+                    </li>
+                  </ul>
               </div>
             </div>
           </div>
