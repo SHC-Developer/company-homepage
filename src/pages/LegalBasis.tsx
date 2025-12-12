@@ -195,7 +195,7 @@ const LegalBasis = () => {
                         </div>
                         <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
                       </div>
-                      <div className="rounded-md border border-slate-200 p-5">
+                      <div className="rounded-md border border-slate-200 p-5 bg-slate-50/50">
                         <p className="text-primary font-bold mb-2">제26조(수의계약에 의할 수 있는 경우)</p>
                         <div className="ml-4 space-y-2">
                           <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>① 법 제7조제1항 단서에 따라 수의계약을 할 수 있는 경우는 다음 각 호와 같다.</p>
