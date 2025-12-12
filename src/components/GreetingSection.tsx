@@ -471,7 +471,7 @@ export const GreetingSection = () => {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">핵심 가치</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#1D66B3' }}>핵심 가치</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
               {/* 상부상조 카드 */}
@@ -559,7 +559,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 인사말 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-10" id="ceo-message" style={{ backgroundColor: '#FFFEFC' }}>
+      <div className="min-h-screen pt-10" id="ceo-message" style={{ background: 'linear-gradient(to bottom, #ffffff 0%, #F0F4F8 100%)' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-12">
@@ -568,10 +568,10 @@ export const GreetingSection = () => {
                 ref={titleRef}
                 className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
               >
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#000000] leading-tight tracking-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1C2B] leading-tight tracking-tight">
                   大韓民國傷痍軍警會 시설사업소
                 </h1>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#000000] leading-tight tracking-tight" style={{ letterSpacing: '0.04em' }}>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0B1C2B] leading-tight tracking-tight" style={{ letterSpacing: '0.04em' }}>
                   Engineering Safety. Inspiring Innovation.
                 </h1>
               </div>
@@ -634,7 +634,7 @@ export const GreetingSection = () => {
                   ref={el => paragraphRefs.current[5] = el}
                   className={`transition-all duration-1000 mt-8 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
-                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold text-right" style={{ color: '#0C2B4B' }}>
+                  <p className="leading-relaxed text-xl sm:text-2xl font-semibold text-right" style={{ color: '#0B1C2B' }}>
                     대한민국상이군경회시설사업소장
                   </p>
                 </div>
@@ -645,7 +645,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 회사연혁 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-36" id="company-history" style={{ backgroundColor: '#F0F4F8' }}>
+      <div className="min-h-screen pt-36" id="company-history" style={{ background: 'linear-gradient(to bottom, #F0F4F8 0%, #F7FBFF 100%)' }}>
         <div className="w-[65%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 헤더 */}
           <div className="mb-10">
@@ -853,7 +853,7 @@ export const GreetingSection = () => {
                 <h3 className="text-4xl sm:text-5xl font-extrabold" style={{ color: '#1D66B3', width: '256px' }}>2003.06</h3>
               </div>
               <div className="relative md:pl-10">
-                <ul className="divide-y divide-slate-200">
+                <ul>
                   <li className="relative py-3 pl-6">
                     <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
                     <div>
@@ -903,7 +903,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 보유면허 및 기술 콘텐츠 섹션 */}
-      <div className="pt-20 pb-16" id="license" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="pt-20 pb-16" id="license" style={{ backgroundColor: '#F7FBFF' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
@@ -940,7 +940,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 보유기술 (특허) 콘텐츠 섹션 */}
-      <div className="pt-20 pb-16" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="pt-20 pb-16" style={{ backgroundColor: '#F7FBFF' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
@@ -1029,7 +1029,7 @@ export const GreetingSection = () => {
       </div>
 
       {/* 오시는길 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-20 pb-16" id="directions" style={{ backgroundColor: '#FFFEF5' }}>
+      <div className="min-h-screen pt-20 pb-16" id="directions" style={{ background: 'linear-gradient(to bottom, #F7FBFF 0%, #FFFFFF 100%)' }}>
         <div className="w-[85%] mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
