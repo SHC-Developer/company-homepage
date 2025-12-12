@@ -210,7 +210,7 @@ export const SitemapSection = () => {
   const categories: CategoryItem[] = [
     {
       id: 'ceo',
-      label: 'CEO인사말',
+      label: '인사말',
       icon: <Building2 className="w-8 h-8" />,
       onClick: () => handleCategoryClick('/greeting', 'management-philosophy'),
     },
