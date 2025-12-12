@@ -439,10 +439,10 @@ export const GreetingSection = () => {
                 className={`rounded-xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-700 ${visiblePhilosophyCards[1] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-full bg-[#1e40af]/10 ring-1 ring-[#1e40af]/20 flex items-center justify-center text-[#1e40af] font-bold">Ⅰ</div>
+                  <div className="h-10 w-10 rounded-full bg-[#1e40af]/10 ring-1 ring-[#1e40af]/20 flex items-center justify-center font-bold" style={{ color: '#0B1C2B' }}>Ⅰ</div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900">국가 보훈의 이념</h3>
-                    <p className="mt-2 leading-7 text-slate-700 text-base">
+                    <h3 className="text-2xl font-bold" style={{ color: '#0C2B4B' }}>국가 보훈의 이념</h3>
+                    <p className="mt-2 leading-7 text-base" style={{ color: '#0C2B4B' }}>
                       대한민국의 오늘은 국가의 존립과 발전을 위해 공헌하거나 이를 위해 자신을 희생한 국가유공자의 공헌과 희생 위에 이룩되었습니다. 국가유공자의 공헌과 희생이 숭고한 애국정신의 귀감으로서 항구적으로 존중되도록 하며, 그에 상응하는 명예와 보상이 유지되도록 합니다.
                     </p>
                   </div>
@@ -455,10 +455,10 @@ export const GreetingSection = () => {
                 className={`rounded-xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-700 ${visiblePhilosophyCards[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-full bg-indigo-600/10 ring-1 ring-indigo-600/20 flex items-center justify-center text-indigo-700 font-bold">Ⅱ</div>
+                  <div className="h-10 w-10 rounded-full bg-indigo-600/10 ring-1 ring-indigo-600/20 flex items-center justify-center font-bold" style={{ color: '#0B1C2B' }}>Ⅱ</div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900">단체설립근거</h3>
-                    <p className="mt-2 leading-7 text-slate-700 text-base">
+                    <h3 className="text-2xl font-bold" style={{ color: '#0C2B4B' }}>단체설립근거</h3>
+                    <p className="mt-2 leading-7 text-base" style={{ color: '#0C2B4B' }}>
                       『국가유공자 등 단체설립에 관한 법률』 제1조에 근거하여 설립되었으며, 국가유공자와 유족의 상부상조, 자활능력 배양, 민족정기 선양, 자유민주주의 수호 및 평화적 통일과 국제평화 유지에 이바지함을 목적으로 합니다.
                     </p>
                   </div>
@@ -484,8 +484,8 @@ export const GreetingSection = () => {
                     <HandHeart className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-900">상부상조</h3>
-                    <p className="text-sm text-slate-600">서로 돕고 함께 성장</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>상부상조</h3>
+                    <p className="text-sm" style={{ color: '#0B1C2B' }}>서로 돕고 함께 성장</p>
                   </div>
                 </div>
               </div>
@@ -500,8 +500,8 @@ export const GreetingSection = () => {
                     <Target className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-900">자활자립</h3>
-                    <p className="text-sm text-slate-600">스스로 역량으로 자립</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>자활자립</h3>
+                    <p className="text-sm" style={{ color: '#0B1C2B' }}>스스로 역량으로 자립</p>
                   </div>
                 </div>
               </div>
@@ -516,8 +516,8 @@ export const GreetingSection = () => {
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-900">명예선양</h3>
-                    <p className="text-sm text-slate-600">숭고한 희생을 기림</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>명예선양</h3>
+                    <p className="text-sm" style={{ color: '#0B1C2B' }}>숭고한 희생을 기림</p>
                   </div>
                 </div>
               </div>
@@ -532,8 +532,8 @@ export const GreetingSection = () => {
                     <TrendingUp className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-900">국가발전</h3>
-                    <p className="text-sm text-slate-600">인프라 발전 기여</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>국가발전</h3>
+                    <p className="text-sm" style={{ color: '#0B1C2B' }}>인프라 발전 기여</p>
                   </div>
                 </div>
               </div>
@@ -548,8 +548,8 @@ export const GreetingSection = () => {
                     <Globe className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-slate-900">세계평화</h3>
-                    <p className="text-sm text-slate-600">공동번영과 협력</p>
+                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>세계평화</h3>
+                    <p className="text-sm" style={{ color: '#0B1C2B' }}>공동번영과 협력</p>
                   </div>
                 </div>
               </div>
