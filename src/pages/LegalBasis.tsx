@@ -155,7 +155,7 @@ const LegalBasis = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                          <h3 className="font-bold mb-2 text-lg"><span style={{ textDecoration: 'underline' }}>국가유공자단체법</span></h3>
+                          <h3 className="font-bold text-lg"><span style={{ textDecoration: 'underline' }}>국가유공자단체법</span></h3>
                         </div>
                         <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">시행 2023.6.5<span className="text-slate-400">/</span> 법률 제19228호</span>
                       </div>
@@ -172,7 +172,7 @@ const LegalBasis = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                          <h3 className="font-bold mb-2 text-lg"><span style={{ textDecoration: 'underline' }}>국가보훈 기본법</span></h3>
+                          <h3 className="font-bold text-lg"><span style={{ textDecoration: 'underline' }}>국가보훈 기본법</span></h3>
                         </div>
                         <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">시행 2024.2.13<span className="text-slate-400">/</span> 법률 제20278호</span>
                       </div>
@@ -191,7 +191,7 @@ const LegalBasis = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                          <h3 className="font-bold mb-2 text-lg"><span style={{ textDecoration: 'underline' }}>국가계약법 시행령</span></h3>
+                          <h3 className="font-bold text-lg"><span style={{ textDecoration: 'underline' }}>국가계약법 시행령</span></h3>
                         </div>
                         <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
                       </div>
@@ -215,7 +215,7 @@ const LegalBasis = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
-                          <h3 className="font-bold mb-2 text-lg"><span style={{ textDecoration: 'underline' }}>지방계약법 시행령</span></h3>
+                          <h3 className="font-bold text-lg"><span style={{ textDecoration: 'underline' }}>지방계약법 시행령</span></h3>
                         </div>
                         <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
                       </div>

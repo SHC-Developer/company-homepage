@@ -221,7 +221,7 @@ const Portfolio = () => {
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">정밀안전점검</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-cyan-600 tabular-nums flex items-baseline gap-2">
+                <div className="text-3xl font-bold tabular-nums flex items-baseline gap-2" style={{ color: '#D10000' }}>
                   {totals.inspection.toLocaleString()}
                   <span className="text-sm font-medium text-slate-600 font-korean">건</span>
                 </div>
@@ -234,7 +234,7 @@ const Portfolio = () => {
                 <CardTitle className="text-sm font-medium text-slate-600 font-korean">엔지니어링 설계</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-green-600 tabular-nums flex items-baseline gap-2">
+                <div className="text-3xl font-bold tabular-nums flex items-baseline gap-2" style={{ color: '#0EB500' }}>
                   {totals.design.toLocaleString()}
                   <span className="text-sm font-medium text-slate-600 font-korean">건</span>
                 </div>
@@ -280,8 +280,8 @@ const Portfolio = () => {
                       <tr key={row.year} className="border-b hover:bg-slate-50">
                         <td className="px-4 py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
                         <td className="px-4 py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
-                        <td className="px-4 py-4 text-center text-cyan-700 font-medium border-r border-slate-200">{row['정밀안전검검']}</td>
-                        <td className="px-4 py-4 text-center text-green-700 font-medium border-r border-slate-200">{row['설계']}</td>
+                        <td className="px-4 py-4 text-center font-medium border-r border-slate-200" style={{ color: '#D10000' }}>{row['정밀안전검검']}</td>
+                        <td className="px-4 py-4 text-center font-medium border-r border-slate-200" style={{ color: '#0EB500' }}>{row['설계']}</td>
                         <td className="px-4 py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
                         <td className="px-4 py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
                         <td className="px-4 py-4 text-center font-bold text-orange-600">{row['합계']}</td>
