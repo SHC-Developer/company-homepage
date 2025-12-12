@@ -27,7 +27,6 @@ export const GreetingSection = () => {
   const coreValueRefs = useRef<(HTMLDivElement | null)[]>([]);
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [focusedHistoryIndex, setFocusedHistoryIndex] = useState<number | null>(null);
 
   // COMPANY HISTORY: no range filtering, continuous timeline (latest first)
 
@@ -318,39 +317,10 @@ export const GreetingSection = () => {
       return observer;
     });
 
-    // 스크롤 이벤트로 포커스 아이템 추적
-    const handleScroll = () => {
-      const screenCenter = window.innerHeight / 2;
-      let closestIndex = -1;
-      let closestDistance = Infinity;
-
-      historyItemRefs.current.forEach((ref, index) => {
-        if (!ref) return;
-        const rect = ref.getBoundingClientRect();
-        const itemCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(itemCenter - screenCenter);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      // 150px 이내의 아이템만 포커스
-      if (closestDistance < 150) {
-        setFocusedHistoryIndex(closestIndex);
-      } else {
-        setFocusedHistoryIndex(null);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
     return () => {
       observers.forEach(observer => {
         if (observer) observer.disconnect();
       });
-      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -678,8 +648,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 11 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -700,8 +670,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 10 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -722,8 +692,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 9 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">기업부설연구소 등록 (시설사업소 휴먼테크연구부)</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -744,8 +714,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 8 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -766,8 +736,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 7 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 부임</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -788,8 +758,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 6 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">엔지니어링사업자 신고</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -810,8 +780,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 5 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">감리전문회사 등록</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -832,8 +802,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 4 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -854,15 +824,15 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                 <ul>
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">안전진단전문기관 등록</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
                     </div>
                   </li>
-                  <li className="relative py-3 pl-6">
-                    <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 3 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                  <li className="group relative py-3 pl-6">
+                    <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
                       <p className="text-lg text-gray-700">엔지니어링활동주체 신고</p>
                       <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
@@ -888,8 +858,8 @@ export const GreetingSection = () => {
               </div>
               <div className="relative md:pl-10">
                   <ul className="divide-y divide-slate-200">
-                    <li className="relative py-3 pl-6">
-                      <span className={`absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 ${focusedHistoryIndex === 2 ? 'bg-[#1D66B3] border-[#1D66B3]' : 'bg-white border-[#1D66B3]'}`}></span>
+                    <li className="group relative py-3 pl-6">
+                      <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                       <div>
                         <p className="text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
                         <div className="mt-2 border-b border-slate-300" style={{ width: 'calc(65vw - 200px)' }}></div>
