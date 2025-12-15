@@ -7,9 +7,9 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Navigation />
-      <main>
+      <main className="overflow-x-hidden">
         <HeroSection />
         <SitemapSection />
       </main>

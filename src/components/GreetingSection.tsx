@@ -3,6 +3,8 @@ import { HandHeart, Target, Award, TrendingUp, Globe, Users } from 'lucide-react
 
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
+  const videoIframeRef = useRef<HTMLIFrameElement>(null);
+  const videoPlayerRef = useRef<any>(null);
   const [showBottomText, setShowBottomText] = useState(true);
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false, false]);
   const [visibleTitle, setVisibleTitle] = useState(false);
@@ -27,6 +29,74 @@ export const GreetingSection = () => {
   const coreValueRefs = useRef<(HTMLDivElement | null)[]>([]);
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // YouTube IFrame API를 사용한 비디오 반복 재생 (모바일 대응)
+  useEffect(() => {
+    const initPlayer = () => {
+      if (videoIframeRef.current && !videoPlayerRef.current && (window as any).YT && (window as any).YT.Player) {
+        try {
+          videoPlayerRef.current = new (window as any).YT.Player(videoIframeRef.current, {
+            events: {
+              onStateChange: (event: any) => {
+                // 비디오가 끝났을 때 (state === 0) 다시 재생
+                if (event.data === (window as any).YT.PlayerState.ENDED) {
+                  videoPlayerRef.current?.playVideo();
+                }
+              },
+              onError: () => {
+                setVideoError(true);
+              }
+            }
+          });
+        } catch (e) {
+          console.error('YouTube Player 초기화 실패:', e);
+        }
+      }
+    };
+
+    // YouTube IFrame API가 이미 로드되어 있는 경우
+    if ((window as any).YT && (window as any).YT.Player) {
+      // 약간의 지연을 두고 초기화 (iframe이 DOM에 완전히 추가된 후)
+      setTimeout(initPlayer, 100);
+    } else {
+      // YouTube IFrame API 로드
+      const existingScript = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
+      if (!existingScript) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+      }
+
+      // 전역 콜백에 추가 (기존 콜백 유지)
+      const originalCallback = (window as any).onYouTubeIframeAPIReady;
+      (window as any).onYouTubeIframeAPIReady = () => {
+        if (originalCallback) originalCallback();
+        setTimeout(initPlayer, 100);
+      };
+
+      // 이미 로드 중이었을 수 있으므로 확인
+      const checkInterval = setInterval(() => {
+        if ((window as any).YT && (window as any).YT.Player) {
+          clearInterval(checkInterval);
+          setTimeout(initPlayer, 100);
+        }
+      }, 100);
+
+      setTimeout(() => clearInterval(checkInterval), 10000); // 10초 후 타임아웃
+    }
+
+    return () => {
+      if (videoPlayerRef.current) {
+        try {
+          videoPlayerRef.current.destroy();
+        } catch (e) {
+          // 무시
+        }
+        videoPlayerRef.current = null;
+      }
+    };
+  }, []);
 
   // COMPANY HISTORY: no range filtering, continuous timeline (latest first)
 
@@ -333,8 +403,10 @@ export const GreetingSection = () => {
           {!videoError ? (
             <div className="relative w-full h-full">
               <iframe
+                ref={videoIframeRef}
+                id="greeting-video-iframe"
                 className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2"
-                src="https://www.youtube-nocookie.com/embed/ZTk_00Kto1o?autoplay=1&mute=1&loop=1&playlist=ZTk_00Kto1o&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1"
+                src="https://www.youtube-nocookie.com/embed/ZTk_00Kto1o?autoplay=1&mute=1&loop=1&playlist=ZTk_00Kto1o&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1"
                 title="대한민국 상이군경회 시설사업소 배경 영상"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
