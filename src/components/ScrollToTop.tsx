@@ -31,7 +31,7 @@ export const ScrollToTop = () => {
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-green-800 hover:bg-green-900 text-white p-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-110 z-40"
+          className="hidden md:block fixed bottom-8 right-8 bg-green-800 hover:bg-green-900 text-white p-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-110 z-40"
           aria-label="페이지 상단으로 이동"
         >
           <ArrowUp className="w-6 h-6" />

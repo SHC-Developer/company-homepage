@@ -2,73 +2,39 @@ import React, { useState, useEffect, useRef } from 'react';
 
 export const HeroSection = () => {
   const [videoError, setVideoError] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<any>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
+  // 로컬 비디오 반복 재생
   useEffect(() => {
-    const initPlayer = () => {
-      if (iframeRef.current && !playerRef.current && (window as any).YT && (window as any).YT.Player) {
-        try {
-          playerRef.current = new (window as any).YT.Player(iframeRef.current, {
-            events: {
-              onStateChange: (event: any) => {
-                // 비디오가 끝났을 때 (state === 0) 다시 재생
-                if (event.data === (window as any).YT.PlayerState.ENDED) {
-                  playerRef.current?.playVideo();
-                }
-              },
-              onError: () => {
-                setVideoError(true);
-              }
-            }
-          });
-        } catch (e) {
-          console.error('YouTube Player 초기화 실패:', e);
-        }
-      }
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleEnded = () => {
+      // 비디오가 끝났을 때 다시 재생
+      video.currentTime = 0;
+      video.play().catch((e) => {
+        console.error('비디오 재생 실패:', e);
+        setVideoError(true);
+      });
     };
 
-    // YouTube IFrame API가 이미 로드되어 있는 경우
-    if ((window as any).YT && (window as any).YT.Player) {
-      // 약간의 지연을 두고 초기화 (iframe이 DOM에 완전히 추가된 후)
-      setTimeout(initPlayer, 100);
-    } else {
-      // YouTube IFrame API 로드
-      const existingScript = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
-      if (!existingScript) {
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-      }
+    const handleError = () => {
+      console.error('비디오 로드 실패');
+      setVideoError(true);
+    };
 
-      // 전역 콜백에 추가 (기존 콜백 유지)
-      const originalCallback = (window as any).onYouTubeIframeAPIReady;
-      (window as any).onYouTubeIframeAPIReady = () => {
-        if (originalCallback) originalCallback();
-        setTimeout(initPlayer, 100);
-      };
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('error', handleError);
 
-      // 이미 로드 중이었을 수 있으므로 확인
-      const checkInterval = setInterval(() => {
-        if ((window as any).YT && (window as any).YT.Player) {
-          clearInterval(checkInterval);
-          setTimeout(initPlayer, 100);
-        }
-      }, 100);
-
-      setTimeout(() => clearInterval(checkInterval), 10000); // 10초 후 타임아웃
-    }
+    // 자동 재생 시도
+    video.play().catch((e) => {
+      console.error('비디오 자동 재생 실패:', e);
+      // 자동 재생이 실패해도 에러로 처리하지 않음 (브라우저 정책)
+    });
 
     return () => {
-      if (playerRef.current) {
-        try {
-          playerRef.current.destroy();
-        } catch (e) {
-          // 무시
-        }
-        playerRef.current = null;
-      }
+      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('error', handleError);
     };
   }, []);
 
@@ -82,18 +48,20 @@ export const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         {!videoError ? (
           <div className="relative w-full h-full">
-            <iframe
-              ref={iframeRef}
-              id="hero-video-iframe"
-              className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2"
-              src="https://www.youtube-nocookie.com/embed/2mi94NnUWSs?autoplay=1&mute=1&loop=1&playlist=2mi94NnUWSs&controls=0&rel=0&modestbranding=1&playsinline=1&start=0&iv_load_policy=3&fs=0&cc_load_policy=0&disablekb=1&enablejsapi=1"
-              title="대한민국 상이군경회 시설사업소 배경 영상"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              onError={() => setVideoError(true)}
-              style={{ pointerEvents: 'none' }}
+            <video
+              ref={videoRef}
+              className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2 object-cover"
+              src={`${import.meta.env.BASE_URL}video/Main1.mp4`}
+              autoPlay
+              muted
+              playsInline
+              loop={false}
+              style={{
+                pointerEvents: 'none',
+              }}
             />
+            {/* 비디오 위에 오버레이 */}
+            <div className="absolute inset-0 bg-black/10 z-10"></div>
           </div>
         ) : (
           <div 
