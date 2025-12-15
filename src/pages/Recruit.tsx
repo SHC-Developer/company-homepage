@@ -150,42 +150,36 @@ const Recruit = () => {
             </div>
 
             <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 text-left text-white font-korean">
-              <div className="space-y-6">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                  <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용분야</p>
-                  <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
-                    안전진단 기술자
-                  </p>
-                  <p className="mt-2 text-sm text-white/70">경력 5년 이하</p>
-                </div>
-
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                  <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용형태</p>
-                  <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
-                    정규직 · 신입/경력
-                  </p>
-                  <p className="mt-2 text-sm text-white/70">현장 안전진단 및 보고 체계 구축</p>
-                </div>
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
+                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용분야</p>
+                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+                  안전진단 기술자
+                </p>
               </div>
 
-              <div className="space-y-6">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                  <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">서류접수</p>
-                  <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
-                    2026.02.01 ~ 2026.03.31
-                  </p>
-                  <p className="mt-2 text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
-                </div>
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
+                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">서류접수</p>
+                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+                  2026.02.01 ~ 2026.03.31
+                </p>
+                <p className="mt-2 text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
+              </div>
 
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                  <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">전형절차</p>
-                  <p className="mt-3 text-sm text-white/80 leading-6">
-                    1차 서류전형 · 2차 실무면접 · 3차 최종합격
-                  </p>
-                  <p className="mt-2 text-sm text-white/70">
-                    제출서류: 이력서, 자기소개서, 관련 자격증 사본
-                  </p>
-                </div>
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
+                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용형태</p>
+                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+                  정규직 · 신입/경력
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
+                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">전형절차</p>
+                <p className="mt-3 text-sm text-white/80 leading-6">
+                  서류접수 → 면접 → 최종합격
+                </p>
+                <p className="mt-2 text-sm text-white/70">
+                  제출서류: 1. 이력서 2. 자기소개서
+                </p>
               </div>
             </div>
 
@@ -193,25 +187,23 @@ const Recruit = () => {
               <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                 <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">주요업무</p>
                 <ul className="mt-3 space-y-2 text-sm text-white/80">
-                  <li>- 시설물 안전진단 및 결과 보고</li>
-                  <li>- 현장 데이터 수집 및 분석</li>
+                  <li>- 토목/건축 시설물 안전진단</li>
                   <li>- 안전관리 프로세스 개선</li>
                 </ul>
               </div>
               <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                 <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">필수요건</p>
                 <ul className="mt-3 space-y-2 text-sm text-white/80">
-                  <li>- 관련 분야 자격증 또는 경력</li>
-                  <li>- 안전진단 보고서 작성 경험</li>
+                  <li>- 관련학과 졸업자(졸업예정자 포함)</li>
                   <li>- 협업 및 커뮤니케이션 능력</li>
                 </ul>
               </div>
               <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
                 <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">우대사항</p>
                 <ul className="mt-3 space-y-2 text-sm text-white/80">
-                  <li>- 공공기관 안전진단 프로젝트 경험</li>
-                  <li>- 관련 법규 및 기준 이해도</li>
-                  <li>- CAD, BIM 등 설계 도구 활용</li>
+                  <li>1. 업무 효율화를 위한 OA프로그램(한글, EXCEL, PPT) 활용 능력 우수자</li>
+                  <li>2. 관련학과 자격증 소지자</li>
+                  <li>3. CAD 활용 능력 우수자</li>
                 </ul>
               </div>
             </div>
