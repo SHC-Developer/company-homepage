@@ -34,10 +34,7 @@ export const Footer = () => {
           </div>
 
           {/* 연락처 */}
-          <div className="border-t border-primary-foreground/10 pt-4 md:pt-6 pb-0 md:pb-0 md:border-t-0 md:border-l md:pl-10 md:pt-0 flex flex-col justify-center md:block">
-            <h4 className="hidden md:block text-sm font-semibold text-primary-foreground/70 font-korean mb-4">
-              연락처
-            </h4>
+          <div className="border-t border-primary-foreground/10 pt-4 md:pt-0 pb-0 md:pb-0 md:border-t-0 md:border-l md:pl-10 flex flex-col justify-center md:block">
             <div className="space-y-4 md:space-y-2 text-left">
               {/* 모바일: TEL과 FAX 가로 한 줄, 데스크톱: 세로 배치 */}
               <div className="text-base md:text-sm text-primary-foreground/80 font-korean space-y-4 md:space-y-2">
