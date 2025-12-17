@@ -9,7 +9,7 @@ interface MenuStructure {
 }
 
 const menuStructure = {
-  '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성', '오시는길'],
+  '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성'],
   '관계법령': [],
   '분야별 수행실적': ['안전진단', '설계', '건설사업관리'],
   '자료실': ['채용공고']
@@ -92,30 +92,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
       navigate('/greeting#company-history');
       setTimeout(() => {
         const element = document.getElementById('company-history');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleDirectionsClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      // 이미 greeting 페이지에 있으면 스크롤만
-      const element = document.getElementById('directions');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // URL에 해시 추가
-        window.history.pushState(null, '', '#directions');
-      }
-    } else {
-      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
-      navigate('/greeting#directions');
-      setTimeout(() => {
-        const element = document.getElementById('directions');
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -355,8 +331,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
           - 데스크톱: md:h-28 (112px), lg:h-[120px]
           - items-center로 모든 요소를 수직 중앙 정렬
         */}
-        <div className={`flex justify-between items-center h-14 sm:h-20 md:h-28 lg:h-[120px] ${variant === 'legal' ? 'nav-legal' : 'nav-bottom-line'} ${
-          isOverLightBackground ? 'nav-light-theme' : ''
+        <div className={`flex justify-between items-center h-14 sm:h-20 md:h-28 lg:h-[120px] ${variant === 'legal' ? 'nav-legal' : ''} ${
+          isOverLightBackground ? 'nav-light-theme nav-gradient-line' : 'nav-bottom-line'
         }`}>
           {/* 로고와 회사명 */}
           {/* 
@@ -552,23 +528,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           key={subMenu}
                           href="#"
                           onClick={handleLicenseClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '오시는길' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handleDirectionsClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             location.pathname === '/greeting'
                               ? (isOverLightBackground
@@ -865,23 +824,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             key={subMenu}
                             href="#"
                             onClick={handleLicenseClick}
-                            className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
-                            }`}
-                          >
-                            {subMenu}
-                          </a>
-                        ) : subMenu === '오시는길' ? (
-                          <a
-                            key={subMenu}
-                            href="#"
-                            onClick={handleDirectionsClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               location.pathname === '/greeting'
                                 ? (isOverLightBackground

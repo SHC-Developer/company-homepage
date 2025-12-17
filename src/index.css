@@ -343,9 +343,34 @@ All colors MUST be HSL.
     background-color: white;
   }
   
-  /* 밝은 배경 위에서의 네비게이션 스타일 */
+  /* 밝은 배경 위에서의 네비게이션 스타일 - 가로줄 제거하고 그라데이션 효과 */
+  .nav-light-theme {
+    position: relative;
+  }
+  
   .nav-light-theme::after {
-    background-color: #000000; /* 검정색 선 */
+    display: none; /* 가로줄 제거 */
+  }
+  
+  /* 그라데이션 효과로 가로줄처럼 보이게 하는 스타일 */
+  .nav-gradient-line {
+    position: relative;
+  }
+  
+  .nav-gradient-line::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to bottom, 
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.10) 30%,
+      rgba(0, 0, 0, 0.05) 60%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
   }
   
   /* Legal 페이지용 네비게이션 스타일 */

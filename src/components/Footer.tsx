@@ -60,6 +60,7 @@ export const Footer = () => {
             </div>
           </div>
         </div>
+        
 
         {/* 저작권 */}
         <div className="mt-4 border-t border-primary-foreground/10 pt-6">
