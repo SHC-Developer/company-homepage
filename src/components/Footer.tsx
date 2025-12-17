@@ -35,15 +35,15 @@ export const Footer = () => {
           </div>
 
           {/* 연락처 */}
-          <div className="space-y-4 border-t border-primary-foreground/10 pt-4 md:pt-6 md:border-t-0 md:border-l md:pl-10 md:pt-0">
-            <h4 className="hidden md:block text-sm font-semibold text-primary-foreground/70 font-korean">
+          <div className="border-t border-primary-foreground/10 pt-4 md:pt-6 pb-2 md:pb-0 md:border-t-0 md:border-l md:pl-10 md:pt-0 flex flex-col justify-center md:block">
+            <h4 className="hidden md:block text-sm font-semibold text-primary-foreground/70 font-korean mb-4">
               연락처
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-4 md:space-y-2 text-left">
               {/* 모바일: TEL과 FAX 가로 한 줄, 데스크톱: 세로 배치 */}
-              <div className="text-base md:text-sm text-primary-foreground/80 font-korean space-y-3">
-                {/* 모바일: TEL과 FAX 가로 배치 - 바로 옆에 */}
-                <div className="flex gap-x-4 md:block items-center md:space-y-3">
+              <div className="text-base md:text-sm text-primary-foreground/80 font-korean space-y-4 md:space-y-2">
+                {/* 모바일: TEL과 FAX 가로 배치 - 바로 옆에, 좌정렬 */}
+                <div className="flex justify-start md:block gap-x-4 items-center md:space-y-3">
                   {/* TEL */}
                   <div className="md:block whitespace-nowrap text-sm md:text-base">
                     TEL&nbsp;
@@ -55,13 +55,13 @@ export const Footer = () => {
                     <span className="font-english text-primary-foreground">02)571-9274</span>
                   </div>
                 </div>
-                {/* 주소 - 회색 가로줄 너비에 맞게 */}
-                <div className="flex items-start gap-3">
+                {/* 주소 - 모바일 좌측 정렬, 데스크톱 좌측 정렬 */}
+                <div className="flex justify-start md:justify-start items-start gap-3">
                   {/* 모바일: Add. 표시, 데스크톱: 아이콘 표시 */}
                   <span className="hidden md:block">
                     <MapPin className="mt-1 h-5 w-5 text-primary-foreground flex-shrink-0" />
                   </span>
-                  <span className="md:hidden text-primary-foreground">Add.</span>
+                  <span className="md:hidden text-sm md:text-base text-primary-foreground/80">Add.</span>
                   <div className="text-sm md:text-sm leading-relaxed text-primary-foreground font-korean">
                     경기도 성남시 분당구 판교역로 230 9층 907호
                   </div>
@@ -72,7 +72,7 @@ export const Footer = () => {
         </div>
 
         {/* 저작권 */}
-        <div className="mt-10 border-t border-primary-foreground/10 pt-6">
+        <div className="mt-6 border-t border-primary-foreground/10 pt-6">
           <p className="text-xs text-primary-foreground/60 font-korean text-center md:text-left">
             © {currentYear} 대한민국상이군경회시설사업소. All rights reserved.
           </p>
