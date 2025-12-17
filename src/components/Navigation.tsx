@@ -382,7 +382,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
             <Link 
               to="/" 
               onClick={() => window.scrollTo(0, 0)} 
-              className={`h-full flex items-center text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold font-logo transition-colors duration-300 whitespace-nowrap overflow-hidden text-ellipsis leading-none ${
+              className={`h-full flex items-center text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold font-logo transition-colors duration-300 whitespace-nowrap overflow-hidden text-ellipsis leading-none ${
                 location.pathname === '/greeting'
                   ? (isOverLightBackground
                       ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80'
