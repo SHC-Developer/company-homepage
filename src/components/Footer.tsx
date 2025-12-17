@@ -1,5 +1,4 @@
 import React from 'react';
-import { MapPin } from 'lucide-react';
 import logo2 from '@/assets/logo2.png';
 
 export const Footer = () => {
@@ -55,16 +54,10 @@ export const Footer = () => {
                     <span className="font-english text-primary-foreground">02)571-9274</span>
                   </div>
                 </div>
-                {/* 주소 - 모바일 좌측 정렬, 데스크톱 좌측 정렬 */}
-                <div className="flex justify-start md:justify-start items-start gap-3">
-                  {/* 모바일: Add. 표시, 데스크톱: 아이콘 표시 */}
-                  <span className="hidden md:block">
-                    <MapPin className="mt-1 h-5 w-5 text-primary-foreground flex-shrink-0" />
-                  </span>
-                  <span className="md:hidden text-sm md:text-base text-primary-foreground/80">Add.</span>
-                  <div className="text-sm md:text-sm leading-relaxed text-primary-foreground font-korean">
-                    경기도 성남시 분당구 판교역로 230 9층 907호
-                  </div>
+                {/* 주소 */}
+                <div className="text-sm md:text-base text-primary-foreground/80 whitespace-nowrap">
+                  Add.&nbsp;
+                  <span className="font-korean text-primary-foreground">경기도 성남시 분당구 판교역로 230 9층 907호</span>
                 </div>
               </div>
             </div>
