@@ -35,7 +35,7 @@ export const Footer = () => {
           </div>
 
           {/* 연락처 */}
-          <div className="border-t border-primary-foreground/10 pt-4 md:pt-6 pb-2 md:pb-0 md:border-t-0 md:border-l md:pl-10 md:pt-0 flex flex-col justify-center md:block">
+          <div className="border-t border-primary-foreground/10 pt-4 md:pt-6 pb-0 md:pb-0 md:border-t-0 md:border-l md:pl-10 md:pt-0 flex flex-col justify-center md:block">
             <h4 className="hidden md:block text-sm font-semibold text-primary-foreground/70 font-korean mb-4">
               연락처
             </h4>
@@ -72,8 +72,8 @@ export const Footer = () => {
         </div>
 
         {/* 저작권 */}
-        <div className="mt-6 border-t border-primary-foreground/10 pt-6">
-          <p className="text-xs text-primary-foreground/60 font-korean text-center md:text-left">
+        <div className="mt-4 border-t border-primary-foreground/10 pt-6">
+          <p className="text-xs text-primary-foreground/60 font-korean text-left">
             © {currentYear} 대한민국상이군경회시설사업소. All rights reserved.
           </p>
         </div>
