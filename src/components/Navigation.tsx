@@ -278,7 +278,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
           </div>
 
           {/* 데스크톱 네비게이션 */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden desktop:flex items-center space-x-8">
             {Object.keys(menuStructure).map((menu) => (
               <div
                 key={menu}
@@ -317,7 +317,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
 
                 {/* 드롭다운 메뉴 - 흰색 라인 아래로 위치 */}
                 {activeMenu === menu && menuStructure[menu].length > 0 && (
-                  <div className={`absolute top-full left-0 mt-3 w-48 rounded-lg shadow-lg nav-slide-down open ${dropdownContainerClass}`}>
+                  <div className={`absolute top-full left-0 mt-12 w-48 rounded-lg shadow-lg nav-slide-down open ${dropdownContainerClass}`}>
                     {menuStructure[menu].map((subMenu) => (
                       subMenu === '수의계약근거' ? (
                         <Link
@@ -448,7 +448,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
             - h-full flex items-center로 버튼 컨테이너를 네비게이션 바 높이에 맞추고 수직 중앙 정렬
             - 버튼 내부에서도 flex items-center justify-center로 SVG 아이콘을 수직 중앙 정렬
           */}
-          <div className="lg:hidden flex items-center h-full">
+          <div className="desktop:hidden flex items-center h-full">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`h-full flex items-center justify-center px-2.5 transition-colors duration-300 rounded-lg hover:bg-opacity-10 hover:bg-current ${
@@ -473,7 +473,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
           4. 패딩 조정: 모바일에서 px-3 py-3으로 공간 효율적
         */}
         {isMobileMenuOpen && (
-          <div className={`lg:hidden backdrop-blur-sm border-t overflow-y-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out ${
+          <div className={`desktop:hidden backdrop-blur-sm border-t overflow-y-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out ${
             mobileMenuPanelClass
           }`}>
             <div className="px-3 py-3 sm:px-4 sm:py-4 space-y-2">

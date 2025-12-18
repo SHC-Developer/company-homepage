@@ -317,7 +317,7 @@ export const GreetingSection = () => {
       {/* 경영이념 콘텐츠 섹션 (리디자인) */}
       <div className="relative min-h-screen py-20 bg-gradient-to-b from-slate-50 via-white to-white" id="management-philosophy">
 
-        <div className="relative mx-auto w-full lg:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-14">
             <div 
@@ -328,15 +328,15 @@ export const GreetingSection = () => {
                 <span className="inline-block h-1.5 w-12 rounded-full bg-[#1e40af]" />
               </div>
               <h2
-                className="text-center font-extrabold text-[clamp(0.95rem,3.6vw,1.6rem)] sm:text-4xl lg:text-5xl leading-[1.35] tracking-tight"
+                className="text-left xl:text-center font-extrabold text-[clamp(1.25rem,4vw,3rem)] leading-[1.35] tracking-tight"
                 style={{ paddingBottom: '0.3em', overflow: 'visible' }}
               >
                 <span className="bg-gradient-to-r from-[#1D66B3] to-slate-900 bg-clip-text text-transparent" style={{ display: 'inline-block', lineHeight: '1.4' }}>
-                  <span className="block whitespace-nowrap">국가유공자의 높은 이상을 바탕으로,</span>
-                  <span className="block whitespace-nowrap">공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.</span>
+                  <span className="block break-keep xl:whitespace-nowrap">국가유공자의 높은 이상을 바탕으로,</span>
+                  <span className="block break-keep xl:whitespace-nowrap">공명정대하고 투명한 조직운영으로 국가 발전에 기여합니다.</span>
                 </span>
               </h2>
-              <p className="text-center text-slate-600 text-base sm:text-lg">
+              <p className="text-left xl:text-center text-slate-600 text-[clamp(0.875rem,1.8vw,1.125rem)]">
                 Veterans-first ethics. Transparent governance. Impact for national infrastructure.
               </p>
             </div>
@@ -356,8 +356,8 @@ export const GreetingSection = () => {
                 <div className="flex items-start gap-4">
                   <div className="h-10 w-10 rounded-full bg-[#1e40af]/10 ring-1 ring-[#1e40af]/20 flex items-center justify-center font-bold" style={{ color: '#0B1C2B' }}>Ⅰ</div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: '#0C2B4B' }}>국가 보훈의 이념</h3>
-                    <p className="mt-2 leading-7 text-base" style={{ color: '#0C2B4B' }}>
+                    <h3 className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-bold" style={{ color: '#0C2B4B' }}>국가 보훈의 이념</h3>
+                    <p className="mt-2 leading-7 text-[clamp(0.875rem,1.8vw,1rem)]" style={{ color: '#0C2B4B' }}>
                       대한민국의 오늘은 국가의 존립과 발전을 위해 공헌하거나 이를 위해 자신을 희생한 국가유공자의 공헌과 희생 위에 이룩되었습니다. 국가유공자의 공헌과 희생이 숭고한 애국정신의 귀감으로서 항구적으로 존중되도록 하며, 그에 상응하는 명예와 보상이 유지되도록 합니다.
                     </p>
                   </div>
@@ -372,8 +372,8 @@ export const GreetingSection = () => {
                 <div className="flex items-start gap-4">
                   <div className="h-10 w-10 rounded-full bg-indigo-600/10 ring-1 ring-indigo-600/20 flex items-center justify-center font-bold" style={{ color: '#0B1C2B' }}>Ⅱ</div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: '#0C2B4B' }}>단체설립근거</h3>
-                    <p className="mt-2 leading-7 text-base" style={{ color: '#0C2B4B' }}>
+                    <h3 className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-bold" style={{ color: '#0C2B4B' }}>단체설립근거</h3>
+                    <p className="mt-2 leading-7 text-[clamp(0.875rem,1.8vw,1rem)]" style={{ color: '#0C2B4B' }}>
                       『국가유공자 등 단체설립에 관한 법률』 제1조에 근거하여 설립되었으며, 국가유공자와 유족의 상부상조, 자활능력 배양, 민족정기 선양, 자유민주주의 수호 및 평화적 통일과 국제평화 유지에 이바지함을 목적으로 합니다.
                     </p>
                   </div>
@@ -386,7 +386,7 @@ export const GreetingSection = () => {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
-              <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: '#1D66B3' }}>핵심 가치</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold" style={{ color: '#1D66B3' }}>핵심 가치</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
               {/* 상부상조 카드 */}
@@ -399,8 +399,8 @@ export const GreetingSection = () => {
                     <HandHeart className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>상부상조</h3>
-                    <p className="text-sm" style={{ color: '#0B1C2B' }}>서로 돕고 함께 성장</p>
+                    <h3 className="text-[clamp(1rem,2vw,1.25rem)] font-semibold" style={{ color: '#0B1C2B' }}>상부상조</h3>
+                    <p className="text-[clamp(0.75rem,1.5vw,0.875rem)]" style={{ color: '#0B1C2B' }}>서로 돕고 함께 성장</p>
                   </div>
                 </div>
               </div>
@@ -415,8 +415,8 @@ export const GreetingSection = () => {
                     <Target className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>자활자립</h3>
-                    <p className="text-sm" style={{ color: '#0B1C2B' }}>스스로 역량으로 자립</p>
+                    <h3 className="text-[clamp(1rem,2vw,1.25rem)] font-semibold" style={{ color: '#0B1C2B' }}>자활자립</h3>
+                    <p className="text-[clamp(0.75rem,1.5vw,0.875rem)]" style={{ color: '#0B1C2B' }}>스스로 역량으로 자립</p>
                   </div>
                 </div>
               </div>
@@ -431,8 +431,8 @@ export const GreetingSection = () => {
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>명예선양</h3>
-                    <p className="text-sm" style={{ color: '#0B1C2B' }}>숭고한 희생을 기림</p>
+                    <h3 className="text-[clamp(1rem,2vw,1.25rem)] font-semibold" style={{ color: '#0B1C2B' }}>명예선양</h3>
+                    <p className="text-[clamp(0.75rem,1.5vw,0.875rem)]" style={{ color: '#0B1C2B' }}>숭고한 희생을 기림</p>
                   </div>
                 </div>
               </div>
@@ -447,8 +447,8 @@ export const GreetingSection = () => {
                     <TrendingUp className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>국가발전</h3>
-                    <p className="text-sm" style={{ color: '#0B1C2B' }}>인프라 발전 기여</p>
+                    <h3 className="text-[clamp(1rem,2vw,1.25rem)] font-semibold" style={{ color: '#0B1C2B' }}>국가발전</h3>
+                    <p className="text-[clamp(0.75rem,1.5vw,0.875rem)]" style={{ color: '#0B1C2B' }}>인프라 발전 기여</p>
                   </div>
                 </div>
               </div>
@@ -463,8 +463,8 @@ export const GreetingSection = () => {
                     <Globe className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold" style={{ color: '#0B1C2B' }}>세계평화</h3>
-                    <p className="text-sm" style={{ color: '#0B1C2B' }}>공동번영과 협력</p>
+                    <h3 className="text-[clamp(1rem,2vw,1.25rem)] font-semibold" style={{ color: '#0B1C2B' }}>세계평화</h3>
+                    <p className="text-[clamp(0.75rem,1.5vw,0.875rem)]" style={{ color: '#0B1C2B' }}>공동번영과 협력</p>
                   </div>
                 </div>
               </div>
@@ -475,7 +475,7 @@ export const GreetingSection = () => {
 
       {/* 인사말 콘텐츠 섹션 */}
       <div className="min-h-screen pt-10" id="ceo-message" style={{ background: 'linear-gradient(to bottom, #ffffff 0%, #F0F4F8 100%)' }}>
-        <div className="mx-auto w-full lg:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 상단 섹션 */}
           <div className="mb-12">
             <div className="mb-4">
@@ -483,7 +483,7 @@ export const GreetingSection = () => {
                 ref={titleRef}
                 className={`space-y-2 transition-all duration-1000 ${visibleTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
               >
-                <h1 className="text-[clamp(1.0rem,4.4vw,1.9rem)] sm:text-4xl lg:text-5xl font-bold text-[#0B1C2B] leading-tight tracking-tight whitespace-nowrap">
+                <h1 className="text-[clamp(1.35rem,5vw,2.2rem)] sm:text-4xl lg:text-5xl font-bold text-[#0B1C2B] leading-tight tracking-tight whitespace-nowrap">
                   大韓民國傷痍軍警會 시설사업소
                 </h1>
                 <h1 className="text-[clamp(0.85rem,3.4vw,1.35rem)] sm:text-2xl lg:text-3xl font-bold text-[#0B1C2B] leading-tight tracking-tight whitespace-nowrap" style={{ letterSpacing: '0.04em' }}>
@@ -563,13 +563,24 @@ export const GreetingSection = () => {
 
       {/* 회사연혁 콘텐츠 섹션 */}
       <div className="min-h-screen pt-20 md:pt-36" id="company-history" style={{ background: 'linear-gradient(to bottom, #F0F4F8 0%, #F7FBFF 100%)' }}>
-        <div className="mx-auto w-full lg:w-[65%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] lg:w-[65%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 헤더 */}
-          <div className="mb-10">
-            <div
-              ref={historyTitleRef}
-              className={`transition-all duration-1000 ${visibleHistoryTitle ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-            >
+          <div
+            ref={historyTitleRef}
+            className={`transition-all duration-1000 ${visibleHistoryTitle ? 'opacity-100 translate-y-0 md:translate-x-0' : 'opacity-0 translate-y-2 md:-translate-x-12 md:translate-y-0'}`}
+          >
+            {/* Mobile header (이미지 스타일) */}
+            <div className="md:hidden">
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-slate-500">
+                <span className="inline-block h-3 w-3 rounded-full border-2 border-[#1D66B3] bg-white" />
+                <span>HISTORY</span>
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold text-[#0B1C2B]">연혁</h2>
+              <div className="mt-5 border-b border-slate-300" />
+            </div>
+
+            {/* Desktop header (기존) */}
+            <div className="hidden md:block mb-10">
               <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight mb-4 tracking-tight">
                 YEARLY <span style={{ color: '#1D66B3' }} className="font-black">GROWTH</span> HIGHLIGHTS
               </h1>
@@ -581,24 +592,24 @@ export const GreetingSection = () => {
 
 
           {/* 리스트형 타임라인 */}
-          <div className="space-y-16 md:space-y-24 relative">
-          {/* 연결된 세로줄 */}
-          <div className="absolute left-2 sm:left-3 md:left-[304px] top-0 bottom-0 w-px bg-slate-300"></div>
+          <div className="relative divide-y divide-slate-300 md:divide-y-0 md:space-y-24">
+            {/* 연결된 세로줄 (PC 전용) */}
+            <div className="hidden md:block absolute left-[304px] top-0 bottom-0 w-px bg-slate-300"></div>
             {/* 2026.01 */}
             <div
               id="history-2026"
               ref={el => historyItemRefs.current[11] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2026.01</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2026.01</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -610,17 +621,17 @@ export const GreetingSection = () => {
             <div
               id="history-2021"
               ref={el => historyItemRefs.current[10] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2021.11</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2021.11</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -632,17 +643,17 @@ export const GreetingSection = () => {
             <div
               id="history-2017"
               ref={el => historyItemRefs.current[9] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2017.03</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2017.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">기업부설연구소 등록 (시설사업소 휴먼테크연구부)</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">기업부설연구소 등록 (시설사업소 휴먼테크연구부)</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -654,17 +665,17 @@ export const GreetingSection = () => {
             <div
               id="history-2015"
               ref={el => historyItemRefs.current[8] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2015.02</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2015.02</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -676,17 +687,17 @@ export const GreetingSection = () => {
             <div
               id="history-2014"
               ref={el => historyItemRefs.current[7] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2014.03</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2014.03</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 부임</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 부임</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -698,17 +709,17 @@ export const GreetingSection = () => {
             <div
               id="history-2012"
               ref={el => historyItemRefs.current[6] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2012.05</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2012.05</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">엔지니어링사업자 신고</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링사업자 신고</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -720,17 +731,17 @@ export const GreetingSection = () => {
             <div
               id="history-2009-10"
               ref={el => historyItemRefs.current[5] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.10</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.10</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">감리전문회사 등록</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -742,17 +753,17 @@ export const GreetingSection = () => {
             <div
               id="history-2009-07"
               ref={el => historyItemRefs.current[4] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.07</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.07</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -764,24 +775,24 @@ export const GreetingSection = () => {
             <div
               id="history-2003-06"
               ref={el => historyItemRefs.current[3] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
-                <h3 className="text-4xl sm:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2003.06</h3>
+                <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2003.06</h3>
               </div>
               <div className="relative md:pl-10">
                 <ul>
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">안전진단전문기관 등록</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">안전진단전문기관 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-lg text-gray-700">엔지니어링활동주체 신고</p>
+                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링활동주체 신고</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -793,11 +804,11 @@ export const GreetingSection = () => {
             <div
               id="history-2002"
               ref={el => historyItemRefs.current[2] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3
-                  className="text-4xl sm:text-5xl font-extrabold md:whitespace-nowrap md:w-[256px]"
+                  className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:whitespace-nowrap md:w-[256px]"
                   style={{ color: '#0C2B4B' }}
                 >
                   2002.12.03
@@ -806,9 +817,9 @@ export const GreetingSection = () => {
               <div className="relative md:pl-10">
                   <ul className="divide-y divide-slate-200">
                     <li className="group relative py-3 pl-6">
-                      <span className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 translate-x-0 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                      <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                       <div>
-                        <p className="text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
+                        <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
                         <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                       </div>
                     </li>
@@ -821,10 +832,10 @@ export const GreetingSection = () => {
 
       {/* 보유면허 및 기술 콘텐츠 섹션 */}
       <div className="pt-20 pb-16" id="license" style={{ backgroundColor: '#F7FBFF' }}>
-        <div className="mx-auto w-full lg:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">국가승인서 및 등록증</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">국가승인서 및 등록증</h2>
           </div>
 
           {/* 인증서 갤러리 - 4개 그리드 */}
@@ -846,9 +857,9 @@ export const GreetingSection = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-3 text-center w-full px-2">
-                  <p className="text-base text-gray-700 font-korean break-words">{cert.name}</p>
-                  <p className="text-sm text-gray-500 font-korean mt-1">{cert.date}</p>
+                <div className="mt-3 text-left w-full px-2">
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-700 font-korean break-keep leading-relaxed">{cert.name}</p>
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-500 font-korean mt-1">{cert.date}</p>
                 </div>
               </div>
             ))}
@@ -858,10 +869,10 @@ export const GreetingSection = () => {
 
       {/* 보유기술 (특허) 콘텐츠 섹션 */}
       <div className="pt-20 pb-16" style={{ backgroundColor: '#F7FBFF' }}>
-        <div className="mx-auto w-full lg:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 제목 */}
           <div className="mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">보유기술</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">보유기술</h2>
           </div>
 
           {/* 특허증 갤러리 */}
@@ -883,9 +894,8 @@ export const GreetingSection = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-3 text-center w-full px-2">
-                  <p className="text-base text-gray-700 font-korean break-words">{patent.title}</p>
-                  <p className="text-sm text-gray-500 font-korean mt-1 break-words">{patent.description}</p>
+                <div className="mt-3 text-left w-full px-2">
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-700 font-korean break-keep leading-relaxed">{patent.title}</p>
                 </div>
               </div>
             ))}
@@ -925,10 +935,10 @@ export const GreetingSection = () => {
 
       {/* 조직구성 콘텐츠 섹션 */}
       <div className="pt-20 pb-16" id="organization" style={{ backgroundColor: '#F7FBFF' }}>
-        <div className="mx-auto w-full lg:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           <div className="mb-10 flex items-center gap-3">
             <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
-            <h2 className="text-4xl sm:text-5xl font-bold" style={{ color: '#1D66B3' }}>조직구성</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold" style={{ color: '#1D66B3' }}>조직구성</h2>
           </div>
 
           <div className="w-full">
