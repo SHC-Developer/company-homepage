@@ -48,13 +48,15 @@ export const Footer = () => {
                   {/* FAX */}
                   <div className="md:block whitespace-nowrap text-sm md:text-base">
                     FAX&nbsp;
-                    <span className="font-english text-primary-foreground">02)571-9274</span>
+                    <span className="font-english text-primary-foreground">050-5115-9274</span>
                   </div>
                 </div>
                 {/* 주소 */}
                 <div className="text-sm md:text-base text-primary-foreground/80 whitespace-nowrap">
                   Add.&nbsp;
-                  <span className="font-korean text-primary-foreground">경기도 성남시 분당구 판교역로 230 9층 907호</span>
+                  <span className="font-korean text-primary-foreground">경기도 성남시 분당구 판교역로 230, 907호</span>
+                  <br />
+                  <span className="font-korean text-primary-foreground">(삼환하이펙B동, 삼평동)</span>
                 </div>
               </div>
             </div>
