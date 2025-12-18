@@ -57,9 +57,8 @@ const LegalBasis = () => {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight font-korean">수의계약 근거 법률조항</h1>
               <p className="mt-1 text-xs sm:text-sm text-white/70 font-korean">법률·시행령 각 조문에 근거한 수의계약 체결 요건 정리</p>
             </div>
-            <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs text-white/70 font-korean">
+            <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs text-white/70 font-korean">
               <div className="rounded-md bg-white/5 ring-1 ring-white/10 px-3 py-2">문서유형: 법률근거 안내</div>
-              <div className="rounded-md bg-white/5 ring-1 ring-white/10 px-3 py-2">작성부서: 시설사업소</div>
               <div className="rounded-md bg-white/5 ring-1 ring-white/10 px-3 py-2">최종개정: 2025-10-01</div>
             </div>
           </div>
