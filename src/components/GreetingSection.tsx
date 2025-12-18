@@ -149,8 +149,8 @@ export const GreetingSection = () => {
         });
       },
       {
-        threshold: 0.3, // 요소의 30%가 보일 때 트리거
-        rootMargin: '0px 0px -100px 0px', // 아래에서 100px 위치에서 시작
+        threshold: 0.1, // 요소의 10%가 보일 때 트리거
+        rootMargin: '0px 0px 50px 0px', // 뷰포트 하단보다 50px 아래에서 시작
       }
     );
   }, []);
@@ -158,48 +158,48 @@ export const GreetingSection = () => {
   // Title 애니메이션 감지
   useEffect(() => {
     return observeSingle(titleRef, setVisibleTitle, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
   // Image 애니메이션 감지
   useEffect(() => {
     return observeSingle(imageRef, setVisibleImage, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
   // CEO Message 애니메이션 감지
   useEffect(() => {
     return observeSingle(ceoMessageRef, setVisibleCEOMessage, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
   // Subtitle 애니메이션 감지
   useEffect(() => {
     return observeSingle(subtitleRef, setVisibleSubtitle, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
   // Philosophy Title 애니메이션 감지
   useEffect(() => {
     return observeSingle(philosophyTitleRef, setVisiblePhilosophyTitle, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
   // Philosophy Content 애니메이션 감지
   useEffect(() => {
     return observeSingle(philosophyContentRef, setVisiblePhilosophyContent, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -250px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
   }, []);
 
@@ -215,8 +215,8 @@ export const GreetingSection = () => {
         });
       },
       {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px',
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
       }
     );
   }, []);
@@ -233,8 +233,8 @@ export const GreetingSection = () => {
         });
       },
       {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px',
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
       }
     );
   }, []);
@@ -242,8 +242,8 @@ export const GreetingSection = () => {
   // History Title 애니메이션 감지
   useEffect(() => {
     return observeSingle(historyTitleRef, setVisibleHistoryTitle, {
-      threshold: 0.3,
-      rootMargin: '0px 0px -10px 0px',
+      threshold: 0.1,
+      rootMargin: '0px 0px 50px 0px',
     });
   }, []);
 
@@ -259,8 +259,8 @@ export const GreetingSection = () => {
         });
       },
       {
-        threshold: 0.5,
-        rootMargin: '0px',
+        threshold: 0.2,
+        rootMargin: '0px 0px 100px 0px',
       }
     );
   }, []);
