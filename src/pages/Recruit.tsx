@@ -5,7 +5,7 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import logo3 from '@/assets/logo3.png';
 
 const HERO_WIDTH = 100;
-const CONTENT_WIDTH = 70;
+const CONTENT_WIDTH = 70; // PC 기준 70%
 const INSTANT_SCROLL = 'instant' as ScrollBehavior;
 const HERO_KEYFRAMES = `
 @keyframes floatY { 
@@ -47,8 +47,8 @@ const Recruit = () => {
           <style>{HERO_KEYFRAMES}</style>
           <div className="absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-white" />
-            <div className="absolute -left-24 -top-24 w-[520px] h-[520px] rounded-full bg-blue-500/10 blur-3xl" />
-            <div className="absolute -right-24 -bottom-24 w-[520px] h-[520px] rounded-full bg-indigo-500/10 blur-3xl" />
+            <div className="absolute -left-12 sm:-left-24 -top-12 sm:-top-24 w-[300px] sm:w-[520px] h-[300px] sm:h-[520px] rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="absolute -right-12 sm:-right-24 -bottom-12 sm:-bottom-24 w-[300px] sm:w-[520px] h-[300px] sm:h-[520px] rounded-full bg-indigo-500/10 blur-3xl" />
           </div>
 
           <div style={{ width: `${HERO_WIDTH}%`, margin: '0 auto' }} className="px-4 sm:px-6 lg:px-8">
@@ -56,7 +56,7 @@ const Recruit = () => {
               {/* 좌상단/우상단 문구는 요청에 따라 제거 */}
 
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center space-y-6 text-center"
+                className="absolute inset-0 flex flex-col items-center justify-center space-y-4 sm:space-y-6 text-center px-4"
                 style={{
                   opacity: showPost ? 0 : showInitial ? 1 : 0,
                   transition: 'opacity 1.2s ease'
@@ -66,15 +66,15 @@ const Recruit = () => {
                   <img
                     src={logo3}
                     alt="회사 로고"
-                    className="w-40 sm:w-48 md:w-56 lg:w-64 h-auto"
+                    className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 h-auto"
                     style={{ animation: 'floatY 6s ease-in-out infinite' }}
                   />
                 </div>
-                <div className="space-y-3">
-                  <p className="text-[#2C3E5E] text-base sm:text-lg md:text-6xl font-korean tracking-wide whitespace-nowrap" style={{ wordBreak: 'keep-all' }}>
+                <div className="space-y-2 sm:space-y-3">
+                  <p className="text-[#2C3E5E] text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-korean tracking-wide" style={{ wordBreak: 'keep-all' }}>
                     대한민국상이군경회시설사업소
                   </p>
-                  <h1 className="leading-tight font-semibold font-korean text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-[#0D2A4A] whitespace-nowrap" style={{ wordBreak: 'keep-all' }}>
+                  <h1 className="leading-tight font-semibold font-korean text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-tight text-[#0D2A4A]" style={{ wordBreak: 'keep-all' }}>
                     2026 안전진단팀 신입/경력 모집
                   </h1>
                 </div>
@@ -83,20 +83,20 @@ const Recruit = () => {
               {/* 타이핑 완료 후 메인 카피 */}
               {showPost && (
                 <>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 animate-fade-in">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 animate-fade-in px-4">
                     <div
-                      className="flex flex-col items-center leading-none gap-5 sm:gap-7"
+                      className="flex flex-col items-center leading-none gap-3 sm:gap-5 md:gap-7"
                       style={{ marginTop: '-2vh', animation: 'floatY 6s ease-in-out 0.6s infinite' }}
                     >
-                      <div className="font-extrabold text-foreground text-[90px] sm:text-[150px] md:text-[220px] lg:text-[280px]">
+                      <div className="font-extrabold text-foreground text-[50px] sm:text-[90px] md:text-[150px] lg:text-[220px] xl:text-[280px]">
                         We are
                       </div>
-                      <div className="font-extrabold text-[90px] sm:text-[150px] md:text-[220px] lg:text-[280px]">
+                      <div className="font-extrabold text-[50px] sm:text-[90px] md:text-[150px] lg:text-[220px] xl:text-[280px]">
                         <span className="text-[#1D66B3]">Hi</span>
                         <span className="text-foreground">ring!</span>
                       </div>
-                      <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-10 justify-center w-[70%]">
-                        <div className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#1D66B3] text-white font-semibold text-xl sm:text-2xl shadow text-center">
+                      <div className="mt-6 sm:mt-8 md:mt-10 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-10 justify-center w-full sm:w-[90%] md:w-[70%]">
+                        <div className="px-4 sm:px-6 md:px-7 py-2 sm:py-3 md:py-3.5 rounded-full bg-[#1D66B3] text-white font-semibold text-sm sm:text-lg md:text-xl lg:text-2xl shadow text-center">
                           안전진단 부문 기술자 신입/경력 모집
                         </div>
                       </div>
@@ -109,94 +109,94 @@ const Recruit = () => {
         </section>
 
         {/* Values banner */}
-        <section className="relative py-20 bg-[#1A1F24] overflow-hidden">
+        <section className="relative py-12 sm:py-16 md:py-20 bg-[#1A1F24] overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-20 -right-24 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
-            <div className="absolute top-40 -left-24 w-64 h-64 bg-emerald-400/10 blur-3xl rounded-full" />
+            <div className="absolute -top-12 sm:-top-20 -right-12 sm:-right-24 w-48 sm:w-72 h-48 sm:h-72 bg-blue-500/10 blur-3xl rounded-full" />
+            <div className="absolute top-20 sm:top-40 -left-12 sm:-left-24 w-40 sm:w-64 h-40 sm:h-64 bg-emerald-400/10 blur-3xl rounded-full" />
           </div>
-          <div style={{ width: `${CONTENT_WIDTH}%`, margin: '0 auto' }} className="relative px-4 sm:px-6 lg:px-8">
+          <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[${CONTENT_WIDTH}%] mx-auto relative px-4 sm:px-6 lg:px-8">
             <div className="text-center text-white">
               <div className="flex flex-col items-center">
-                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-extrabold tracking-[0.2em] font-english">
                   TRUST
                 </p>
-                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 font-korean mt-1">
                   신뢰
                 </p>
               </div>
-              <div className="mt-10 flex flex-col items-center">
-                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+              <div className="mt-8 sm:mt-10 flex flex-col items-center">
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-extrabold tracking-[0.2em] font-english">
                   FLEXIBILITY
                 </p>
-                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 font-korean mt-1">
                   유연함
                 </p>
               </div>
-              <div className="mt-10 flex flex-col items-center">
-                <p className="text-3xl sm:text-4xl md:text-[52px] font-extrabold tracking-[0.2em] font-english">
+              <div className="mt-8 sm:mt-10 flex flex-col items-center">
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-extrabold tracking-[0.2em] font-english">
                   PASSION
                 </p>
-                <p className="text-sm sm:text-base md:text-lg text-white/70 font-korean mt-1">
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 font-korean mt-1">
                   열정
                 </p>
               </div>
-              <p className="mt-10 text-white/80 text-base md:text-lg font-korean">
+              <p className="mt-8 sm:mt-10 text-white/80 text-sm sm:text-base md:text-lg font-korean">
                 함께 성장하는 기업, 대한민국상이군경회시설사업소
               </p>
             </div>
 
-            <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 text-left text-white font-korean">
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용분야</p>
-                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+            <div className="mt-10 sm:mt-12 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 text-left text-white font-korean">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6 flex flex-col">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용분야</p>
+                <p className="mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-white">
                   안전진단 기술자
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">서류접수</p>
-                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6 flex flex-col">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">서류접수</p>
+                <p className="mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-white">
                   2026.02.01 ~ 2026.03.31
                 </p>
-                <p className="mt-2 text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
+                <p className="mt-2 text-xs sm:text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
               </div>
 
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용형태</p>
-                <p className="mt-3 text-xl md:text-2xl font-semibold text-white">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6 flex flex-col">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">채용형태</p>
+                <p className="mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-white">
                   정규직 · 신입/경력
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6 flex flex-col">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">전형절차</p>
-                <p className="mt-3 text-sm text-white/80 leading-6">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6 flex flex-col">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">전형절차</p>
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-white/80 leading-6">
                   서류접수 → 면접 → 최종합격
                 </p>
-                <p className="mt-2 text-sm text-white/70">
+                <p className="mt-2 text-xs sm:text-sm text-white/70">
                   제출서류: 1. 이력서 2. 자기소개서
                 </p>
               </div>
             </div>
 
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 text-left text-white font-korean">
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">주요업무</p>
-                <ul className="mt-3 space-y-2 text-sm text-white/80">
+            <div className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-left text-white font-korean">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">주요업무</p>
+                <ul className="mt-2 sm:mt-3 space-y-2 text-xs sm:text-sm text-white/80">
                   <li>- 토목/건축 시설물 안전진단</li>
                   <li>- 안전관리 프로세스 개선</li>
                 </ul>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">필수요건</p>
-                <ul className="mt-3 space-y-2 text-sm text-white/80">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">필수요건</p>
+                <ul className="mt-2 sm:mt-3 space-y-2 text-xs sm:text-sm text-white/80">
                   <li>- 관련학과 졸업자(졸업예정자 포함)</li>
                   <li>- 협업 및 커뮤니케이션 능력</li>
                 </ul>
               </div>
-              <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
-                <p className="text-sm uppercase tracking-[0.4em] text-white/60 font-medium">우대사항</p>
-                <ul className="mt-3 space-y-2 text-sm text-white/80">
+              <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-white/60 font-medium">우대사항</p>
+                <ul className="mt-2 sm:mt-3 space-y-2 text-xs sm:text-sm text-white/80">
                   <li>1. 업무 효율화를 위한 OA프로그램(한글, EXCEL, PPT) 활용 능력 우수자</li>
                   <li>2. 관련학과 자격증 소지자</li>
                   <li>3. CAD 활용 능력 우수자</li>
