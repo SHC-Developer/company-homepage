@@ -1,8 +1,9 @@
-import React from 'react';
-import { Navigation } from '../components/Navigation';
-import { Footer } from '../components/Footer';
-import { ScrollToTop } from '../components/ScrollToTop';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Navigation } from '@/components/Navigation';
+import { Footer } from '@/components/Footer';
+import { ScrollToTop } from '@/components/ScrollToTop';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { withBaseUrl } from '@/lib/utils';
 
 interface PortfolioData {
   year: number;
@@ -48,13 +49,110 @@ const portfolioData: PortfolioData[] = [
   { year: 2025, '정밀안전진단': 5, '정밀안전검검': 25, '설계': 3, '감리': 0, '기타': 0, '합계': 33 },
 ];
 
-const Portfolio = () => {
-  const [tunnelRecords, setTunnelRecords] = React.useState<PerformanceRecord[]>([]);
-  const [suriRecords, setSuriRecords] = React.useState<PerformanceRecord[]>([]);
-  const [designRecords, setDesignRecords] = React.useState<PerformanceRecord[]>([]);
-  const [gamRiRecords, setGamRiRecords] = React.useState<PerformanceRecord[]>([]);
+const PerformanceTableSection = ({
+  id,
+  title,
+  records,
+  description,
+}: {
+  id: string;
+  title: string;
+  records: PerformanceRecord[];
+  description: string;
+}) => {
+  if (records.length === 0) return null;
 
-  const totals = React.useMemo(() => {
+  return (
+    <section id={id} className="mt-16 scroll-mt-32">
+      <div className="flex items-baseline justify-between mb-3">
+        <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
+          {title}
+        </h2>
+        <p className="text-xs md:text-sm text-slate-500 font-korean">
+          {records.length.toLocaleString()}
+          {description}
+        </p>
+      </div>
+      <Card className="shadow-sm border-slate-200">
+        <CardContent className="pt-4">
+          <div className="overflow-hidden rounded-xl border border-slate-200/80">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
+                <thead>
+                  <tr>
+                    <th
+                      className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200"
+                      style={{ width: '8%', backgroundColor: '#0C2B4B' }}
+                    >
+                      년도
+                    </th>
+                    <th
+                      className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200"
+                      style={{ width: '42%', backgroundColor: '#0C2B4B' }}
+                    >
+                      계약명
+                    </th>
+                    <th
+                      className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200"
+                      style={{ width: '30%', backgroundColor: '#0C2B4B' }}
+                    >
+                      발주처
+                    </th>
+                    <th
+                      className="px-3 py-3 text-center text-white font-korean font-semibold"
+                      style={{ width: '20%', backgroundColor: '#0C2B4B' }}
+                    >
+                      계약방법
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {records.map((row, index) => (
+                    <tr
+                      key={`${row.year}-${index}`}
+                      className={
+                        'border-b border-slate-100 last:border-b-0 transition-colors ' +
+                        (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                        ' hover:bg-blue-50/60'
+                      }
+                    >
+                      <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
+                        {row.year}
+                      </td>
+                      <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                        {row.contractName}
+                      </td>
+                      <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
+                        {row.client}
+                      </td>
+                      <td className="px-3 py-2 text-center font-korean text-slate-900">
+                        {row.method ? (
+                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
+                            {row.method}
+                          </span>
+                        ) : (
+                          ''
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+  );
+};
+
+const Portfolio = () => {
+  const [tunnelRecords, setTunnelRecords] = useState<PerformanceRecord[]>([]);
+  const [suriRecords, setSuriRecords] = useState<PerformanceRecord[]>([]);
+  const [designRecords, setDesignRecords] = useState<PerformanceRecord[]>([]);
+  const [gamRiRecords, setGamRiRecords] = useState<PerformanceRecord[]>([]);
+
+  const totals = useMemo(() => {
     const totalProjects = portfolioData.reduce((sum, d) => sum + d['합계'], 0);
     const diagnosis = portfolioData.reduce((sum, d) => sum + d['정밀안전진단'], 0);
     const inspection = portfolioData.reduce((sum, d) => sum + d['정밀안전검검'], 0);
@@ -74,22 +172,11 @@ const Portfolio = () => {
 
   // 이미지 경로 헬퍼 함수 (certification과 동일한 패턴)
   const getImagePath = (filename: string) => {
-    const baseUrl = import.meta.env.BASE_URL;
-    const path = `${baseUrl}portfolio/${filename}`;
-    return path;
-  };
-
-  // 실제 파일 확장자 매핑 (1-3: JPG, 4-11: jpg)
-  const getImageExtensions = (idx: number): string[] => {
-    if (idx >= 1 && idx <= 3) {
-      return ['JPG', 'jpg']; // 대문자 우선
-    } else {
-      return ['jpg', 'JPG']; // 소문자 우선
-    }
+    return withBaseUrl(`portfolio/${filename}`);
   };
 
   // 텍스트 기반 수행실적 데이터 로드 (교량/터널, 수리, 설계, 감리)
-  React.useEffect(() => {
+  useEffect(() => {
     const loadRecords = async (filename: string): Promise<PerformanceRecord[]> => {
       try {
         const baseUrl = import.meta.env.BASE_URL;
@@ -123,7 +210,7 @@ const Portfolio = () => {
 
         return records;
       } catch (error) {
-        console.error('Failed to load tunnel performance data:', error);
+        console.error('Failed to load performance data:', error);
         return [];
       }
     };
@@ -298,289 +385,33 @@ const Portfolio = () => {
             </CardContent>
           </Card>
 
-          {/* 안전진단 수행실적 - 교량및터널 */}
-          {tunnelRecords.length > 0 && (
-            <section id="portfolio-safety-bridge-tunnel" className="mt-16 scroll-mt-32">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-                  안전진단 수행실적 - 교량및터널
-                </h2>
-                <p className="text-xs md:text-sm text-slate-500 font-korean">
-                  {tunnelRecords.length.toLocaleString()}건의 교량 및 터널 관련 수행실적
-                </p>
-              </div>
-              <Card className="shadow-sm border-slate-200">
-                <CardContent className="pt-4">
-                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
-                        <thead>
-                          <tr>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
-                              년도
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
-                              계약명
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
-                              발주처
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
-                              계약방법
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {tunnelRecords.map((row, index) => (
-                            <tr
-                              key={`${row.year}-${index}`}
-                              className={
-                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
-                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
-                                ' hover:bg-blue-50/60'
-                              }
-                            >
-                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
-                                {row.year}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.contractName}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.client}
-                              </td>
-                              <td className="px-3 py-2 text-center font-korean text-slate-900">
-                                {row.method ? (
-                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
-                                    {row.method}
-                                  </span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          )}
+          <PerformanceTableSection
+            id="portfolio-safety-bridge-tunnel"
+            title="안전진단 수행실적 - 교량및터널"
+            records={tunnelRecords}
+            description="건의 교량 및 터널 관련 수행실적"
+          />
 
-          {/* 안전진단 수행실적 - 수리 */}
-          {suriRecords.length > 0 && (
-            <section id="portfolio-safety-suri" className="mt-16 scroll-mt-32">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-                  안전진단 수행실적 - 수리
-                </h2>
-                <p className="text-xs md:text-sm text-slate-500 font-korean">
-                  {suriRecords.length.toLocaleString()}건의 수리 관련 수행실적
-                </p>
-              </div>
-              <Card className="shadow-sm border-slate-200">
-                <CardContent className="pt-4">
-                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
-                        <thead>
-                          <tr>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
-                              년도
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
-                              계약명
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
-                              발주처
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
-                              계약방법
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {suriRecords.map((row, index) => (
-                            <tr
-                              key={`${row.year}-${index}`}
-                              className={
-                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
-                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
-                                ' hover:bg-blue-50/60'
-                              }
-                            >
-                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
-                                {row.year}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.contractName}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.client}
-                              </td>
-                              <td className="px-3 py-2 text-center font-korean text-slate-900">
-                                {row.method ? (
-                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
-                                    {row.method}
-                                  </span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          )}
+          <PerformanceTableSection
+            id="portfolio-safety-suri"
+            title="안전진단 수행실적 - 수리"
+            records={suriRecords}
+            description="건의 수리 관련 수행실적"
+          />
 
-          {/* 설계 수행실적 */}
-          {designRecords.length > 0 && (
-            <section id="portfolio-design" className="mt-16 scroll-mt-32">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-                  설계 수행실적
-                </h2>
-                <p className="text-xs md:text-sm text-slate-500 font-korean">
-                  {designRecords.length.toLocaleString()}건의 설계 관련 수행실적
-                </p>
-              </div>
-              <Card className="shadow-sm border-slate-200">
-                <CardContent className="pt-4">
-                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
-                        <thead>
-                          <tr>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
-                              년도
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
-                              계약명
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
-                              발주처
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
-                              계약방법
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {designRecords.map((row, index) => (
-                            <tr
-                              key={`${row.year}-${index}`}
-                              className={
-                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
-                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
-                                ' hover:bg-blue-50/60'
-                              }
-                            >
-                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
-                                {row.year}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.contractName}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.client}
-                              </td>
-                              <td className="px-3 py-2 text-center font-korean text-slate-900">
-                                {row.method ? (
-                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
-                                    {row.method}
-                                  </span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          )}
+          <PerformanceTableSection
+            id="portfolio-design"
+            title="설계 수행실적"
+            records={designRecords}
+            description="건의 설계 관련 수행실적"
+          />
 
-          {/* 건설사업관리 실적 */}
-          {gamRiRecords.length > 0 && (
-            <section id="portfolio-supervision" className="mt-16 scroll-mt-32">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-                  건설사업관리 실적
-                </h2>
-                <p className="text-xs md:text-sm text-slate-500 font-korean">
-                  {gamRiRecords.length.toLocaleString()}건의 건설사업관리 관련 수행실적
-                </p>
-              </div>
-              <Card className="shadow-sm border-slate-200">
-                <CardContent className="pt-4">
-                  <div className="overflow-hidden rounded-xl border border-slate-200/80">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm md:text-base" style={{ tableLayout: 'fixed' }}>
-                        <thead>
-                          <tr>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '8%', backgroundColor: '#0C2B4B' }}>
-                              년도
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '42%', backgroundColor: '#0C2B4B' }}>
-                              계약명
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold border-r border-slate-200" style={{ width: '30%', backgroundColor: '#0C2B4B' }}>
-                              발주처
-                            </th>
-                            <th className="px-3 py-3 text-center text-white font-korean font-semibold" style={{ width: '20%', backgroundColor: '#0C2B4B' }}>
-                              계약방법
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {gamRiRecords.map((row, index) => (
-                            <tr
-                              key={`${row.year}-${index}`}
-                              className={
-                                'border-b border-slate-100 last:border-b-0 transition-colors ' +
-                                (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
-                                ' hover:bg-blue-50/60'
-                              }
-                            >
-                              <td className="px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200">
-                                {row.year}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.contractName}
-                              </td>
-                              <td className="px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-words">
-                                {row.client}
-                              </td>
-                              <td className="px-3 py-2 text-center font-korean text-slate-900">
-                                {row.method ? (
-                                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
-                                    {row.method}
-                                  </span>
-                                ) : (
-                                  ''
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          )}
+          <PerformanceTableSection
+            id="portfolio-supervision"
+            title="건설사업관리 실적"
+            records={gamRiRecords}
+            description="건의 건설사업관리 관련 수행실적"
+          />
         </div>
       </div>
 

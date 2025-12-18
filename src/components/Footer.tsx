@@ -3,13 +3,15 @@ import logo2 from '@/assets/logo2.png';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const tel = '02)572-6218';
+  const fax = '050-5115-9274';
+  const addressLine1 = '경기도 성남시 분당구 판교역로 230, 907호';
+  const addressLine2 = '(삼환하이펙B동, 삼평동)';
 
   return (
-    <footer 
+    <footer
       className="relative overflow-hidden text-primary-foreground"
-      style={{ 
-        backgroundColor: '#0b1c2b'
-      }}
+      style={{ backgroundColor: '#0b1c2b' }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-14 pb-16">
         {/* 좌: 로고+회사명 | 우: 연락처+주소 */}
@@ -43,20 +45,20 @@ export const Footer = () => {
                   {/* TEL */}
                   <div className="md:block whitespace-nowrap text-sm md:text-base">
                     TEL&nbsp;
-                    <span className="font-english text-primary-foreground">02)572-6218</span>
+                    <span className="font-english text-primary-foreground">{tel}</span>
                   </div>
                   {/* FAX */}
                   <div className="md:block whitespace-nowrap text-sm md:text-base">
                     FAX&nbsp;
-                    <span className="font-english text-primary-foreground">050-5115-9274</span>
+                    <span className="font-english text-primary-foreground">{fax}</span>
                   </div>
                 </div>
                 {/* 주소 */}
                 <div className="text-sm md:text-base text-primary-foreground/80 whitespace-nowrap">
                   Add.&nbsp;
-                  <span className="font-korean text-primary-foreground">경기도 성남시 분당구 판교역로 230, 907호</span>
+                  <span className="font-korean text-primary-foreground">{addressLine1}</span>
                   <br />
-                  <span className="font-korean text-primary-foreground">(삼환하이펙B동, 삼평동)</span>
+                  <span className="font-korean text-primary-foreground">{addressLine2}</span>
                 </div>
               </div>
             </div>

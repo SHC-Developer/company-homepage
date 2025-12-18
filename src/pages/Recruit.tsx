@@ -6,11 +6,22 @@ import logo3 from '@/assets/logo3.png';
 
 const HERO_WIDTH = 100;
 const CONTENT_WIDTH = 70;
+const INSTANT_SCROLL = 'instant' as ScrollBehavior;
+const HERO_KEYFRAMES = `
+@keyframes floatY { 
+  0%, 100% { transform: translateY(0) } 
+  50% { transform: translateY(-10px) } 
+}
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(16px) }
+  100% { opacity: 1; transform: translateY(0) }
+}
+`;
 
 const Recruit = () => {
   // 채용공고 진입 시 항상 맨 위로 초기화
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    window.scrollTo({ top: 0, left: 0, behavior: INSTANT_SCROLL });
   }, []);
 
   // 히어로 전환 상태
@@ -18,15 +29,11 @@ const Recruit = () => {
   const [showPost, setShowPost] = useState(false);
 
   useEffect(() => {
-    const timers: number[] = [];
-
-    timers.push(window.setTimeout(() => setShowInitial(true), 50));
-    timers.push(window.setTimeout(() => setShowPost(true), 3000));
-
+    const initialTimer = window.setTimeout(() => setShowInitial(true), 50);
+    const postTimer = window.setTimeout(() => setShowPost(true), 3000);
     return () => {
-      timers.forEach(t => {
-        clearTimeout(t);
-      });
+      clearTimeout(initialTimer);
+      clearTimeout(postTimer);
     };
   }, []);
 
@@ -37,18 +44,7 @@ const Recruit = () => {
       <main>
         {/* Fullscreen Hero */}
         <section className="relative min-h-screen overflow-hidden bg-white">
-          <style>
-            {`
-            @keyframes floatY { 
-              0%, 100% { transform: translateY(0) } 
-              50% { transform: translateY(-10px) } 
-            }
-            @keyframes fadeUp {
-              0% { opacity: 0; transform: translateY(16px) }
-              100% { opacity: 1; transform: translateY(0) }
-            }
-            `}
-          </style>
+          <style>{HERO_KEYFRAMES}</style>
           <div className="absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-white" />
             <div className="absolute -left-24 -top-24 w-[520px] h-[520px] rounded-full bg-blue-500/10 blur-3xl" />

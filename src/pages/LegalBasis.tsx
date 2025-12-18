@@ -7,8 +7,14 @@ import { Scale } from 'lucide-react';
 // 섹션 화면 비율 설정 (% 단위로 입력)
 const HERO_WIDTH = 100; // Hero 섹션 너비
 const CONTENT_WIDTH = 65; // 컨텐츠 섹션 너비
+const TOC_LINK_COLOR = '#0C2B4B';
+const TOC_LINK_HOVER_COLOR = '#0B1C2B';
 
 const LegalBasis = () => {
+  const setTocLinkColor = (e: React.MouseEvent<HTMLAnchorElement>, color: string) => {
+    e.currentTarget.style.color = color;
+  };
+
   const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
@@ -26,6 +32,20 @@ const LegalBasis = () => {
       });
     }
   };
+
+  const TocLink = ({ targetId, children }: { targetId: string; children: React.ReactNode }) => (
+    <a
+      href={`#${targetId}`}
+      onClick={(e) => handleScrollToSection(e, targetId)}
+      style={{ color: TOC_LINK_COLOR }}
+      className="hover:underline transition-colors cursor-pointer"
+      onMouseEnter={(e) => setTocLinkColor(e, TOC_LINK_HOVER_COLOR)}
+      onMouseLeave={(e) => setTocLinkColor(e, TOC_LINK_COLOR)}
+    >
+      {children}
+    </a>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation variant="default" forceLightTheme={true} />
@@ -62,13 +82,25 @@ const LegalBasis = () => {
                     </div>
                     <nav aria-label="Table of contents" className="text-sm font-korean">
                       <ul className="space-y-2">
-                        <li><a href="#laws-list" onClick={(e) => handleScrollToSection(e, 'laws-list')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>수의계약 체결 가능한 법률조항</a></li>
-                        <li><a href="#qa" onClick={(e) => handleScrollToSection(e, 'qa')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>질의회신자료</a></li>
+                        <li>
+                          <TocLink targetId="laws-list">수의계약 체결 가능한 법률조항</TocLink>
+                        </li>
+                        <li>
+                          <TocLink targetId="qa">질의회신자료</TocLink>
+                        </li>
                         <li className="space-y-2" style={{ color: '#0B1C2B' }}>관련 법령</li>
-                        <li className="ml-3"><a href="#act-veterans" onClick={(e) => handleScrollToSection(e, 'act-veterans')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>- 국가유공자단체법</a></li>
-                        <li className="ml-3"><a href="#basiclaw-veterans" onClick={(e) => handleScrollToSection(e, 'basiclaw-veterans')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>- 국가보훈 기본법</a></li>
-                        <li className="ml-3"><a href="#decree-national" onClick={(e) => handleScrollToSection(e, 'decree-national')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>- 국가계약법 시행령</a></li>
-                        <li className="ml-3"><a href="#decree-local" onClick={(e) => handleScrollToSection(e, 'decree-local')} style={{ color: '#0C2B4B' }} className="hover:underline transition-colors cursor-pointer" onMouseEnter={(e) => e.currentTarget.style.color = '#0B1C2B'} onMouseLeave={(e) => e.currentTarget.style.color = '#0C2B4B'}>- 지방계약법 시행령</a></li>
+                        <li className="ml-3">
+                          <TocLink targetId="act-veterans">- 국가유공자단체법</TocLink>
+                        </li>
+                        <li className="ml-3">
+                          <TocLink targetId="basiclaw-veterans">- 국가보훈 기본법</TocLink>
+                        </li>
+                        <li className="ml-3">
+                          <TocLink targetId="decree-national">- 국가계약법 시행령</TocLink>
+                        </li>
+                        <li className="ml-3">
+                          <TocLink targetId="decree-local">- 지방계약법 시행령</TocLink>
+                        </li>
                       </ul>
                     </nav>
                   </div>

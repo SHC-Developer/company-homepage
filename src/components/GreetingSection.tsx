@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HandHeart, Target, Award, TrendingUp, Globe, Users } from 'lucide-react';
+import { setupLoopingVideo } from '@/lib/utils';
 
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -34,36 +35,59 @@ export const GreetingSection = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleEnded = () => {
-      // 비디오가 끝났을 때 다시 재생
-      video.currentTime = 0;
-      video.play().catch((e) => {
+    return setupLoopingVideo(video, {
+      onEndedPlayError: (e) => {
         console.error('비디오 재생 실패:', e);
         setVideoError(true);
-      });
-    };
-
-    const handleError = () => {
-      console.error('비디오 로드 실패');
-      setVideoError(true);
-    };
-
-    video.addEventListener('ended', handleEnded);
-    video.addEventListener('error', handleError);
-
-    // 자동 재생 시도
-    video.play().catch((e) => {
-      console.error('비디오 자동 재생 실패:', e);
-      // 자동 재생이 실패해도 에러로 처리하지 않음 (브라우저 정책)
+      },
+      onLoadError: () => {
+        console.error('비디오 로드 실패');
+        setVideoError(true);
+      },
+      onAutoplayError: (e) => {
+        console.error('비디오 자동 재생 실패:', e);
+        // 자동 재생이 실패해도 에러로 처리하지 않음 (브라우저 정책)
+      },
     });
-
-    return () => {
-      video.removeEventListener('ended', handleEnded);
-      video.removeEventListener('error', handleError);
-    };
   }, []);
 
   // COMPANY HISTORY: no range filtering, continuous timeline (latest first)
+
+  const observeSingle = <T extends Element>(
+    ref: React.RefObject<T>,
+    onChange: (isVisible: boolean) => void,
+    options: IntersectionObserverInit
+  ) => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      onChange(entry.isIntersecting);
+    }, options);
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  };
+
+  const observeMany = <T extends Element>(
+    refs: React.MutableRefObject<(T | null)[]>,
+    onChangeAtIndex: (index: number, isVisible: boolean) => void,
+    options: IntersectionObserverInit
+  ) => {
+    const observers = refs.current.map((node, index) => {
+      if (!node) return null;
+
+      const observer = new IntersectionObserver(([entry]) => {
+        onChangeAtIndex(index, entry.isIntersecting);
+      }, options);
+
+      observer.observe(node);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((observer) => observer?.disconnect());
+    };
+  };
 
   // 인증서 목록 (특허증 제외)
   const certifications = [
@@ -115,248 +139,130 @@ export const GreetingSection = () => {
   ];
 
   useEffect(() => {
-    const observers = paragraphRefs.current.map((ref, index) => {
-      if (!ref) return null;
-      
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          setVisibleParagraphs(prev => {
-            const newState = [...prev];
-            newState[index] = entry.isIntersecting;
-            return newState;
-          });
-        },
-        {
-          threshold: 0.3, // 요소의 30%가 보일 때 트리거
-          rootMargin: '0px 0px -100px 0px' // 아래에서 100px 위치에서 시작
-        }
-      );
-      
-      observer.observe(ref);
-      return observer;
-    });
-
-    return () => {
-      observers.forEach(observer => {
-        if (observer) observer.disconnect();
-      });
-    };
+    return observeMany(
+      paragraphRefs,
+      (index, isVisible) => {
+        setVisibleParagraphs((prev) => {
+          const next = [...prev];
+          next[index] = isVisible;
+          return next;
+        });
+      },
+      {
+        threshold: 0.3, // 요소의 30%가 보일 때 트리거
+        rootMargin: '0px 0px -100px 0px', // 아래에서 100px 위치에서 시작
+      }
+    );
   }, []);
 
   // Title 애니메이션 감지
   useEffect(() => {
-    if (!titleRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisibleTitle(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(titleRef.current);
-    return () => observer.disconnect();
+    return observeSingle(titleRef, setVisibleTitle, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // Image 애니메이션 감지
   useEffect(() => {
-    if (!imageRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisibleImage(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(imageRef.current);
-    return () => observer.disconnect();
+    return observeSingle(imageRef, setVisibleImage, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // CEO Message 애니메이션 감지
   useEffect(() => {
-    if (!ceoMessageRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisibleCEOMessage(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(ceoMessageRef.current);
-    return () => observer.disconnect();
+    return observeSingle(ceoMessageRef, setVisibleCEOMessage, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // Subtitle 애니메이션 감지
   useEffect(() => {
-    if (!subtitleRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisibleSubtitle(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(subtitleRef.current);
-    return () => observer.disconnect();
+    return observeSingle(subtitleRef, setVisibleSubtitle, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // Philosophy Title 애니메이션 감지
   useEffect(() => {
-    if (!philosophyTitleRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisiblePhilosophyTitle(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(philosophyTitleRef.current);
-    return () => observer.disconnect();
+    return observeSingle(philosophyTitleRef, setVisiblePhilosophyTitle, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // Philosophy Content 애니메이션 감지
   useEffect(() => {
-    if (!philosophyContentRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisiblePhilosophyContent(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -250px 0px'
-      }
-    );
-
-    observer.observe(philosophyContentRef.current);
-    return () => observer.disconnect();
+    return observeSingle(philosophyContentRef, setVisiblePhilosophyContent, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -250px 0px',
+    });
   }, []);
 
   // Philosophy Cards 애니메이션 감지
   useEffect(() => {
-    const observers = philosophyCardRefs.current.map((ref, index) => {
-      if (!ref) return null;
-      
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          setVisiblePhilosophyCards(prev => {
-            const newState = [...prev];
-            newState[index] = entry.isIntersecting;
-            return newState;
-          });
-        },
-        {
-          threshold: 0.3,
-          rootMargin: '0px 0px -250px 0px'
-        }
-      );
-      
-      observer.observe(ref);
-      return observer;
-    });
-
-    return () => {
-      observers.forEach(observer => {
-        if (observer) observer.disconnect();
-      });
-    };
+    return observeMany(
+      philosophyCardRefs,
+      (index, isVisible) => {
+        setVisiblePhilosophyCards((prev) => {
+          const next = [...prev];
+          next[index] = isVisible;
+          return next;
+        });
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -250px 0px',
+      }
+    );
   }, []);
 
   // Core Values 애니메이션 감지
   useEffect(() => {
-    const observers = coreValueRefs.current.map((ref, index) => {
-      if (!ref) return null;
-      
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          setVisibleCoreValues(prev => {
-            const newState = [...prev];
-            newState[index] = entry.isIntersecting;
-            return newState;
-          });
-        },
-        {
-          threshold: 0.3,
-          rootMargin: '0px 0px -250px 0px'
-        }
-      );
-      
-      observer.observe(ref);
-      return observer;
-    });
-
-    return () => {
-      observers.forEach(observer => {
-        if (observer) observer.disconnect();
-      });
-    };
+    return observeMany(
+      coreValueRefs,
+      (index, isVisible) => {
+        setVisibleCoreValues((prev) => {
+          const next = [...prev];
+          next[index] = isVisible;
+          return next;
+        });
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px 0px -250px 0px',
+      }
+    );
   }, []);
 
   // History Title 애니메이션 감지
   useEffect(() => {
-    if (!historyTitleRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisibleHistoryTitle(entry.isIntersecting);
-      },
-      {
-        threshold: 0.3,
-        rootMargin: '0px 0px -10px 0px'
-      }
-    );
-
-    observer.observe(historyTitleRef.current);
-    return () => observer.disconnect();
+    return observeSingle(historyTitleRef, setVisibleHistoryTitle, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -10px 0px',
+    });
   }, []);
 
   // History Items 애니메이션 감지
   useEffect(() => {
-    const observers = historyItemRefs.current.map((ref, index) => {
-      if (!ref) return null;
-      
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          setVisibleHistoryItems(prev => {
-            const newState = [...prev];
-            newState[index] = entry.isIntersecting;
-            return newState;
-          });
-        },
-        {
-          threshold: 0.5,
-          rootMargin: '0px'
-        }
-      );
-      
-      observer.observe(ref);
-      return observer;
-    });
-
-    return () => {
-      observers.forEach(observer => {
-        if (observer) observer.disconnect();
-      });
-    };
+    return observeMany(
+      historyItemRefs,
+      (index, isVisible) => {
+        setVisibleHistoryItems((prev) => {
+          const next = [...prev];
+          next[index] = isVisible;
+          return next;
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '0px',
+      }
+    );
   }, []);
 
   return (

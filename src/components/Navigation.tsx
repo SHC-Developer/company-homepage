@@ -28,9 +28,68 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   const [isOverLightBackground, setIsOverLightBackground] = useState(forceLightTheme);
   
   const menuRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const isLandingPage = location.pathname === '/' || location.pathname === '/greeting';
+
+  const navBackgroundClass = isOverLightBackground ? 'bg-white' : 'bg-transparent';
+  const dropdownContainerClass = isOverLightBackground
+    ? 'bg-white border border-gray-200'
+    : 'bg-slate-800 border border-slate-700';
+  const dropdownItemClass = isOverLightBackground
+    ? 'text-gray-700 hover:text-black'
+    : 'text-gray-300 hover:text-white';
+  const brandTextClass = isOverLightBackground
+    ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80'
+    : 'text-white hover:text-white/80 drop-shadow-lg';
+  const mobileMenuPanelClass = isOverLightBackground
+    ? 'bg-white/95 border-gray-200'
+    : 'bg-black/80 border-white';
+  const mobileMenuButtonThemeClass = isOverLightBackground
+    ? 'text-[#0B1C2B] hover:bg-gray-100 active:bg-gray-200'
+    : 'text-white hover:bg-white/20 active:bg-white/30';
+
+  const closeMenus = () => {
+    setActiveMenu(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const scrollToElementById = (id: string, options: ScrollIntoViewOptions = { behavior: 'smooth', block: 'start' }) => {
+    const element = document.getElementById(id);
+    if (!element) return false;
+    element.scrollIntoView(options);
+    return true;
+  };
+
+  const pushHash = (id: string) => {
+    window.history.pushState(null, '', `#${id}`);
+  };
+
+  const navigateAndScrollToId = (pathWithHash: string, id: string, delayMs = 300) => {
+    navigate(pathWithHash);
+    window.setTimeout(() => {
+      scrollToElementById(id, { behavior: 'smooth', block: 'start' });
+    }, delayMs);
+  };
+
+  const handleSameOrNavigateToSection = (
+    e: React.MouseEvent,
+    target: { pagePath: string; id: string; delayMs?: number }
+  ) => {
+    e.preventDefault();
+
+    if (location.pathname === target.pagePath) {
+      const didScroll = scrollToElementById(target.id, { behavior: 'smooth', block: 'start' });
+      if (didScroll) {
+        pushHash(target.id);
+      }
+    } else {
+      navigateAndScrollToId(`${target.pagePath}#${target.id}`, target.id, target.delayMs ?? 300);
+    }
+
+    closeMenus();
+  };
 
   const handleMenuEnter = (menu: string) => {
     if (timeoutRef.current) {
@@ -53,208 +112,51 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     );
   };
 
-  const handlePhilosophyClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      // 이미 greeting 페이지에 있으면 스크롤만
-      const element = document.getElementById('management-philosophy');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // URL에 해시 추가
-        window.history.pushState(null, '', '#management-philosophy');
-      }
-    } else {
-      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
-      navigate('/greeting#management-philosophy');
-      setTimeout(() => {
-        const element = document.getElementById('management-philosophy');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handlePhilosophyClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'management-philosophy' });
 
-  const handleHistoryClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      // 이미 greeting 페이지에 있으면 스크롤만
-      const element = document.getElementById('company-history');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // URL에 해시 추가
-        window.history.pushState(null, '', '#company-history');
-      }
-    } else {
-      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
-      navigate('/greeting#company-history');
-      setTimeout(() => {
-        const element = document.getElementById('company-history');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handleHistoryClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'company-history' });
 
-  const handleLicenseClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      // 이미 greeting 페이지에 있으면 스크롤만
-      const element = document.getElementById('license');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // URL에 해시 추가
-        window.history.pushState(null, '', '#license');
-      }
-    } else {
-      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
-      navigate('/greeting#license');
-      setTimeout(() => {
-        const element = document.getElementById('license');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handleLicenseClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'license' });
 
-  const handleOrganizationClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      const element = document.getElementById('organization');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '#organization');
-      }
-    } else {
-      navigate('/greeting#organization');
-      setTimeout(() => {
-        const element = document.getElementById('organization');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handleOrganizationClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'organization' });
 
-  const handleCompanyIntroClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/greeting') {
-      // 이미 greeting 페이지에 있으면 스크롤만
-      const element = document.getElementById('management-philosophy');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // URL에 해시 추가
-        window.history.pushState(null, '', '#management-philosophy');
-      }
-    } else {
-      // 다른 페이지에서 클릭하면 greeting 페이지로 이동 후 스크롤
-      navigate('/greeting#management-philosophy');
-      setTimeout(() => {
-        const element = document.getElementById('management-philosophy');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handleCeoMessageClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'ceo-message' });
 
-  const handlePortfolioClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleCompanyIntroClick = handlePhilosophyClick;
+
+  const handlePortfolioClick = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     navigate('/portfolio');
     window.scrollTo(0, 0);
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
+    closeMenus();
   };
 
-  const handlePortfolioBridgeTunnelClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/portfolio') {
-      const element = document.getElementById('portfolio-safety-bridge-tunnel');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '#portfolio-safety-bridge-tunnel');
-      }
-    } else {
-      navigate('/portfolio#portfolio-safety-bridge-tunnel');
-      setTimeout(() => {
-        const element = document.getElementById('portfolio-safety-bridge-tunnel');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handlePortfolioBridgeTunnelClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/portfolio', id: 'portfolio-safety-bridge-tunnel' });
 
-  const handlePortfolioDesignClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/portfolio') {
-      const element = document.getElementById('portfolio-design');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '#portfolio-design');
-      }
-    } else {
-      navigate('/portfolio#portfolio-design');
-      setTimeout(() => {
-        const element = document.getElementById('portfolio-design');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handlePortfolioDesignClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/portfolio', id: 'portfolio-design' });
 
-  const handlePortfolioSupervisionClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname === '/portfolio') {
-      const element = document.getElementById('portfolio-supervision');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', '#portfolio-supervision');
-      }
-    } else {
-      navigate('/portfolio#portfolio-supervision');
-      setTimeout(() => {
-        const element = document.getElementById('portfolio-supervision');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
-  };
+  const handlePortfolioSupervisionClick = (e: React.MouseEvent) =>
+    handleSameOrNavigateToSection(e, { pagePath: '/portfolio', id: 'portfolio-supervision' });
 
-  const handleRecruitClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleRecruitClick = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     navigate('/recruit');
     window.scrollTo(0, 0);
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
+    closeMenus();
   };
 
-  const handleLegalBasisClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleLegalBasisClick = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     navigate('/legal-basis');
     window.scrollTo(0, 0);
-    setActiveMenu(null);
-    setIsMobileMenuOpen(false);
+    closeMenus();
   };
 
   // 클릭 외부 감지
@@ -280,6 +182,15 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 언마운트 시 메뉴 닫힘 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
 
   // 스크롤 감지로 배경 감지
@@ -310,11 +221,10 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   }, [forceLightTheme]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-      location.pathname === '/greeting'
-        ? (isOverLightBackground ? 'bg-white' : 'bg-transparent')
-        : isOverLightBackground ? 'bg-white' : 'bg-transparent'
-    }`} ref={menuRef}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${navBackgroundClass}`}
+      ref={menuRef}
+    >
       {/* 
         반응형 가이드라인:
         1. 모바일 우선 접근법: 기본 스타일은 모바일용, 큰 화면용은 sm:, md:, lg: 등으로 확장
@@ -350,7 +260,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
               src={
                 isOverLightBackground
                   ? logo3
-                  : (location.pathname === '/' || location.pathname === '/greeting' ? logo2 : logo3)
+                  : (isLandingPage ? logo2 : logo3)
               } 
               alt="회사 로고" 
               className="h-10 w-10 sm:h-16 sm:w-16 md:h-20 md:w-20 flex-shrink-0 object-contain"
@@ -359,13 +269,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
               to="/" 
               onClick={() => window.scrollTo(0, 0)} 
               className={`h-full flex items-center text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl font-bold font-logo transition-colors duration-300 whitespace-nowrap overflow-hidden text-ellipsis leading-none ${
-                location.pathname === '/greeting'
-                  ? (isOverLightBackground
-                      ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80'
-                      : 'text-white hover:text-white/80 drop-shadow-lg')
-                  : isOverLightBackground 
-                    ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80' 
-                    : 'text-white hover:text-white/80 drop-shadow-lg'
+                brandTextClass
               }`}
             >
               {/* 모바일에서도 전체 회사명 표시, 글자 크기만 줄임 */}
@@ -384,25 +288,15 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
               >
                 <button
                   className={`px-4 py-2 text-xl font-normal rounded-lg transition-all duration-200 font-korean ${
-                    location.pathname === '/greeting'
-                      ? (isOverLightBackground
-                          ? `drop-shadow-none ${activeMenu === menu 
-                              ? 'bg-gray-200 text-[#0B1C2B]' 
-                              : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
-                            }`
-                          : `drop-shadow-md ${activeMenu === menu 
-                              ? 'bg-white/20 text-white' 
-                              : 'text-white hover:text-white/80 hover:bg-white/10'
-                            }`)
-                      : isOverLightBackground 
-                        ? `drop-shadow-none ${activeMenu === menu 
-                            ? 'bg-gray-200 text-[#0B1C2B]' 
-                            : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
-                          }`
-                        : `drop-shadow-md ${activeMenu === menu 
-                            ? 'bg-white/20 text-white' 
-                            : 'text-white hover:text-white/80 hover:bg-white/10'
-                          }`
+                    isOverLightBackground
+                      ? `drop-shadow-none ${activeMenu === menu 
+                          ? 'bg-gray-200 text-[#0B1C2B]' 
+                          : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
+                        }`
+                      : `drop-shadow-md ${activeMenu === menu 
+                          ? 'bg-white/20 text-white' 
+                          : 'text-white hover:text-white/80 hover:bg-white/10'
+                        }`
                   }`}
                   onClick={
                     menu === '회사소개'
@@ -423,28 +317,14 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
 
                 {/* 드롭다운 메뉴 - 흰색 라인 아래로 위치 */}
                 {activeMenu === menu && menuStructure[menu].length > 0 && (
-                  <div className={`absolute top-full left-0 mt-3 w-48 rounded-lg shadow-lg nav-slide-down open ${
-                    location.pathname === '/greeting'
-                      ? (isOverLightBackground
-                          ? 'bg-white border border-gray-200'
-                          : 'bg-slate-800 border border-slate-700')
-                      : isOverLightBackground 
-                        ? 'bg-white border border-gray-200' 
-                        : 'bg-slate-800 border border-slate-700'
-                  }`}>
+                  <div className={`absolute top-full left-0 mt-3 w-48 rounded-lg shadow-lg nav-slide-down open ${dropdownContainerClass}`}>
                     {menuStructure[menu].map((subMenu) => (
                       subMenu === '수의계약근거' ? (
                         <Link
                           key={subMenu}
                           to="/legal-basis"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -459,13 +339,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             setIsMobileMenuOpen(false);
                           }}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -474,34 +348,9 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         <a
                           key={subMenu}
                           href="#ceo-message"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (location.pathname === '/greeting') {
-                              const element = document.getElementById('ceo-message');
-                              if (element) {
-                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                window.history.pushState(null, '', '#ceo-message');
-                              }
-                            } else {
-                              navigate('/greeting#ceo-message');
-                              setTimeout(() => {
-                                const element = document.getElementById('ceo-message');
-                                if (element) {
-                                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                }
-                              }, 300);
-                            }
-                            setActiveMenu(null);
-                            setIsMobileMenuOpen(false);
-                          }}
+                          onClick={handleCeoMessageClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -512,13 +361,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="/greeting#company-history"
                           onClick={handleHistoryClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -529,13 +372,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="#"
                           onClick={handleLicenseClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -546,13 +383,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="#"
                           onClick={handleOrganizationClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -563,13 +394,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="/portfolio#portfolio-safety-bridge-tunnel"
                           onClick={handlePortfolioBridgeTunnelClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -580,13 +405,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="/portfolio#portfolio-design"
                           onClick={handlePortfolioDesignClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -597,13 +416,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           href="/portfolio#portfolio-supervision"
                           onClick={handlePortfolioSupervisionClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -613,13 +426,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           key={subMenu}
                           to="/portfolio"
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            location.pathname === '/greeting'
-                              ? (isOverLightBackground
-                                  ? 'text-gray-700 hover:text-black'
-                                  : 'text-gray-300 hover:text-white')
-                              : isOverLightBackground 
-                                ? 'text-gray-700 hover:text-black' 
-                                : 'text-gray-300 hover:text-white'
+                            dropdownItemClass
                           }`}
                         >
                           {subMenu}
@@ -667,13 +474,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
         */}
         {isMobileMenuOpen && (
           <div className={`lg:hidden backdrop-blur-sm border-t overflow-y-auto max-h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out ${
-            location.pathname === '/greeting'
-              ? (isOverLightBackground
-                  ? 'bg-white/95 border-gray-200'
-                  : 'bg-black/80 border-white')
-              : isOverLightBackground 
-                ? 'bg-white/95 border-gray-200' 
-                : 'bg-black/80 border-white'
+            mobileMenuPanelClass
           }`}>
             <div className="px-3 py-3 sm:px-4 sm:py-4 space-y-2">
               {Object.keys(menuStructure).map((menu) => (
@@ -687,23 +488,17 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                   <button
                     onClick={() => {
                       if (menu === '분야별 수행실적') {
-                        handlePortfolioClick({} as React.MouseEvent);
+                        handlePortfolioClick();
                       } else if (menu === '관계법령') {
-                        handleLegalBasisClick({} as React.MouseEvent);
+                        handleLegalBasisClick();
                       } else if (menu === '자료실') {
-                        handleRecruitClick({} as React.MouseEvent);
+                        handleRecruitClick();
                       } else {
                         toggleMobileMenu(menu);
                       }
                     }}
                     className={`w-full text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 active:scale-[0.98] ${
-                      location.pathname === '/greeting'
-                        ? (isOverLightBackground
-                            ? 'text-[#0B1C2B] hover:bg-gray-100 active:bg-gray-200'
-                            : 'text-white hover:bg-white/20 active:bg-white/30')
-                        : isOverLightBackground 
-                          ? 'text-[#0B1C2B] hover:bg-gray-100 active:bg-gray-200' 
-                          : 'text-white hover:bg-white/20 active:bg-white/30'
+                      mobileMenuButtonThemeClass
                     }`}
                   >
                     <span className="flex-1">{menu}</span>
@@ -734,13 +529,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             key={subMenu}
                             to="/legal-basis"
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -755,13 +544,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                               setIsMobileMenuOpen(false);
                             }}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -770,34 +553,9 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           <a
                             key={subMenu}
                             href="#ceo-message"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (location.pathname === '/greeting') {
-                                const element = document.getElementById('ceo-message');
-                                if (element) {
-                                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                  window.history.pushState(null, '', '#ceo-message');
-                                }
-                              } else {
-                                navigate('/greeting#ceo-message');
-                                setTimeout(() => {
-                                  const element = document.getElementById('ceo-message');
-                                  if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                  }
-                                }, 300);
-                              }
-                              setActiveMenu(null);
-                              setIsMobileMenuOpen(false);
-                            }}
+                            onClick={handleCeoMessageClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -808,13 +566,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="/greeting#company-history"
                             onClick={handleHistoryClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -825,13 +577,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="#"
                             onClick={handleLicenseClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -842,13 +588,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="#"
                             onClick={handleOrganizationClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -859,13 +599,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="/portfolio#portfolio-safety-bridge-tunnel"
                             onClick={handlePortfolioBridgeTunnelClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -876,13 +610,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="/portfolio#portfolio-design"
                             onClick={handlePortfolioDesignClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -893,13 +621,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             href="/portfolio#portfolio-supervision"
                             onClick={handlePortfolioSupervisionClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}
@@ -909,13 +631,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             key={subMenu}
                             to="/portfolio"
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              location.pathname === '/greeting'
-                                ? (isOverLightBackground
-                                    ? 'text-gray-700 hover:text-black'
-                                    : 'text-gray-300 hover:text-white')
-                                : isOverLightBackground 
-                                  ? 'text-gray-700 hover:text-black' 
-                                  : 'text-gray-300 hover:text-white'
+                              dropdownItemClass
                             }`}
                           >
                             {subMenu}

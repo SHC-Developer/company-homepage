@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Building2, 
@@ -8,6 +8,7 @@ import {
   Users, 
   Search
 } from 'lucide-react';
+import { withBaseUrl } from '@/lib/utils';
 
 interface CategoryItem {
   id: string;
@@ -23,6 +24,16 @@ interface SlideItem {
   imageSrc: string;
 }
 
+const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
+
+const HIGHLIGHT_WORDS: Record<number, string[]> = {
+  0: ['오늘'],
+  1: ['안전', '쾌적'],
+  2: ['나라건설'],
+  3: ['사람', '사랑'],
+  4: ['성장', '시설사업소'],
+};
+
 export const SitemapSection = () => {
   const navigate = useNavigate();
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -30,44 +41,45 @@ export const SitemapSection = () => {
   const [sitemapOpacity, setSitemapOpacity] = useState(0);
 
   // 이미지 경로 헬퍼 함수 (Portfolio.tsx와 동일한 패턴)
-  const getImagePath = (filename: string) => {
-    const baseUrl = import.meta.env.BASE_URL;
-    const path = `${baseUrl}portfolio/${filename}`;
-    return path;
-  };
+  const getImagePath = useCallback((filename: string) => {
+    return withBaseUrl(`portfolio/${filename}`);
+  }, []);
 
-  const slides: SlideItem[] = [
-    {
-      id: 'slide-1',
-      text: '당신의 오늘은 안전하셨습니까?',
-      align: 'right',
-      imageSrc: getImagePath('performance1.JPG'),
-    },
-    {
-      id: 'slide-2',
-      text: '국민들의 안전하고 쾌적한',
-      align: 'left',
-      imageSrc: getImagePath('performance3.JPG'),
-    },
-    {
-      id: 'slide-3',
-      text: '아름다운 생활을 영위하는 나라건설',
-      align: 'right',
-      imageSrc: getImagePath('performance5.jpg'),
-    },
-    {
-      id: 'slide-4',
-      text: '사람과 사랑으로 융합된',
-      align: 'left',
-      imageSrc: getImagePath('performance8.jpg'),
-    },
-    {
-      id: 'slide-5',
-      text: '성장의 발자국을 남기는 시설사업소가 되겠습니다.',
-      align: 'right',
-      imageSrc: getImagePath('performance12.jpg'),
-    },
-  ];
+  const slides: SlideItem[] = useMemo(
+    () => [
+      {
+        id: 'slide-1',
+        text: '당신의 오늘은 안전하셨습니까?',
+        align: 'right',
+        imageSrc: getImagePath('performance1.JPG'),
+      },
+      {
+        id: 'slide-2',
+        text: '국민들의 안전하고 쾌적한',
+        align: 'left',
+        imageSrc: getImagePath('performance3.JPG'),
+      },
+      {
+        id: 'slide-3',
+        text: '아름다운 생활을 영위하는 나라건설',
+        align: 'right',
+        imageSrc: getImagePath('performance5.jpg'),
+      },
+      {
+        id: 'slide-4',
+        text: '사람과 사랑으로 융합된',
+        align: 'left',
+        imageSrc: getImagePath('performance8.jpg'),
+      },
+      {
+        id: 'slide-5',
+        text: '성장의 발자국을 남기는 시설사업소가 되겠습니다.',
+        align: 'right',
+        imageSrc: getImagePath('performance12.jpg'),
+      },
+    ],
+    [getImagePath]
+  );
 
   const [opacities, setOpacities] = useState<number[]>(
     () => slides.map((_, idx) => (idx === 0 ? 1 : 0))
@@ -82,7 +94,7 @@ export const SitemapSection = () => {
           entries.forEach((entry) => {
             const idx = Number((entry.target as HTMLElement).dataset.index);
             if (Number.isFinite(idx)) {
-              next[idx] = Math.max(0, Math.min(1, entry.intersectionRatio));
+              next[idx] = clamp01(entry.intersectionRatio);
             }
           });
           return next;
@@ -140,16 +152,34 @@ export const SitemapSection = () => {
     }
   };
 
-  const renderHighlightedText = (text: string, index: number) => {
-    const highlightWords: { [key: number]: string[] } = {
-      0: ['오늘'],
-      1: ['안전', '쾌적'],
-      2: ['나라건설'],
-      3: ['사람', '사랑'],
-      4: ['성장', '시설사업소'],
-    };
+  const createSlideImageErrorHandler = useCallback(
+    (originalSrc: string) =>
+      (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        const t = e.currentTarget;
+        const attempt = parseInt(t.dataset.attempt || '0', 10);
 
-    const words = highlightWords[index] || [];
+        const filename = originalSrc.split('/').pop() || '';
+        const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
+        const attempts = [
+          getImagePath(filename),
+          getImagePath(`${baseName}.jpg`),
+          getImagePath(`${baseName}.JPG`),
+        ];
+
+        if (attempt < attempts.length - 1) {
+          t.src = attempts[attempt + 1];
+          t.dataset.attempt = String(attempt + 1);
+          return;
+        }
+
+        t.onerror = null;
+        t.style.display = 'none';
+      },
+    [getImagePath]
+  );
+
+  const renderHighlightedText = (text: string, index: number) => {
+    const words = HIGHLIGHT_WORDS[index] || [];
     if (words.length === 0) {
       return <>{text}</>;
     }
@@ -206,6 +236,66 @@ export const SitemapSection = () => {
     return <>{result}</>;
   };
 
+  const renderMobileSlideImage = (imageSrc: string) => (
+    <div className="w-full lg:hidden flex justify-center">
+      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer w-full max-w-md">
+        <div className="w-full aspect-[4/3]">
+          <img
+            src={imageSrc}
+            alt="포트폴리오 이미지"
+            className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
+            onError={createSlideImageErrorHandler(imageSrc)}
+            data-attempt="0"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
+      </div>
+    </div>
+  );
+
+  const renderDesktopSlideImage = (imageSrc: string, align: 'left' | 'right') => (
+    <div
+      className={`hidden lg:flex flex-shrink-0 ${align === 'right' ? 'justify-end' : 'justify-start'}`}
+    >
+      <div
+        className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
+        style={{
+          width: '100%',
+          minWidth: '240px',
+          maxWidth: '40vw',
+        }}
+      >
+        <div className="w-full h-full">
+          <img
+            src={imageSrc}
+            alt="포트폴리오 이미지"
+            className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
+            style={{ minHeight: '320px', maxHeight: '600px' }}
+            onError={createSlideImageErrorHandler(imageSrc)}
+            data-attempt="0"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
+      </div>
+    </div>
+  );
+
+  const renderSlideText = (text: string, index: number, opacity: number, options: { paddingClass: string; textAlignClass: string }) => (
+    <div className={`w-full lg:flex-1 flex items-center justify-center ${options.paddingClass}`}>
+      <p
+        className={`font-korean font-semibold leading-relaxed transition-[opacity,transform] duration-500 ${options.textAlignClass}`}
+        style={{
+          opacity,
+          transform: `translateY(${(1 - opacity) * 12}px)`,
+          color: '#0C2B4B',
+          fontSize: 'clamp(1.25rem, 2vw + 0.5rem, 34pt)',
+        }}
+      >
+        {renderHighlightedText(text, index)}
+      </p>
+    </div>
+  );
+
   const categories: CategoryItem[] = [
     {
       id: 'ceo',
@@ -249,7 +339,7 @@ export const SitemapSection = () => {
     <section className="bg-white">
       <div className="flex flex-col">
         {slides.map((slide, index) => {
-          const opacity = Math.max(0, Math.min(1, opacities[index] ?? 0));
+          const opacity = clamp01(opacities[index] ?? 0);
           const imageOnRight = slide.align === 'right';
 
           return (
@@ -264,193 +354,35 @@ export const SitemapSection = () => {
               <div
                 className="relative w-[90%] md:w-[85%] mx-auto flex items-center"
               >
-                <div className={`w-full flex items-center ${imageOnRight ? 'flex-col lg:flex-row' : 'flex-col lg:flex-row'} gap-6 md:gap-8 lg:gap-0`}>
+                <div className="w-full flex items-center flex-col lg:flex-row gap-6 md:gap-8 lg:gap-0">
                   {/* 이미지가 오른쪽일 때: 모바일은 이미지→텍스트, 데스크톱은 텍스트→이미지 */}
                   {imageOnRight ? (
                     <>
                       {/* 이미지 (모바일 우선, lg에서 순서 변경) */}
-                      <div className="w-full lg:hidden flex justify-center">
-                        <div 
-                          className="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer w-full max-w-md"
-                        >
-                          <div className="w-full aspect-[4/3]">
-                            <img
-                              src={slide.imageSrc}
-                              alt="포트폴리오 이미지"
-                              className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-                              onError={(e) => {
-                                const t = e.currentTarget as HTMLImageElement;
-                                const attempt = parseInt(t.dataset.attempt || '0', 10);
-                                const filename = slide.imageSrc.split('/').pop() || '';
-                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
-                                const attempts = [
-                                  getImagePath(filename),
-                                  getImagePath(`${baseName}.jpg`),
-                                  getImagePath(`${baseName}.JPG`),
-                                ];
-                                if (attempt < attempts.length - 1) {
-                                  t.src = attempts[attempt + 1];
-                                  t.dataset.attempt = String(attempt + 1);
-                                } else {
-                                  t.onerror = null;
-                                  t.style.display = 'none';
-                                }
-                              }}
-                              data-attempt="0"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-                        </div>
-                      </div>
+                      {renderMobileSlideImage(slide.imageSrc)}
 
                       {/* 텍스트 영역 */}
-                      <div className="w-full lg:flex-1 flex items-center justify-center lg:pr-[2%]">
-                        <p
-                          className={`font-korean font-semibold leading-relaxed transition-[opacity,transform] duration-500 ${index === 4 ? 'text-left' : 'text-center'}`}
-                          style={{
-                            opacity,
-                            transform: `translateY(${(1 - opacity) * 12}px)`,
-                            color: '#0C2B4B',
-                            fontSize: 'clamp(1.25rem, 2vw + 0.5rem, 34pt)',
-                          }}
-                        >
-                          {renderHighlightedText(slide.text, index)}
-                        </p>
-                      </div>
+                      {renderSlideText(slide.text, index, opacity, {
+                        paddingClass: 'lg:pr-[2%]',
+                        textAlignClass: index === 4 ? 'text-left' : 'text-center',
+                      })}
 
                       {/* 이미지 (데스크톱) */}
-                      <div className="hidden lg:flex flex-shrink-0 justify-end">
-                        <div 
-                          className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
-                          style={{
-                            width: '100%',
-                            minWidth: '240px',
-                            maxWidth: '40vw',
-                          }}
-                        >
-                          <div className="w-full h-full">
-                            <img
-                              src={slide.imageSrc}
-                              alt="포트폴리오 이미지"
-                              className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-                              style={{ minHeight: '320px', maxHeight: '600px' }}
-                              onError={(e) => {
-                                const t = e.currentTarget as HTMLImageElement;
-                                const attempt = parseInt(t.dataset.attempt || '0', 10);
-                                const filename = slide.imageSrc.split('/').pop() || '';
-                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
-                                const attempts = [
-                                  getImagePath(filename),
-                                  getImagePath(`${baseName}.jpg`),
-                                  getImagePath(`${baseName}.JPG`),
-                                ];
-                                if (attempt < attempts.length - 1) {
-                                  t.src = attempts[attempt + 1];
-                                  t.dataset.attempt = String(attempt + 1);
-                                } else {
-                                  t.onerror = null;
-                                  t.style.display = 'none';
-                                }
-                              }}
-                              data-attempt="0"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-                        </div>
-                      </div>
+                      {renderDesktopSlideImage(slide.imageSrc, 'right')}
                     </>
                   ) : (
                     <>
                       {/* 이미지 (모바일/태블릿) */}
-                      <div className="w-full lg:hidden flex justify-center">
-                        <div 
-                          className="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer w-full max-w-md"
-                        >
-                          <div className="w-full aspect-[4/3]">
-                            <img
-                              src={slide.imageSrc}
-                              alt="포트폴리오 이미지"
-                              className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-                              onError={(e) => {
-                                const t = e.currentTarget as HTMLImageElement;
-                                const attempt = parseInt(t.dataset.attempt || '0', 10);
-                                const filename = slide.imageSrc.split('/').pop() || '';
-                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
-                                const attempts = [
-                                  getImagePath(filename),
-                                  getImagePath(`${baseName}.jpg`),
-                                  getImagePath(`${baseName}.JPG`),
-                                ];
-                                if (attempt < attempts.length - 1) {
-                                  t.src = attempts[attempt + 1];
-                                  t.dataset.attempt = String(attempt + 1);
-                                } else {
-                                  t.onerror = null;
-                                  t.style.display = 'none';
-                                }
-                              }}
-                              data-attempt="0"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-                        </div>
-                      </div>
+                      {renderMobileSlideImage(slide.imageSrc)}
 
                       {/* 이미지 (데스크톱) */}
-                      <div className="hidden lg:flex flex-shrink-0 justify-start">
-                        <div 
-                          className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
-                          style={{
-                            width: '100%',
-                            minWidth: '240px',
-                            maxWidth: '40vw',
-                          }}
-                        >
-                          <div className="w-full h-full">
-                            <img
-                              src={slide.imageSrc}
-                              alt="포트폴리오 이미지"
-                              className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-                              style={{ minHeight: '320px', maxHeight: '600px' }}
-                              onError={(e) => {
-                                const t = e.currentTarget as HTMLImageElement;
-                                const attempt = parseInt(t.dataset.attempt || '0', 10);
-                                const filename = slide.imageSrc.split('/').pop() || '';
-                                const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
-                                const attempts = [
-                                  getImagePath(filename),
-                                  getImagePath(`${baseName}.jpg`),
-                                  getImagePath(`${baseName}.JPG`),
-                                ];
-                                if (attempt < attempts.length - 1) {
-                                  t.src = attempts[attempt + 1];
-                                  t.dataset.attempt = String(attempt + 1);
-                                } else {
-                                  t.onerror = null;
-                                  t.style.display = 'none';
-                                }
-                              }}
-                              data-attempt="0"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-                        </div>
-                      </div>
+                      {renderDesktopSlideImage(slide.imageSrc, 'left')}
 
                       {/* 텍스트 영역 */}
-                      <div className="w-full lg:flex-1 flex items-center justify-center lg:pl-[2%]">
-                        <p
-                          className="font-korean font-semibold leading-relaxed transition-[opacity,transform] duration-500 text-center"
-                          style={{
-                            opacity,
-                            transform: `translateY(${(1 - opacity) * 12}px)`,
-                            color: '#0C2B4B',
-                            fontSize: 'clamp(1.25rem, 2vw + 0.5rem, 34pt)',
-                          }}
-                        >
-                          {renderHighlightedText(slide.text, index)}
-                        </p>
-                      </div>
+                      {renderSlideText(slide.text, index, opacity, {
+                        paddingClass: 'lg:pl-[2%]',
+                        textAlignClass: 'text-center',
+                      })}
                     </>
                   )}
                 </div>
@@ -500,6 +432,7 @@ export const SitemapSection = () => {
               {/* 하단 장식선 */}
               <div
                 style={{
+                  
                   width: '60%',
                   height: '2px',
                   margin: '16px auto 0',

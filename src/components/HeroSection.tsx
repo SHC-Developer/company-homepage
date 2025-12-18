@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { setupLoopingVideo } from '@/lib/utils';
 
 export const HeroSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -9,33 +10,20 @@ export const HeroSection = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleEnded = () => {
-      // 비디오가 끝났을 때 다시 재생
-      video.currentTime = 0;
-      video.play().catch((e) => {
+    return setupLoopingVideo(video, {
+      onEndedPlayError: (e) => {
         console.error('비디오 재생 실패:', e);
         setVideoError(true);
-      });
-    };
-
-    const handleError = () => {
-      console.error('비디오 로드 실패');
-      setVideoError(true);
-    };
-
-    video.addEventListener('ended', handleEnded);
-    video.addEventListener('error', handleError);
-
-    // 자동 재생 시도
-    video.play().catch((e) => {
-      console.error('비디오 자동 재생 실패:', e);
-      // 자동 재생이 실패해도 에러로 처리하지 않음 (브라우저 정책)
+      },
+      onLoadError: () => {
+        console.error('비디오 로드 실패');
+        setVideoError(true);
+      },
+      onAutoplayError: (e) => {
+        console.error('비디오 자동 재생 실패:', e);
+        // 자동 재생이 실패해도 에러로 처리하지 않음 (브라우저 정책)
+      },
     });
-
-    return () => {
-      video.removeEventListener('ended', handleEnded);
-      video.removeEventListener('error', handleError);
-    };
   }, []);
 
   return (
