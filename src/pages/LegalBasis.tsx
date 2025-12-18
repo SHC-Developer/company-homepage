@@ -185,13 +185,13 @@ const LegalBasis = () => {
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
                           <h3 className="font-bold text-base sm:text-lg"><span style={{ textDecoration: 'underline' }}>국가유공자단체법</span></h3>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 ml-4 sm:ml-0 self-start sm:self-auto">시행 2023.6.5<span className="text-slate-400">/</span> 법률 제19228호</span>
+                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 self-start sm:self-auto">시행 2023.6.5<span className="text-slate-400">/</span> 법률 제19228호</span>
                       </div>
                       <div className="rounded-md border border-slate-200 p-4 sm:p-5 bg-slate-50/50">
                         <p className="text-primary font-bold mb-2 text-sm sm:text-base">제17조(국가유공자등단체의 수익사업)</p>
-                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base">
-                          <p style={{ textAlign: 'justify', wordBreak: 'keep-all' }}>① 이 법에 따라 설립된 국가유공자등단체는 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>제1조</span>에 따른 설립목적을 달성하기 위하여 필요한 범위에서 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>직접 수익사업을 할 수 있다.</span><span style={{ textDecoration: 'underline', whiteSpace: 'nowrap' }}>&nbsp;&lt;개정 2021.6.8.&gt;</span></p>
-                          <p style={{ textAlign: 'justify', wordBreak: 'keep-all' }}>② 국가, 지방자치단체 및 그 밖의 공공단체는 제1항에 따라 수익사업을 운영하는 국가유공자등단체 중 상이를 입은 사람을 회원으로 하는 국가유공자등단체가 직접 생산하는 물품을 구매하거나 해당 국가유공자등단체에 직접 물건을 매각 또는 임대하거나 해당 국가유공자등단체와 용역계약을 체결하는 경우에는 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>수의계약으로 할 수 있다.</span><span style={{ textDecoration: 'underline', whiteSpace: 'nowrap' }}>&nbsp;&lt;개정 2021.6.8.&gt;</span></p>
+                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base [&>p]:[word-break:break-word] sm:[&>p]:[word-break:keep-all]">
+                          <p style={{ textAlign: 'justify' }}>① 이 법에 따라 설립된 국가유공자등단체는 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>제1조</span>에 따른 설립목적을 달성하기 위하여 필요한 범위에서 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>직접 수익사업을 할 수 있다.</span><br /><span style={{ textDecoration: 'underline', whiteSpace: 'nowrap' }}>&lt;개정 2021.6.8.&gt;</span></p>
+                          <p style={{ textAlign: 'justify' }}>② 국가, 지방자치단체 및 그 밖의 공공단체는 제1항에 따라 수익사업을 운영하는 국가유공자등단체 중 상이를 입은 사람을 회원으로 하는 국가유공자등단체가 직접 생산하는 물품을 구매하거나 해당 국가유공자등단체에 직접 물건을 매각 또는 임대하거나 해당 국가유공자등단체와 용역계약을 체결하는 경우에는 <span style={{ color: '#0024FF', textDecoration: 'underline' }}>수의계약으로 할 수 있다.</span><br /><span style={{ textDecoration: 'underline', whiteSpace: 'nowrap' }}>&lt;개정 2021.6.8.&gt;</span></p>
                         </div>
                       </div>
                     </section>
@@ -202,15 +202,15 @@ const LegalBasis = () => {
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
                           <h3 className="font-bold text-base sm:text-lg"><span style={{ textDecoration: 'underline' }}>국가보훈 기본법</span></h3>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 ml-4 sm:ml-0 self-start sm:self-auto">시행 2024.2.13<span className="text-slate-400">/</span> 법률 제20278호</span>
+                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 self-start sm:self-auto">시행 2024.2.13<span className="text-slate-400">/</span> 법률 제20278호</span>
                       </div>
                       <div className="rounded-md border border-slate-200 p-4 sm:p-5">
                         <p className="text-primary font-bold mb-2 text-sm sm:text-base">제5조(국가와 지방자치단체의 책무)</p>
-                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base">
-                          <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>① 국가와 지방자치단체는 희생·공헌자의 공훈과 나라사랑정신을 선양하고, 국가보훈대상자를 예우하는 기반을 조성하기 위하여 노력하여야 한다.</p>
-                          <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>② 국가와 지방자치단체는 제2조에 따른 기본이념을 구현하기 위하여 필요한 시책을 수립·시행하여야 한다.</p>
-                          <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>③ 국가와 지방자치단체는 국민 또는 주민의 복지와 관련된 정책을 수립·시행하거나 법령 등을 제정 또는 개정할 때에는 국가보훈대상자를 우선하여 배려하는 등 적극적 조치를 하여야 한다.</p>
-                          <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify', wordBreak: 'keep-all' }}>④ 국가와 지방자치단체는 국가보훈사업에 필요한 재원(財源) 조성에 노력하여야 한다.</p>
+                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base [&>p]:[word-break:break-word] sm:[&>p]:[word-break:keep-all]">
+                          <p style={{ color: '#0024FF', textAlign: 'justify' }}>① 국가와 지방자치단체는 희생·공헌자의 공훈과 나라사랑정신을 선양하고, 국가보훈대상자를 예우하는 기반을 조성하기 위하여 노력하여야 한다.</p>
+                          <p style={{ color: '#0024FF', textAlign: 'justify' }}>② 국가와 지방자치단체는 제2조에 따른 기본이념을 구현하기 위하여 필요한 시책을 수립·시행하여야 한다.</p>
+                          <p style={{ color: '#0024FF', textAlign: 'justify' }}>③ 국가와 지방자치단체는 국민 또는 주민의 복지와 관련된 정책을 수립·시행하거나 법령 등을 제정 또는 개정할 때에는 국가보훈대상자를 우선하여 배려하는 등 적극적 조치를 하여야 한다.</p>
+                          <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify' }}>④ 국가와 지방자치단체는 국가보훈사업에 필요한 재원(財源) 조성에 노력하여야 한다.</p>
                         </div>
                       </div>
                     </section>
@@ -221,18 +221,18 @@ const LegalBasis = () => {
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
                           <h3 className="font-bold text-base sm:text-lg"><span style={{ textDecoration: 'underline' }}>국가계약법 시행령</span></h3>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 ml-4 sm:ml-0 self-start sm:self-auto">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
+                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 self-start sm:self-auto">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
                       </div>
                       <div className="rounded-md border border-slate-200 p-4 sm:p-5 bg-slate-50/50">
                         <p className="text-primary font-bold mb-2 text-sm sm:text-base">제26조(수의계약에 의할 수 있는 경우)</p>
-                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base">
-                          <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>① 법 제7조제1항 단서에 따라 수의계약을 할 수 있는 경우는 다음 각 호와 같다.</p>
+                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base [&_p]:[word-break:break-word] sm:[&_p]:[word-break:keep-all]">
+                          <p style={{ color: '#0024FF', textAlign: 'justify' }}>① 법 제7조제1항 단서에 따라 수의계약을 할 수 있는 경우는 다음 각 호와 같다.</p>
                           <div className="ml-3 sm:ml-4">
-                            <p style={{ textAlign: 'justify', wordBreak: 'keep-all' }}>1. 경쟁에 부칠 여유가 없거나 경쟁에 부쳐서는 계약의 목적을 달성하기 곤란하다고 판단되는 경우로서 다음 각 목의 경우(가~라 : 4개 목)</p>
-                            <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>4. 국가유공자 또는 장애인 등에게 일자리나 보훈ㆍ복지서비스 등을 제공하기 위한 목적으로 설립된 다음 각 목의 어느 하나에 해당하는 단체 등과 물품의 제조ㆍ구매 또는 용역 계약(해당 단체가 직접 생산하는 물품 및 직접 수행하는 용역에 한정한다)을 체결하거나, 그 단체 등에 직접 물건을 매각ㆍ임대하는 경우</p>
+                            <p style={{ textAlign: 'justify' }}>1. 경쟁에 부칠 여유가 없거나 경쟁에 부쳐서는 계약의 목적을 달성하기 곤란하다고 판단되는 경우로서 다음 각 목의 경우(가~라 : 4개 목)</p>
+                            <p style={{ color: '#0024FF', textAlign: 'justify' }}>4. 국가유공자 또는 장애인 등에게 일자리나 보훈ㆍ복지서비스 등을 제공하기 위한 목적으로 설립된 다음 각 목의 어느 하나에 해당하는 단체 등과 물품의 제조ㆍ구매 또는 용역 계약(해당 단체가 직접 생산하는 물품 및 직접 수행하는 용역에 한정한다)을 체결하거나, 그 단체 등에 직접 물건을 매각ㆍ임대하는 경우</p>
                             <div className="ml-3 sm:ml-4 space-y-1">
-                              <p style={{ color: '#0024FF', textAlign: 'justify', wordBreak: 'keep-all' }}>가. 국가보훈부장관이 지정하는 국가유공자 자활집단촌의 복지공장</p>
-                              <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify', wordBreak: 'keep-all' }}>나. <span style={{ textDecoration: 'underline' }}>「국가유공자 등 단체설립에 관한 법률」</span>에 따라 설립된 단체 중 상이를 입은 자들로 구성된 단체</p>
+                              <p style={{ color: '#0024FF', textAlign: 'justify' }}>가. 국가보훈부장관이 지정하는 국가유공자 자활집단촌의 복지공장</p>
+                              <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify' }}>나. <span style={{ textDecoration: 'underline' }}>「국가유공자 등 단체설립에 관한 법률」</span>에 따라 설립된 단체 중 상이를 입은 자들로 구성된 단체</p>
                             </div>
                           </div>
                         </div>
@@ -245,16 +245,16 @@ const LegalBasis = () => {
                           <span className="inline-block h-2 w-2 rounded-full bg-primary flex-shrink-0" />
                           <h3 className="font-bold text-base sm:text-lg"><span style={{ textDecoration: 'underline' }}>지방계약법 시행령</span></h3>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 ml-4 sm:ml-0 self-start sm:self-auto">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
+                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 self-start sm:self-auto">시행 2025.10.01<span className="text-slate-400">/</span> 대통령령 제35811호</span>
                       </div>
                       <div className="rounded-md border border-slate-200 p-4 sm:p-5">
                         <p className="text-primary font-bold mb-2 text-sm sm:text-base">제25조(수의계약에 의할 수 있는 경우)</p>
-                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base">
-                          <p style={{ textAlign: 'justify', wordBreak: 'keep-all' }}>① 지방자치단체의 장 또는 계약담당자는 다음 각 호의 어느 하나에 해당하는 경우에는 법 제9조제1항 단서에 따라 수의계약을 할 수 있다.</p>
+                        <div className="ml-3 sm:ml-4 space-y-2 text-sm sm:text-base [&_p]:[word-break:break-word] sm:[&_p]:[word-break:keep-all]">
+                          <p style={{ textAlign: 'justify' }}>① 지방자치단체의 장 또는 계약담당자는 다음 각 호의 어느 하나에 해당하는 경우에는 법 제9조제1항 단서에 따라 수의계약을 할 수 있다.</p>
                           <div className="ml-3 sm:ml-4">
-                            <p style={{ fontWeight: 'bold', textAlign: 'justify', wordBreak: 'keep-all' }}>7의2. 국가유공자 또는 장애인 등에게 일자리나 보훈ㆍ복지서비스 등을 제공하기 위한 경우로서 다음 각 목의 경우</p>
+                            <p style={{ fontWeight: 'bold', textAlign: 'justify' }}>7의2. 국가유공자 또는 장애인 등에게 일자리나 보훈ㆍ복지서비스 등을 제공하기 위한 경우로서 다음 각 목의 경우</p>
                             <div className="ml-3 sm:ml-4">
-                              <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify', wordBreak: 'keep-all' }}>가. 「국가유공자 등 단체 설립에 관한 법률」 제1조에 따라 설립된 단체 중 상이(傷痍)를 입은 사람들로 구성된 단체가 직접 생산하는 물품의 제조ㆍ구매 또는 직접 수행하는 용역계약을 하거나 이들에게 직접 물품을 매각 또는 임대하는 경우</p>
+                              <p style={{ color: '#ED1C24', fontWeight: 'bold', textAlign: 'justify' }}>가. 「국가유공자 등 단체 설립에 관한 법률」 제1조에 따라 설립된 단체 중 상이(傷痍)를 입은 사람들로 구성된 단체가 직접 생산하는 물품의 제조ㆍ구매 또는 직접 수행하는 용역계약을 하거나 이들에게 직접 물품을 매각 또는 임대하는 경우</p>
                             </div>
                           </div>
                         </div>

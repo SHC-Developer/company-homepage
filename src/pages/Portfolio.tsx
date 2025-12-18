@@ -276,7 +276,11 @@ const Portfolio = () => {
             </div>
           </div>
         </section>
-        <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[75%] mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-300 pt-8 sm:pt-10 md:pt-12">
+        {/* 네비게이션 너비에 맞춘 가로줄 */}
+        <div className="w-[95%] sm:w-[90%] md:w-[85%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+          <div className="border-t border-slate-300"></div>
+        </div>
+        <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[75%] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 md:pt-12">
           {/* KPI 카드 */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-8 sm:mb-10">
             <Card className="border-2 border-[#0C2B4B]">
