@@ -358,7 +358,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                       ) : subMenu === '회사연혁' ? (
                         <a
                           key={subMenu}
-                          href="/greeting#company-history"
+                          href="#"
                           onClick={handleHistoryClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             dropdownItemClass
@@ -391,7 +391,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                       ) : subMenu === '안전진단' ? (
                         <a
                           key={subMenu}
-                          href="/portfolio#portfolio-safety-bridge-tunnel"
+                          href="#"
                           onClick={handlePortfolioBridgeTunnelClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             dropdownItemClass
@@ -402,7 +402,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                       ) : subMenu === '설계' ? (
                         <a
                           key={subMenu}
-                          href="/portfolio#portfolio-design"
+                          href="#"
                           onClick={handlePortfolioDesignClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             dropdownItemClass
@@ -413,7 +413,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                       ) : subMenu === '건설사업관리' ? (
                         <a
                           key={subMenu}
-                          href="/portfolio#portfolio-supervision"
+                          href="#"
                           onClick={handlePortfolioSupervisionClick}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             dropdownItemClass
@@ -563,7 +563,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         ) : subMenu === '회사연혁' ? (
                           <a
                             key={subMenu}
-                            href="/greeting#company-history"
+                            href="#"
                             onClick={handleHistoryClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
@@ -596,7 +596,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         ) : subMenu === '안전진단' ? (
                           <a
                             key={subMenu}
-                            href="/portfolio#portfolio-safety-bridge-tunnel"
+                            href="#"
                             onClick={handlePortfolioBridgeTunnelClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
@@ -607,7 +607,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         ) : subMenu === '설계' ? (
                           <a
                             key={subMenu}
-                            href="/portfolio#portfolio-design"
+                            href="#"
                             onClick={handlePortfolioDesignClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
@@ -618,7 +618,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         ) : subMenu === '건설사업관리' ? (
                           <a
                             key={subMenu}
-                            href="/portfolio#portfolio-supervision"
+                            href="#"
                             onClick={handlePortfolioSupervisionClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
