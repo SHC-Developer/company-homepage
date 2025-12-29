@@ -6,7 +6,7 @@ export const Footer = () => {
   const tel = '02)572-6218';
   const fax = '050-5115-9274';
   const addressLine1 = '경기도 성남시 분당구 판교역로 230, 907호';
-  const addressLine2 = '(삼환하이펙B동, 삼평동)';
+  const addressLine2 = '(삼환하이펙스B동, 삼평동)';
 
   return (
     <footer

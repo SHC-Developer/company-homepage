@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HandHeart, Target, Award, TrendingUp, Globe, Users } from 'lucide-react';
 import { setupLoopingVideo } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -539,7 +540,7 @@ export const GreetingSection = () => {
                 </div>
 
                 <div 
-                  ref={el => paragraphRefs.current[3] = el}
+                  ref={el => paragraphRefs.current[3] = el} 
                   className={`transition-all duration-1000 ${visibleParagraphs[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 >
                   <p className="mb-6 leading-relaxed text-base sm:text-lg md:text-xl text-[#0C2B4B] break-words lg:break-keep text-left lg:text-justify">
