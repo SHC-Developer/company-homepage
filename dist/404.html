@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>대한민국 상이군경회 시설사업소 - 공공시설 진단·설계·감리 전문기관</title>
+    <title>대한민국상이군경회시설사업소</title>
     <meta name="description" content="진단·설계·감리·유지관리 원스톱 솔루션으로 시설 수명주기를 최적화하는 엔지니어링 전문기관" />
-    <meta name="author" content="대한민국 상이군경회 시설사업소" />
+    <meta name="author" content="대한민국상이군경회시설사업소" />
     
     <!-- Korean fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,64 +14,24 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="대한민국 상이군경회 시설사업소" />
+    <meta property="og:title" content="대한민국상이군경회시설사업소" />
     <meta property="og:description" content="진단·설계·감리·유지관리 원스톱 솔루션으로 시설 수명주기를 최적화하는 엔지니어링 전문기관" />
-    <meta property="og:image" content="/company-homepage/logo.svg" />
+    <meta property="og:image" content="/logo.svg" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="대한민국 상이군경회 시설사업소" />
+    <meta name="twitter:title" content="대한민국상이군경회시설사업소" />
     <meta name="twitter:description" content="진단·설계·감리·유지관리 원스톱 솔루션으로 시설 수명주기를 최적화하는 엔지니어링 전문기관" />
-    <meta name="twitter:image" content="/company-homepage/logo.svg" />
+    <meta name="twitter:image" content="/logo.svg" />
     
     <link rel="icon" type="image/x-icon" href="/company-homepage/logo.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="/company-homepage/logo.ico" />
     <link rel="apple-touch-icon" href="/company-homepage/logo.ico" />
-    
-    <script>
-      // GitHub Pages SPA redirect - 404.html을 index.html로 리다이렉트
-      sessionStorage.redirect = location.href;
-      var basePath = '/company-homepage';
-      var path = location.pathname;
-      
-      if (path === '/404.html' || path.includes('/404')) {
-        location.replace(basePath + '/');
-      } else {
-        location.replace(basePath + path);
-      }
-    </script>
+    <script type="module" crossorigin src="/company-homepage/assets/index-CO8qMNJD.js"></script>
+    <link rel="stylesheet" crossorigin href="/company-homepage/assets/index-CHDkn2bV.css">
   </head>
 
   <body>
     <div id="root"></div>
-    <script type="module">
-      // Build된 assets를 동적으로 로드
-      const scripts = document.querySelectorAll('script[type="module"]');
-      const basePath = '/company-homepage';
-      fetch(basePath + '/index.html')
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const scriptTag = doc.querySelector('script[type="module"][crossorigin]');
-          const linkTag = doc.querySelector('link[rel="stylesheet"][crossorigin]');
-          
-          if (scriptTag) {
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.crossOrigin = 'anonymous';
-            script.src = scriptTag.src;
-            document.head.appendChild(script);
-          }
-          
-          if (linkTag) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.crossOrigin = 'anonymous';
-            link.href = linkTag.href;
-            document.head.appendChild(link);
-          }
-        });
-    </script>
   </body>
 </html>

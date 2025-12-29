@@ -72,6 +72,22 @@ const copyNetlifyFiles = () => ({
       } else {
         console.warn("⚠ portfolio folder not found in public");
       }
+
+      // Copy 404.html - use index.html as base (GitHub Pages SPA routing)
+      const html404Dest = path.resolve(__dirname, "dist/404.html");
+      const indexHtmlDest = path.resolve(__dirname, "dist/index.html");
+      
+      if (fs.existsSync(indexHtmlDest)) {
+        // Simply copy index.html to 404.html for GitHub Pages SPA routing
+        // GitHub Pages will serve 404.html for any 404 errors, and React Router will handle routing
+        const indexHtmlContent = fs.readFileSync(indexHtmlDest, "utf-8");
+        fs.writeFileSync(html404Dest, indexHtmlContent);
+        console.log("✓ Created 404.html from index.html for GitHub Pages SPA routing");
+      } else if (fs.existsSync(path.resolve(__dirname, "public/404.html"))) {
+        // Fallback: copy from public if index.html doesn't exist yet
+        fs.copyFileSync(path.resolve(__dirname, "public/404.html"), html404Dest);
+        console.log("✓ Copied 404.html from public to dist");
+      }
       
     } catch (error) {
       console.error("❌ Error copying netlify files:", error);
