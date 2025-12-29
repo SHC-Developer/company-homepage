@@ -151,6 +151,8 @@ const Portfolio = () => {
   const [suriRecords, setSuriRecords] = useState<PerformanceRecord[]>([]);
   const [designRecords, setDesignRecords] = useState<PerformanceRecord[]>([]);
   const [gamRiRecords, setGamRiRecords] = useState<PerformanceRecord[]>([]);
+  const [heroImageError, setHeroImageError] = useState(false);
+  const [heroImageAttempt, setHeroImageAttempt] = useState(0);
 
   const totals = useMemo(() => {
     const totalProjects = portfolioData.reduce((sum, d) => sum + d['합계'], 0);
@@ -240,33 +242,28 @@ const Portfolio = () => {
         {/* 풀폭 헤더 배너 (배경 이미지 + 중앙 정렬 텍스트) */}
         <section className="relative overflow-hidden text-white mb-20 sm:mb-28 md:mb-40">
           <div className="absolute inset-0">
-            <img
-              src={getImagePath('performance4.jpg')}
-              alt="Portfolio hero background"
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                const t = e.currentTarget as HTMLImageElement;
-                const attempt = parseInt(t.dataset.attempt || '0', 10);
-                // 실제 존재하는 파일만 시도: performance4 (jpg/JPG), performance1 (JPG/jpg), performance5 (jpg/JPG)
-                const attempts = [
-                  getImagePath('performance4.jpg'),
-                  getImagePath('performance4.JPG'),
-                  getImagePath('performance1.JPG'),
-                  getImagePath('performance1.jpg'),
-                  getImagePath('performance5.jpg'),
-                  getImagePath('performance5.JPG'),
-                ];
-                if (attempt < attempts.length - 1) {
-                  t.src = attempts[attempt + 1];
-                  t.dataset.attempt = String(attempt + 1);
-                } else {
-                  // 모든 시도 실패 시 에러 핸들러 제거하여 무한 루프 방지
-                  t.onerror = null;
-                  t.style.display = 'none';
+            {!heroImageError && (
+              <img
+                src={
+                  heroImageAttempt === 0 ? getImagePath('performance4.jpg') :
+                  heroImageAttempt === 1 ? getImagePath('performance4.JPG') :
+                  heroImageAttempt === 2 ? getImagePath('performance1.JPG') :
+                  heroImageAttempt === 3 ? getImagePath('performance1.jpg') :
+                  heroImageAttempt === 4 ? getImagePath('performance5.jpg') :
+                  getImagePath('performance5.JPG')
                 }
-              }}
-              data-attempt="0"
-            />
+                alt="Portfolio hero background"
+                className="h-full w-full object-cover"
+                onError={() => {
+                  if (heroImageAttempt < 5) {
+                    setHeroImageAttempt(prev => prev + 1);
+                  } else {
+                    // 모든 시도 실패 시 이미지 숨김
+                    setHeroImageError(true);
+                  }
+                }}
+              />
+            )}
             <div className="absolute inset-0 bg-slate-900/60" />
           </div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-28 lg:py-32">

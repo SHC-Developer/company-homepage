@@ -851,6 +851,12 @@ export const GreetingSection = () => {
                     src={`${import.meta.env.BASE_URL}${cert.path}`}
                     alt={cert.name}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                      const img = e.currentTarget;
+                      img.onerror = null;
+                      img.style.display = 'none';
+                    }}
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                     <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
@@ -888,6 +894,12 @@ export const GreetingSection = () => {
                     src={`${import.meta.env.BASE_URL}${patent.path}`}
                     alt={patent.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                      const img = e.currentTarget;
+                      img.onerror = null;
+                      img.style.display = 'none';
+                    }}
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                     <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
@@ -929,6 +941,12 @@ export const GreetingSection = () => {
                 src={selectedImage || ''}
                 alt="확대된 이미지"
                 className="w-full h-auto"
+                onError={(e) => {
+                  // 이미지 로드 실패 시 모달 닫기
+                  const img = e.currentTarget;
+                  img.onerror = null; // 무한 루프 방지
+                  setSelectedImage(null);
+                }}
               />
             </div>
           </div>
@@ -948,11 +966,15 @@ export const GreetingSection = () => {
                 <img
                   src={`${import.meta.env.BASE_URL}organization chart.png`}
                   alt="조직구성도"
-                  className="w-full h-auto max-w-6xl object-contain cursor-zoom-in"
-                  onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}organization chart.png`)}
+                  className="w-full h-auto max-w-6xl object-contain"
+                  onError={(e) => {
+                    // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                    const img = e.currentTarget;
+                    img.onerror = null;
+                    img.style.display = 'none';
+                  }}
                 />
               </div>
-              <p className="mt-4 text-sm text-slate-500 text-center md:hidden">이미지를 탭하면 확대해서 볼 수 있습니다.</p>
             </div>
           </div>
         </div>

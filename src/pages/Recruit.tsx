@@ -68,6 +68,12 @@ const Recruit = () => {
                     alt="회사 로고"
                     className="w-32 sm:w-40 md:w-48 lg:w-56 xl:w-64 h-auto"
                     style={{ animation: 'floatY 6s ease-in-out infinite' }}
+                    onError={(e) => {
+                      // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
+                      const img = e.currentTarget;
+                      img.onerror = null;
+                      img.style.display = 'none';
+                    }}
                   />
                 </div>
                 <div className="space-y-2 sm:space-y-3">
