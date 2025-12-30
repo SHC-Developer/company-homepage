@@ -202,14 +202,30 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
       if (forceLightTheme) {
         setIsOverLightBackground(true);
       } else {
+        const heroSection = document.getElementById('hero-section');
+        const sitemapSection = document.getElementById('sitemap-section');
+        const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : window.innerHeight;
+        
+        // SitemapSection 영역에 있는지 확인
+        if (sitemapSection) {
+          const sitemapTop = sitemapSection.offsetTop;
+          const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
+          
+          // SitemapSection 영역에 있으면 투명 배경(어두운 테마)
+          if (currentScrollY >= sitemapTop && currentScrollY < sitemapBottom) {
+            setIsOverLightBackground(false);
+            return;
+          }
+        }
+        
         // 히어로 섹션 높이를 기준으로 밝은 배경 위에 있는지 확인
-        // 히어로 섹션은 보통 100vh이므로, 그 이후부터는 밝은 배경으로 간주
-        const heroSectionHeight = window.innerHeight;
-        setIsOverLightBackground(currentScrollY > heroSectionHeight * 0.8);
+        // 히어로 섹션은 보통 100vh이므로, 그 이후부터는 밝은 배경으로 간주 (단, SitemapSection 제외)
+        setIsOverLightBackground(currentScrollY > heroBottom * 0.8);
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // 초기 체크
     return () => window.removeEventListener('scroll', handleScroll);
   }, [forceLightTheme]);
 

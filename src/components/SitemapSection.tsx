@@ -20,11 +20,9 @@ interface CategoryItem {
 interface SlideItem {
   id: string;
   text: string;
-  align: 'left' | 'right';
   imageSrc: string;
+  highlightWords: string[];
 }
-
-const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
 
 const HIGHLIGHT_WORDS: Record<number, string[]> = {
   0: ['오늘'],
@@ -38,7 +36,11 @@ export const SitemapSection = () => {
   const navigate = useNavigate();
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const sitemapRef = useRef<HTMLDivElement>(null);
-  const [sitemapOpacity, setSitemapOpacity] = useState(0);
+  const companyNameRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [sitemapVisible, setSitemapVisible] = useState(false);
+  const isScrollingRef = useRef(false);
+  const [showIndicator, setShowIndicator] = useState(false);
 
   // 이미지 경로 헬퍼 함수 (Portfolio.tsx와 동일한 패턴)
   const getImagePath = useCallback((filename: string) => {
@@ -50,93 +52,168 @@ export const SitemapSection = () => {
       {
         id: 'slide-1',
         text: '당신의 오늘은 안전하셨습니까?',
-        align: 'right',
         imageSrc: getImagePath('performance1.JPG'),
+        highlightWords: HIGHLIGHT_WORDS[0],
       },
       {
         id: 'slide-2',
         text: '국민들의 안전하고 쾌적한',
-        align: 'left',
         imageSrc: getImagePath('performance3.JPG'),
+        highlightWords: HIGHLIGHT_WORDS[1],
       },
       {
         id: 'slide-3',
         text: '아름다운 생활을 영위하는 나라건설',
-        align: 'right',
         imageSrc: getImagePath('performance5.jpg'),
+        highlightWords: HIGHLIGHT_WORDS[2],
       },
       {
         id: 'slide-4',
         text: '사람과 사랑으로 융합된',
-        align: 'left',
         imageSrc: getImagePath('performance8.jpg'),
+        highlightWords: HIGHLIGHT_WORDS[3],
       },
       {
         id: 'slide-5',
         text: '성장의 발자국을 남기는 시설사업소가 되겠습니다.',
-        align: 'right',
         imageSrc: getImagePath('performance12.jpg'),
+        highlightWords: HIGHLIGHT_WORDS[4],
       },
     ],
     [getImagePath]
   );
 
-  const [opacities, setOpacities] = useState<number[]>(
-    () => slides.map((_, idx) => (idx === 0 ? 1 : 0))
-  );
+  // 섹션 시작 위치 계산을 위한 ref
+  const sectionStartRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const thresholds = Array.from({ length: 21 }, (_, i) => i / 20);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setOpacities((prev) => {
-          const next = [...prev];
-          entries.forEach((entry) => {
-            const idx = Number((entry.target as HTMLElement).dataset.index);
-            if (Number.isFinite(idx)) {
-              next[idx] = clamp01(entry.intersectionRatio);
-            }
-          });
-          return next;
-        });
-      },
-      { threshold: thresholds }
-    );
-
-    slideRefs.current.forEach((node) => {
-      if (node) observer.observe(node);
-    });
-
-    return () => observer.disconnect();
-  }, [slides.length]);
-
-  // 사이트맵 섹션 fade in 효과
+  // 스크롤 기반 activeIndex 업데이트
   useEffect(() => {
     const handleScroll = () => {
-      if (!sitemapRef.current) return;
-
-      const rect = sitemapRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+      if (!sectionStartRef.current) return;
       
-      // 요소가 화면 상단에서 50% 위치에 도달했을 때 (더 앞당김)
-      const triggerPoint = windowHeight * 0.75;
-      const elementTop = rect.top;
+      const sectionTop = sectionStartRef.current.offsetTop;
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+      const relativeScroll = scrollY - sectionTop;
       
-      // 요소가 화면 상단에서 50% 지점 이하로 들어오면 fade in
-      if (elementTop <= triggerPoint) {
-        const opacity = Math.min(1, Math.max(0, 1 - (elementTop - triggerPoint + 200) / 300));
-        setSitemapOpacity(opacity);
-      } else {
-        setSitemapOpacity(0);
+      if (relativeScroll < 0) {
+        setShowIndicator(false);
+        return;
       }
       
+      setShowIndicator(true);
+      const index = Math.round(relativeScroll / height);
+      
+      if (index !== activeIndex && index >= 0 && index <= slides.length) {
+        setActiveIndex(index);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // 초기 체크
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [activeIndex, slides.length]);
+
+  // 스크롤 스냅을 위한 wheel 이벤트 처리 (HeroSection 포함)
+  useEffect(() => {
+    if (!sectionStartRef.current) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrollingRef.current) return;
+
+      const heroSection = document.getElementById('hero-section');
+      const sectionTop = sectionStartRef.current!.offsetTop;
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+      const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : 0;
+      const relativeScroll = scrollY - sectionTop;
+      const deltaY = e.deltaY;
+      
+      // HeroSection에서 SitemapSection으로 넘어가는 경우
+      if (heroSection && scrollY >= heroBottom - height && scrollY < sectionTop) {
+        if (deltaY > 0) {
+          // 아래로 스크롤 - SitemapSection 첫 페이지로
+          e.preventDefault();
+          isScrollingRef.current = true;
+          window.scrollTo({
+            top: sectionTop,
+            behavior: 'smooth',
+          });
+          setTimeout(() => {
+            isScrollingRef.current = false;
+          }, 600);
+        } else if (deltaY < 0) {
+          // 위로 스크롤 - HeroSection으로
+          e.preventDefault();
+          isScrollingRef.current = true;
+          window.scrollTo({
+            top: heroSection.offsetTop,
+            behavior: 'smooth',
+          });
+          setTimeout(() => {
+            isScrollingRef.current = false;
+          }, 600);
+        }
+        return;
+      }
+      
+      // SitemapSection 내부 스크롤
+      if (relativeScroll < -50 || relativeScroll > slides.length * height + 50) {
+        return;
+      }
+
+      const currentIndex = Math.round(relativeScroll / height);
+
+      if (deltaY > 0 && currentIndex < slides.length) {
+        // 아래로 스크롤
+        e.preventDefault();
+        isScrollingRef.current = true;
+        window.scrollTo({
+          top: sectionTop + (currentIndex + 1) * height,
+          behavior: 'smooth',
+        });
+        setTimeout(() => {
+          isScrollingRef.current = false;
+        }, 600);
+      } else if (deltaY < 0 && currentIndex > 0) {
+        // 위로 스크롤
+        e.preventDefault();
+        isScrollingRef.current = true;
+        window.scrollTo({
+          top: sectionTop + (currentIndex - 1) * height,
+          behavior: 'smooth',
+        });
+        setTimeout(() => {
+          isScrollingRef.current = false;
+        }, 600);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [slides.length]);
+
+  const scrollToSection = (index: number) => {
+    if (!sectionStartRef.current) return;
+    const sectionTop = sectionStartRef.current.offsetTop;
+    window.scrollTo({
+      top: sectionTop + index * window.innerHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  // 사이트맵 섹션 visibility 관리
+  useEffect(() => {
+    if (activeIndex === slides.length) {
+      setSitemapVisible(true);
+    } else {
+      setSitemapVisible(false);
+    }
+  }, [activeIndex, slides.length]);
 
   const handleCategoryClick = (path: string, hash?: string) => {
     if (hash) {
@@ -152,68 +229,35 @@ export const SitemapSection = () => {
     }
   };
 
-  const createSlideImageErrorHandler = useCallback(
-    (originalSrc: string) =>
-      (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-        const t = e.currentTarget;
-        const attempt = parseInt(t.dataset.attempt || '0', 10);
-
-        const filename = originalSrc.split('/').pop() || '';
-        const baseName = filename.replace(/\.(jpg|JPG)$/i, '');
-        const attempts = [
-          getImagePath(filename),
-          getImagePath(`${baseName}.jpg`),
-          getImagePath(`${baseName}.JPG`),
-        ];
-
-        if (attempt < attempts.length - 1) {
-          t.src = attempts[attempt + 1];
-          t.dataset.attempt = String(attempt + 1);
-          return;
-        }
-
-        t.onerror = null;
-        t.style.display = 'none';
-      },
-    [getImagePath]
-  );
-
-  const renderHighlightedText = (text: string, index: number) => {
-    const words = HIGHLIGHT_WORDS[index] || [];
-    if (words.length === 0) {
+  const renderHighlightedText = (text: string, highlightWords: string[], index: number) => {
+    if (highlightWords.length === 0) {
       return <>{text}</>;
     }
 
-    // 모든 강조 단어를 한 번에 처리
     let result: (string | JSX.Element)[] = [];
     let remainingText = text;
     
-    words.forEach((word, wordIndex) => {
+    highlightWords.forEach((word, wordIndex) => {
       const parts = remainingText.split(word);
       if (parts.length > 1) {
-        // 첫 번째 부분 추가
         if (parts[0]) {
           result.push(parts[0]);
         }
-        // 강조된 단어 추가 (반응형 크기)
         result.push(
-          <span key={`${index}-${wordIndex}`} style={{ fontSize: 'clamp(1.5rem, 2.5vw + 0.5rem, 48pt)', color: '#1D66B3' }}>
+          <span key={`${index}-${wordIndex}`} style={{ fontSize: 'clamp(1.5rem, 3vw + 0.75rem, 60pt)', color: '#2686EB' }}>
             {word}
           </span>
         );
-        // 나머지 텍스트
         remainingText = parts.slice(1).join(word);
       }
     });
     
-    // 마지막 남은 텍스트 추가
     if (remainingText) {
       result.push(remainingText);
     }
 
     // 다섯 번째 슬라이드의 경우 줄바꿈 처리
     if (index === 4) {
-      // "을 남기는" 부분을 찾아서 뒤에 줄바꿈 삽입
       const finalResult: (string | JSX.Element)[] = [];
       result.forEach((item, i) => {
         if (typeof item === 'string' && item.includes('을 남기는')) {
@@ -235,66 +279,6 @@ export const SitemapSection = () => {
 
     return <>{result}</>;
   };
-
-  const renderMobileSlideImage = (imageSrc: string) => (
-    <div className="w-full lg:hidden flex justify-center">
-      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer w-full max-w-md">
-        <div className="w-full aspect-[4/3]">
-          <img
-            src={imageSrc}
-            alt="포트폴리오 이미지"
-            className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-            onError={createSlideImageErrorHandler(imageSrc)}
-            data-attempt="0"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-      </div>
-    </div>
-  );
-
-  const renderDesktopSlideImage = (imageSrc: string, align: 'left' | 'right') => (
-    <div
-      className={`hidden lg:flex flex-shrink-0 ${align === 'right' ? 'justify-end' : 'justify-start'}`}
-    >
-      <div
-        className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-100 bg-white/60 backdrop-blur transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
-        style={{
-          width: '100%',
-          minWidth: '240px',
-          maxWidth: '40vw',
-        }}
-      >
-        <div className="w-full h-full">
-          <img
-            src={imageSrc}
-            alt="포트폴리오 이미지"
-            className="w-full h-full object-cover transition-transform duration-300 ease-in-out"
-            style={{ minHeight: '320px', maxHeight: '600px' }}
-            onError={createSlideImageErrorHandler(imageSrc)}
-            data-attempt="0"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
-      </div>
-    </div>
-  );
-
-  const renderSlideText = (text: string, index: number, opacity: number, options: { paddingClass: string; textAlignClass: string }) => (
-    <div className={`w-full lg:flex-1 flex items-center justify-center ${options.paddingClass}`}>
-      <p
-        className={`font-korean font-semibold leading-relaxed transition-[opacity,transform] duration-500 ${options.textAlignClass}`}
-        style={{
-          opacity,
-          transform: `translateY(${(1 - opacity) * 12}px)`,
-          color: '#0C2B4B',
-          fontSize: 'clamp(1.25rem, 2vw + 0.5rem, 34pt)',
-        }}
-      >
-        {renderHighlightedText(text, index)}
-      </p>
-    </div>
-  );
 
   const categories: CategoryItem[] = [
     {
@@ -335,156 +319,157 @@ export const SitemapSection = () => {
     },
   ];
 
-  return (
-    <section className="bg-white">
-      <div className="flex flex-col">
-        {slides.map((slide, index) => {
-          const opacity = clamp01(opacities[index] ?? 0);
-          const imageOnRight = slide.align === 'right';
+  // Slide 컴포넌트를 내부에 정의
+  const SlideComponent: React.FC<{ slide: SlideItem; index: number; isActive: boolean }> = ({ slide, index, isActive }) => {
+    const [visible, setVisible] = useState(false);
 
-          return (
-            <div
-              key={slide.id}
-              ref={(el) => (slideRefs.current[index] = el)}
-              data-index={index}
-              className={`relative min-h-[500px] md:min-h-[600px] lg:h-[750px] flex items-center justify-center overflow-hidden ${index === 0 ? 'mt-[80px] md:mt-[120px] lg:mt-[150px]' : ''} py-8 md:py-12 lg:py-0`}
+    useEffect(() => {
+      if (isActive) {
+        const timer = setTimeout(() => setVisible(true), 200);
+        return () => clearTimeout(timer);
+      } else {
+        setVisible(false);
+      }
+    }, [isActive]);
+
+    return (
+      <div
+        ref={(el) => (slideRefs.current[index] = el)}
+        className="relative w-full h-screen overflow-hidden bg-black"
+      >
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${slide.imageSrc})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+
+        {/* Content */}
+        <div className="relative h-full flex flex-col items-center justify-center text-white px-4 text-center">
+          <div className={`transition-all duration-1000 transform ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h2 
+              className="font-korean font-semibold leading-relaxed mb-6 drop-shadow-2xl"
+              style={{
+                color: '#ffffff',
+                fontSize: 'clamp(1.25rem, 2.5vw + 0.5rem, 45pt)',
+              }}
             >
-              <div className="absolute inset-0 bg-white" />
+              {renderHighlightedText(slide.text, slide.highlightWords, index)}
+            </h2>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
-              <div
-                className="relative w-[90%] md:w-[85%] mx-auto flex items-center"
-              >
-                <div className="w-full flex items-center flex-col lg:flex-row gap-6 md:gap-8 lg:gap-0">
-                  {/* 이미지가 오른쪽일 때: 모바일은 이미지→텍스트, 데스크톱은 텍스트→이미지 */}
-                  {imageOnRight ? (
-                    <>
-                      {/* 이미지 (모바일 우선, lg에서 순서 변경) */}
-                      {renderMobileSlideImage(slide.imageSrc)}
+  return (
+    <section id="sitemap-section" className="bg-white relative" ref={sectionStartRef}>
+      {/* Side Indicator (Dots) - SitemapSection 영역에 진입했을 때만 표시 */}
+      {showIndicator && (
+        <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
+        {[...slides, { id: 'sitemap' }].map((_, i) => (
+          <button
+            key={i}
+            onClick={() => scrollToSection(i)}
+            className="group relative flex items-center justify-end"
+          >
+            <div 
+              className={`w-2 h-2 rounded-full transition-all duration-500 border border-white/40 ${
+                i === activeIndex 
+                  ? 'bg-blue-500 scale-150 border-transparent shadow-[0_0_10px_rgba(59,130,246,0.8)]' 
+                  : 'bg-transparent'
+              }`}
+            />
+          </button>
+        ))}
+        </nav>
+      )}
 
-                      {/* 텍스트 영역 */}
-                      {renderSlideText(slide.text, index, opacity, {
-                        paddingClass: 'lg:pr-[2%]',
-                        textAlignClass: index === 4 ? 'text-left' : 'text-center',
-                      })}
+      <div className="flex flex-col">
+        {slides.map((slide, index) => (
+          <SlideComponent
+            key={slide.id}
+            slide={slide}
+            index={index}
+            isActive={activeIndex === index}
+          />
+        ))}
 
-                      {/* 이미지 (데스크톱) */}
-                      {renderDesktopSlideImage(slide.imageSrc, 'right')}
-                    </>
-                  ) : (
-                    <>
-                      {/* 이미지 (모바일/태블릿) */}
-                      {renderMobileSlideImage(slide.imageSrc)}
-
-                      {/* 이미지 (데스크톱) */}
-                      {renderDesktopSlideImage(slide.imageSrc, 'left')}
-
-                      {/* 텍스트 영역 */}
-                      {renderSlideText(slide.text, index, opacity, {
-                        paddingClass: 'lg:pl-[2%]',
-                        textAlignClass: 'text-center',
-                      })}
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
+        {/* Sitemap Footer Section */}
         <div 
           ref={sitemapRef}
-          className="min-h-[1200px] flex items-center pt-20 pb-12 transition-opacity duration-1000"
+          className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden"
           style={{
-            background: 'linear-gradient(to bottom, #ffffff 0%, #0B1C2B 100%)',
-            opacity: sitemapOpacity,
+            background: '#0B1C2B',
           }}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col justify-center items-center gap-32">
-            {/* 회사명 텍스트 */}
-            <div className="relative">
-              {/* 배경 글로우 효과 */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: '-20px',
-                  background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
-                  filter: 'blur(20px)',
-                  zIndex: -1,
-                }}
-              />
-              
-              {/* 텍스트 */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-16 lg:gap-24">
+            {/* Company Title */}
+            <div 
+              ref={companyNameRef}
+              className={`text-center transition-all duration-1000 transform ${sitemapVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            >
               <h1 
-                className="font-logo text-center relative"
+                className="text-white font-light tracking-tighter mb-4 font-logo"
                 style={{
-                  fontSize: 'clamp(1.5rem, 5vw, 4rem)',
-                  fontWeight: 400,
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.3,
-                  color: '#0C2B4B',
-                  position: 'relative',
-                  zIndex: 1,
+                  fontSize: 'clamp(1.25rem, 3vw + 0.5rem, 3.75rem)', // 모바일(480px) ~ 데스크톱 반응형
                 }}
               >
-                대한민국상이군경회시설사업소
+                대한민국상이군경회<span className="font-light" style={{ color: '#2686EB' }}>시설사업소</span>
               </h1>
-              
-              {/* 하단 장식선 */}
-              <div
-                style={{
-                  
-                  width: '60%',
-                  height: '2px',
-                  margin: '16px auto 0',
-                  background: 'linear-gradient(90deg, transparent, rgba(30, 63, 100, 0.5), transparent)',
-                }}
-              />
             </div>
 
-            {/* 카테고리 그리드 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 sm:gap-4 w-full">
-              {categories.map((category) => (
-                <button
+            {/* Categories Grid (asset2 레이아웃) */}
+            <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-t border-b border-white/10">
+              {categories.map((category, index) => (
+                <div
                   key={category.id}
                   onClick={category.onClick}
-                  className="flex flex-col items-center gap-6 p-8 rounded-xl transition-all duration-300 hover:bg-slate-100 hover:shadow-2xl group relative overflow-hidden"
+                  className={`group relative flex flex-col items-center justify-center py-12 px-4 cursor-pointer hover:bg-white/5 transition-all duration-700 border-white/10 ${sitemapVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} ${
+                    // 모바일(2열): 홀수 번째(1, 3, 5)에만 border-r
+                    // 태블릿(3열): 3의 배수가 아닐 때 border-r
+                    // 데스크톱(6열): 6의 배수가 아닐 때 border-r
+                    (index + 1) % 2 !== 0 ? 'border-r' : 
+                    (index + 1) % 3 !== 0 ? 'md:border-r lg:border-r' :
+                    (index + 1) % 6 !== 0 ? 'lg:border-r' : ''
+                  }`}
                   style={{
-                    border: '1px solid rgba(0, 0, 0, 0.05)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    transitionDelay: `${index * 100}ms`,
                   }}
                 >
-                  {/* 호버 시 배경 글로우 */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
-                      filter: 'blur(20px)',
-                    }}
-                  />
-                  
-                  {/* 아이콘 */}
-                  <div 
-                    className="text-gray-600 group-hover:text-[#1A3152] transition-all duration-300 relative z-10"
-                  >
+                  <div className="text-white/60 group-hover:text-blue-400 group-hover:scale-110 transition-all duration-300 mb-6">
                     {React.cloneElement(category.icon as React.ReactElement, { 
-                      className: "w-16 h-16 group-hover:scale-110 transition-transform duration-300",
-                      strokeWidth: (category.icon as React.ReactElement).props.strokeWidth || 1
+                      size: 40,
+                      strokeWidth: 1.2,
+                      className: "xl:w-[60px] xl:h-[60px]"
                     })}
                   </div>
-                  
-                  {/* 라벨 */}
-                  <span className="text-base sm:text-lg font-medium text-center font-korean text-gray-700 group-hover:text-[#1A3152] transition-colors duration-300 relative z-10">
+                  <span className="text-white/80 group-hover:text-white text-center font-medium tracking-tight text-sm lg:text-base xl:text-xl xl:leading-7 font-korean">
                     {category.label}
                   </span>
                   
-                  {/* 하단 액센트 라인 */}
-                  <div
-                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-[#1A3152] group-hover:w-3/4 transition-all duration-300"
-                  />
-                </button>
+                  {/* Plus Sign Decoration */}
+                  <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 text-white/20 font-thin text-xl pointer-events-none">+</div>
+                  <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-1/2 text-white/20 font-thin text-xl pointer-events-none">+</div>
+                </div>
               ))}
             </div>
           </div>
+          
+          {/* Decorative Grid Background */}
+          <div 
+            className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+            style={{
+              backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              backgroundSize: '100px 100px'
+            }}
+          />
         </div>
       </div>
     </section>

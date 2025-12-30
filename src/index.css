@@ -191,7 +191,7 @@ All colors MUST be HSL.
   }
   
   @keyframes slideDownFade {
-    0% {
+   0% {
       opacity: 0;
       transform: translateY(-30px);
     }
@@ -199,6 +199,26 @@ All colors MUST be HSL.
       opacity: 1;
       transform: translateY(0);
     }
+  }
+  
+  /* Sitemap scroll container */
+  .sitemap-scroll-container {
+    height: 100vh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  .sitemap-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  
+  .scroll-section {
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
   }
   
   /* 타이핑 박스 테두리 애니메이션 */
