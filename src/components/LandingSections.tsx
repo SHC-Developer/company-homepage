@@ -38,6 +38,7 @@ export const LandingSections = () => {
   const sitemapRef = useRef<HTMLDivElement>(null);
   const companyNameRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0); // 0 is Hero, 1-5 are Slides, 6 is Sitemap
   const [sitemapVisible, setSitemapVisible] = useState(false);
   const isScrollingRef = useRef(false);
@@ -48,6 +49,7 @@ export const LandingSections = () => {
   const touchCurrentYRef = useRef(0);
   const touchStartTimeRef = useRef(0);
   const touchActiveRef = useRef(false);
+  const touchMovedRef = useRef(false);
 
   // 모바일 감지 및 viewport 높이 동적 계산
   useEffect(() => {
@@ -241,9 +243,14 @@ export const LandingSections = () => {
   useEffect(() => {
     if (!isMobile) return;
 
+    const target = containerRef.current;
+    if (!target) return;
+
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
+      if (isScrollingRef.current) return;
       touchActiveRef.current = true;
+      touchMovedRef.current = false;
       touchStartYRef.current = e.touches[0].clientY;
       touchCurrentYRef.current = e.touches[0].clientY;
       touchStartTimeRef.current = Date.now();
@@ -251,11 +258,23 @@ export const LandingSections = () => {
 
     const handleTouchMove = (e: TouchEvent) => {
       if (!touchActiveRef.current) return;
+      if (isScrollingRef.current) {
+        e.preventDefault();
+        return;
+      }
       touchCurrentYRef.current = e.touches[0].clientY;
       const diffY = touchStartYRef.current - touchCurrentYRef.current;
       const height = window.innerHeight;
-      if (Math.abs(diffY) > height * 0.05) {
-        e.preventDefault();
+      const currentIndex = Math.round(window.scrollY / height);
+
+      // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 허용
+      // diffY > 0: 손가락을 위로 밀기(페이지는 아래로 이동)
+      if (currentIndex === totalSections - 1 && diffY > 0) {
+        return;
+      }
+      if (Math.abs(diffY) > 2) {
+        touchMovedRef.current = true;
+        e.preventDefault(); // 브라우저 기본 스크롤/관성 차단
       }
     };
 
@@ -263,14 +282,16 @@ export const LandingSections = () => {
       if (!touchActiveRef.current) return;
 
       const diffY = touchStartYRef.current - touchCurrentYRef.current;
-      const duration = Date.now() - touchStartTimeRef.current;
       touchActiveRef.current = false;
 
       const height = window.innerHeight;
       const currentIndex = Math.round(window.scrollY / height);
-      const distanceThreshold = height * 0.15;
-      const velocity = diffY / Math.max(duration, 1);
-      const velocityThreshold = 0.6;
+      const distanceThreshold = 30; // 30px만 움직여도 다음 페이지로
+
+      // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 유지
+      if (currentIndex === totalSections - 1 && diffY > 0) {
+        return;
+      }
 
       const canMoveNext = currentIndex < totalSections - 1;
       const canMovePrev = currentIndex > 0;
@@ -283,27 +304,31 @@ export const LandingSections = () => {
 
       if (isScrollingRef.current) return;
 
-      if ((diffY > distanceThreshold || velocity > velocityThreshold) && canMoveNext) {
+      if (touchMovedRef.current && diffY > distanceThreshold && canMoveNext) {
         performScroll(currentIndex + 1);
-      } else if ((diffY < -distanceThreshold || velocity < -velocityThreshold) && canMovePrev) {
+      } else if (touchMovedRef.current && diffY < -distanceThreshold && canMovePrev) {
         performScroll(currentIndex - 1);
+      } else {
+        // 임계값 미만이면 현재 섹션에 고정(스냅)
+        performScroll(currentIndex);
       }
     };
 
     const handleTouchCancel = () => {
       touchActiveRef.current = false;
+      touchMovedRef.current = false;
     };
 
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd, { passive: false });
-    window.addEventListener('touchcancel', handleTouchCancel, { passive: false });
+    target.addEventListener('touchstart', handleTouchStart, { passive: false });
+    target.addEventListener('touchmove', handleTouchMove, { passive: false });
+    target.addEventListener('touchend', handleTouchEnd, { passive: false });
+    target.addEventListener('touchcancel', handleTouchCancel, { passive: false });
 
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', handleTouchCancel);
+      target.removeEventListener('touchstart', handleTouchStart);
+      target.removeEventListener('touchmove', handleTouchMove);
+      target.removeEventListener('touchend', handleTouchEnd);
+      target.removeEventListener('touchcancel', handleTouchCancel);
     };
   }, [isMobile, slides.length, totalSections, performScroll]);
 
@@ -316,9 +341,9 @@ export const LandingSections = () => {
 
   // 사이트맵 섹션 visibility 관리
   useEffect(() => {
-    // 모바일에서는 항상 표시
-    setSitemapVisible(isMobile || activeIndex === totalSections - 1);
-  }, [activeIndex, totalSections, isMobile]);
+    // 터치/PC 모두: 마지막 섹션에서만 표시 (스냅 UX에 맞춤)
+    setSitemapVisible(activeIndex === totalSections - 1);
+  }, [activeIndex, totalSections]);
 
   const handleCategoryClick = (path: string, hash?: string) => {
     if (hash) {
@@ -400,14 +425,7 @@ export const LandingSections = () => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-      // 모바일에서는 항상 표시
-      if (isMobile) {
-        setVisible(true);
-        onAnimationComplete();
-        return;
-      }
-
-      // 데스크톱에서는 기존 애니메이션 동작
+      // 터치/PC 모두 동일한 애니메이션/잠금 동작 (완료 후에만 다음 섹션 이동 가능)
       if (isActive) {
         setVisible(true);
         const timer = setTimeout(() => {
@@ -418,7 +436,7 @@ export const LandingSections = () => {
         setVisible(false);
         onAnimationReset();
       }
-    }, [isActive, onAnimationComplete, onAnimationReset, isMobile]);
+    }, [isActive, onAnimationComplete, onAnimationReset]);
 
     return (
       <div className="relative w-full overflow-hidden bg-black" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
@@ -436,7 +454,15 @@ export const LandingSections = () => {
   };
 
   return (
-    <div className="relative w-full">
+    <div
+      ref={containerRef}
+      className="relative w-full"
+      style={{
+        // 마지막 섹션에서는 아래로 자연 스크롤 허용
+        touchAction: isMobile && activeIndex !== totalSections - 1 ? 'none' : 'pan-y',
+        overscrollBehavior: isMobile && activeIndex !== totalSections - 1 ? 'none' : 'auto',
+      }}
+    >
       {/* Side Indicator */}
       {showIndicator && (
         <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
