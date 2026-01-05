@@ -558,7 +558,12 @@ export const LandingSections = () => {
           style={{ background: '#0B1C2B', height: 'calc(var(--vh, 1vh) * 100)' }}
         >
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-8 lg:gap-12">
-            <div ref={companyNameRef} className={`text-center transition-all duration-1000 transform ${sitemapVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <div
+              ref={companyNameRef}
+              className={`hidden lg:block text-center transition-all duration-1000 transform ${
+                sitemapVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
+            >
               <h1 className="text-white font-light tracking-tighter mb-2 font-logo" style={{ fontSize: 'clamp(1.25rem, 3vw + 0.5rem, 3.75rem)' }}>
                 대한민국상이군경회<span className="font-light" style={{ color: '#2686EB' }}>시설사업소</span>
               </h1>
