@@ -148,6 +148,20 @@ export const LandingSections = () => {
   // 스크롤 스냅을 위한 wheel 및 touch 이벤트 처리
   useEffect(() => {
     let touchStartY = 0;
+    let touchStartTime = 0;
+    let isTouching = false;
+
+    const performScroll = (targetIndex: number) => {
+      const height = window.innerHeight;
+      isScrollingRef.current = true;
+      window.scrollTo({
+        top: targetIndex * height,
+        behavior: 'smooth',
+      });
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 800);
+    };
 
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
@@ -184,60 +198,102 @@ export const LandingSections = () => {
     };
 
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaY = touchStartY - touchEndY; // 양수면 아래로 스와이프(화면은 위로), 음수면 위로 스와이프(화면은 아래로)
       const scrollY = window.scrollY;
       const height = window.innerHeight;
       const currentIndex = Math.round(scrollY / height);
 
-      // 최소 스와이프 거리 (너무 예민하지 않게 설정)
-      if (Math.abs(deltaY) < 50) return;
+      // 섹션 범위 내에서는 기본 터치 동작 허용 (스크롤은 막되 터치 입력은 받음)
+      if (currentIndex >= 0 && currentIndex < totalSections) {
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+        isTouching = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isTouching) return;
+      
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+      const currentIndex = Math.round(scrollY / height);
+
+      // 섹션 범위 내에서 스크롤 중이면 기본 동작 차단
+      if (currentIndex >= 0 && currentIndex < totalSections) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!isTouching) return;
+      
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchEndTime = Date.now();
+      const deltaY = touchStartY - touchEndY; // 양수면 아래로 스와이프, 음수면 위로 스와이프
+      const deltaTime = touchEndTime - touchStartTime;
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+      const currentIndex = Math.round(scrollY / height);
+
+      isTouching = false;
+
+      // 터치 속도 계산 (픽셀/밀리초)
+      const velocity = Math.abs(deltaY) / deltaTime;
+
+      // 최소 스와이프 거리 또는 빠른 스와이프 감지
+      const minDistance = 30; // 최소 거리를 30픽셀로 낮춤
+      const minVelocity = 0.5; // 빠른 스와이프 감지
+      
+      if (Math.abs(deltaY) < minDistance && velocity < minVelocity) {
+        // 스와이프가 충분하지 않으면 현재 위치로 스냅
+        performScroll(currentIndex);
+        return;
+      }
 
       // 마지막 페이지에서 아래로 스와이프할 때는 차단하지 않음
       if (currentIndex === totalSections - 1 && deltaY > 0) {
         return;
       }
 
-      // 이미 스크롤 중이거나 애니메이션 미완료 시 차단
-      if (isScrollingRef.current) return;
+      // 이미 스크롤 중이면 차단
+      if (isScrollingRef.current) {
+        e.preventDefault();
+        return;
+      }
+
+      // 애니메이션 미완료 시 차단
       if (currentIndex >= 1 && currentIndex <= slides.length) {
         if (!animationCompletedRef.current[currentIndex]) {
+          e.preventDefault();
+          // 현재 위치로 다시 스냅
+          performScroll(currentIndex);
           return;
         }
       }
 
+      // 스와이프 방향에 따라 페이지 이동
       if (deltaY > 0 && currentIndex < totalSections - 1) {
         // 아래로 이동 (손가락을 위로 올림)
+        e.preventDefault();
         performScroll(currentIndex + 1);
       } else if (deltaY < 0 && currentIndex > 0) {
         // 위로 이동 (손가락을 아래로 내림)
+        e.preventDefault();
         performScroll(currentIndex - 1);
+      } else {
+        // 이동할 수 없으면 현재 위치로 스냅
+        performScroll(currentIndex);
       }
-    };
-
-    const performScroll = (targetIndex: number) => {
-      const height = window.innerHeight;
-      isScrollingRef.current = true;
-      window.scrollTo({
-        top: targetIndex * height,
-        behavior: 'smooth',
-      });
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 800);
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [slides.length, totalSections]);
@@ -361,7 +417,7 @@ export const LandingSections = () => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" style={{ touchAction: 'none', overscrollBehavior: 'none' }}>
       {/* Side Indicator */}
       {showIndicator && (
         <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
