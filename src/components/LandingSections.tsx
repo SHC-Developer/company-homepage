@@ -40,6 +40,7 @@ export const LandingSections = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0); // 0 is Hero, 1-5 are Slides, 6 is Sitemap
+  const activeIndexRef = useRef(0);
   const [sitemapVisible, setSitemapVisible] = useState(false);
   const isScrollingRef = useRef(false);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -50,6 +51,7 @@ export const LandingSections = () => {
   const touchStartTimeRef = useRef(0);
   const touchActiveRef = useRef(false);
   const touchMovedRef = useRef(false);
+  const gestureStartIndexRef = useRef(0);
 
   // 모바일 감지 및 viewport 높이 동적 계산
   useEffect(() => {
@@ -193,6 +195,10 @@ export const LandingSections = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeIndex, totalSections, isMobile]);
 
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
   // 스크롤 스냅을 위한 wheel 이벤트 처리 (데스크톱만)
   useEffect(() => {
     // 모바일에서는 스크롤 스냅 비활성화
@@ -254,6 +260,7 @@ export const LandingSections = () => {
       touchStartYRef.current = e.touches[0].clientY;
       touchCurrentYRef.current = e.touches[0].clientY;
       touchStartTimeRef.current = Date.now();
+      gestureStartIndexRef.current = activeIndexRef.current;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
@@ -264,12 +271,11 @@ export const LandingSections = () => {
       }
       touchCurrentYRef.current = e.touches[0].clientY;
       const diffY = touchStartYRef.current - touchCurrentYRef.current;
-      const height = window.innerHeight;
-      const currentIndex = Math.round(window.scrollY / height);
+      const startIndex = gestureStartIndexRef.current;
 
       // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 허용
       // diffY > 0: 손가락을 위로 밀기(페이지는 아래로 이동)
-      if (currentIndex === totalSections - 1 && diffY > 0) {
+      if (startIndex === totalSections - 1 && diffY > 0) {
         return;
       }
       if (Math.abs(diffY) > 2) {
@@ -284,12 +290,17 @@ export const LandingSections = () => {
       const diffY = touchStartYRef.current - touchCurrentYRef.current;
       touchActiveRef.current = false;
 
-      const height = window.innerHeight;
-      const currentIndex = Math.round(window.scrollY / height);
+      const currentIndex = activeIndexRef.current;
       const distanceThreshold = 30; // 30px만 움직여도 다음 페이지로
 
       // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 유지
       if (currentIndex === totalSections - 1 && diffY > 0) {
+        // 자연 스크롤 후에 스크롤 위치가 어긋나면 마지막 섹션 top으로 재정렬
+        const height = window.innerHeight;
+        const lastTop = (totalSections - 1) * height;
+        if (Math.abs(window.scrollY - lastTop) > 2) {
+          performScroll(totalSections - 1);
+        }
         return;
       }
 
