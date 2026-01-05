@@ -41,6 +41,7 @@ export const LandingSections = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0); // 0 is Hero, 1-5 are Slides, 6 is Sitemap
   const activeIndexRef = useRef(0);
+  const viewportHeightRef = useRef<number>(window.visualViewport?.height ?? window.innerHeight);
   const [sitemapVisible, setSitemapVisible] = useState(false);
   const isScrollingRef = useRef(false);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -60,9 +61,27 @@ export const LandingSections = () => {
       setIsMobile(touchCapable || window.innerWidth <= 768);
     };
 
+    const getViewportHeight = () => Math.round(window.visualViewport?.height ?? window.innerHeight);
+
     const setVH = () => {
-      const vh = window.innerHeight * 0.01;
+      const height = getViewportHeight();
+      viewportHeightRef.current = height;
+      const vh = height * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+      // 스냅 구간(마지막 섹션 제외)에서 viewport 높이 변화로 어긋나면 현재 섹션 top으로 재정렬
+      if (
+        activeIndexRef.current !== totalSections - 1 &&
+        !touchActiveRef.current &&
+        !isScrollingRef.current
+      ) {
+        const targetTop = activeIndexRef.current * height;
+        if (Math.abs(window.scrollY - targetTop) > 1) {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: targetTop, behavior: 'auto' });
+          });
+        }
+      }
     };
 
     const handleResize = () => {
@@ -75,10 +94,15 @@ export const LandingSections = () => {
     
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', setVH);
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', handleResize);
+    vv?.addEventListener('scroll', setVH);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', setVH);
+      vv?.removeEventListener('resize', handleResize);
+      vv?.removeEventListener('scroll', setVH);
     };
   }, []);
 
@@ -143,7 +167,7 @@ export const LandingSections = () => {
   }, []);
 
   const performScroll = useCallback((targetIndex: number) => {
-    const height = window.innerHeight;
+    const height = viewportHeightRef.current;
     isScrollingRef.current = true;
     window.scrollTo({
       top: targetIndex * height,
@@ -178,7 +202,7 @@ export const LandingSections = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const height = window.innerHeight;
+      const height = viewportHeightRef.current;
       const index = Math.round(scrollY / height);
       
       if (index !== activeIndex && index >= 0 && index < totalSections) {
@@ -207,7 +231,7 @@ export const LandingSections = () => {
 
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
-      const height = window.innerHeight;
+      const height = viewportHeightRef.current;
       const deltaY = e.deltaY;
       const currentIndex = Math.round(scrollY / height);
 
@@ -274,11 +298,6 @@ export const LandingSections = () => {
       const diffY = touchStartYRef.current - touchCurrentYRef.current;
       const startIndex = gestureStartIndexRef.current;
 
-      // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 허용
-      // diffY > 0: 손가락을 위로 밀기(페이지는 아래로 이동)
-      if (startIndex === totalSections - 1 && diffY > 0) {
-        return;
-      }
       if (Math.abs(diffY) > 2) {
         touchMovedRef.current = true;
         e.preventDefault(); // 브라우저 기본 스크롤/관성 차단
@@ -293,17 +312,6 @@ export const LandingSections = () => {
 
       const currentIndex = activeIndexRef.current;
       const distanceThreshold = 30; // 30px만 움직여도 다음 페이지로
-
-      // 마지막 섹션에서 아래로(다음으로) 스크롤하려는 제스처는 자연 스크롤 유지
-      if (currentIndex === totalSections - 1 && diffY > 0) {
-        // 자연 스크롤 후에 스크롤 위치가 어긋나면 마지막 섹션 top으로 재정렬
-        const height = window.innerHeight;
-        const lastTop = (totalSections - 1) * height;
-        if (Math.abs(window.scrollY - lastTop) > 2) {
-          performScroll(totalSections - 1);
-        }
-        return;
-      }
 
       const canMoveNext = currentIndex < totalSections - 1;
       const canMovePrev = currentIndex > 0;
@@ -346,7 +354,7 @@ export const LandingSections = () => {
 
   const scrollToSection = (index: number) => {
     window.scrollTo({
-      top: index * window.innerHeight,
+      top: index * viewportHeightRef.current,
       behavior: 'smooth',
     });
   };
@@ -470,9 +478,9 @@ export const LandingSections = () => {
       ref={containerRef}
       className="relative w-full"
       style={{
-        // 마지막 섹션에서는 아래로 자연 스크롤 허용
-        touchAction: isMobile && activeIndex !== totalSections - 1 ? 'none' : 'pan-y',
-        overscrollBehavior: isMobile && activeIndex !== totalSections - 1 ? 'none' : 'auto',
+        // PC 이하(터치 디바이스)에서는 자유 스크롤 제거: 항상 스냅만 동작
+        touchAction: isMobile ? 'none' : 'auto',
+        overscrollBehavior: isMobile ? 'none' : 'auto',
       }}
     >
       {/* Side Indicator */}

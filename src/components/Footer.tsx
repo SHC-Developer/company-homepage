@@ -10,7 +10,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative overflow-hidden text-primary-foreground"
+      className="relative overflow-hidden text-primary-foreground hidden lg:block"
       style={{ backgroundColor: '#0b1c2b' }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-14 pb-16">
