@@ -44,11 +44,16 @@ export const LandingSections = () => {
   const [showIndicator, setShowIndicator] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const touchStartYRef = useRef(0);
+  const touchCurrentYRef = useRef(0);
+  const touchStartTimeRef = useRef(0);
+  const touchActiveRef = useRef(false);
 
   // 모바일 감지 및 viewport 높이 동적 계산
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const touchCapable = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsMobile(touchCapable || window.innerWidth <= 768);
     };
 
     const setVH = () => {
@@ -133,6 +138,18 @@ export const LandingSections = () => {
     animationCompletedRef.current[index] = false;
   }, []);
 
+  const performScroll = useCallback((targetIndex: number) => {
+    const height = window.innerHeight;
+    isScrollingRef.current = true;
+    window.scrollTo({
+      top: targetIndex * height,
+      behavior: 'smooth',
+    });
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 800);
+  }, []);
+
   // 비디오 설정 (Hero Section용)
   useEffect(() => {
     const video = videoRef.current;
@@ -213,24 +230,82 @@ export const LandingSections = () => {
       }
     };
 
-    const performScroll = (targetIndex: number) => {
-      const height = window.innerHeight;
-      isScrollingRef.current = true;
-      window.scrollTo({
-        top: targetIndex * height,
-        behavior: 'smooth',
-      });
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 800);
-    };
-
     window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [isMobile, slides.length, totalSections]);
+  }, [isMobile, slides.length, totalSections, performScroll]);
+
+  // 터치(모바일) 스크롤 스냅 처리
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      touchActiveRef.current = true;
+      touchStartYRef.current = e.touches[0].clientY;
+      touchCurrentYRef.current = e.touches[0].clientY;
+      touchStartTimeRef.current = Date.now();
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!touchActiveRef.current) return;
+      touchCurrentYRef.current = e.touches[0].clientY;
+      const diffY = touchStartYRef.current - touchCurrentYRef.current;
+      const height = window.innerHeight;
+      if (Math.abs(diffY) > height * 0.05) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (!touchActiveRef.current) return;
+
+      const diffY = touchStartYRef.current - touchCurrentYRef.current;
+      const duration = Date.now() - touchStartTimeRef.current;
+      touchActiveRef.current = false;
+
+      const height = window.innerHeight;
+      const currentIndex = Math.round(window.scrollY / height);
+      const distanceThreshold = height * 0.15;
+      const velocity = diffY / Math.max(duration, 1);
+      const velocityThreshold = 0.6;
+
+      const canMoveNext = currentIndex < totalSections - 1;
+      const canMovePrev = currentIndex > 0;
+
+      if (currentIndex >= 1 && currentIndex <= slides.length) {
+        if (!animationCompletedRef.current[currentIndex]) {
+          return;
+        }
+      }
+
+      if (isScrollingRef.current) return;
+
+      if ((diffY > distanceThreshold || velocity > velocityThreshold) && canMoveNext) {
+        performScroll(currentIndex + 1);
+      } else if ((diffY < -distanceThreshold || velocity < -velocityThreshold) && canMovePrev) {
+        performScroll(currentIndex - 1);
+      }
+    };
+
+    const handleTouchCancel = () => {
+      touchActiveRef.current = false;
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: false });
+    window.addEventListener('touchcancel', handleTouchCancel, { passive: false });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchCancel);
+    };
+  }, [isMobile, slides.length, totalSections, performScroll]);
 
   const scrollToSection = (index: number) => {
     window.scrollTo({
