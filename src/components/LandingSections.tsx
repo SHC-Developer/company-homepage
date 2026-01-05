@@ -124,22 +124,6 @@ export const LandingSections = () => {
     });
   }, []);
 
-  // CSS scroll-snap 설정 및 초기 위치 설정
-  useEffect(() => {
-    // 모바일에서 정확한 섹션 스냅을 위한 설정
-    document.documentElement.style.scrollSnapType = 'y mandatory';
-    document.documentElement.style.scrollBehavior = 'smooth';
-    document.documentElement.style.overscrollBehavior = 'none';
-    document.body.style.overscrollBehavior = 'none';
-    
-    return () => {
-      document.documentElement.style.scrollSnapType = '';
-      document.documentElement.style.scrollBehavior = '';
-      document.documentElement.style.overscrollBehavior = '';
-      document.body.style.overscrollBehavior = '';
-    };
-  }, []);
-
   // 스크롤 기반 activeIndex 업데이트
   useEffect(() => {
     const handleScroll = () => {
@@ -158,79 +142,109 @@ export const LandingSections = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [activeIndex, totalSections]);
 
-  // 애니메이션 완료 체크 기반 스크롤 제어
+  // 스크롤 스냅을 위한 wheel 및 touch 이벤트 처리
   useEffect(() => {
-    let lastScrollY = 0;
-    let isBlocking = false;
+    let touchStartY = 0;
 
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
+      const deltaY = e.deltaY;
       const currentIndex = Math.round(scrollY / height);
-      
-      // 애니메이션이 완료되지 않은 슬라이드에서 스크롤 시도 시 차단
+
+      // 마지막 페이지에서 아래로 스크롤할 때는 차단하지 않음
+      if (currentIndex === totalSections - 1 && deltaY > 0) {
+        return;
+      }
+
+      // 섹션 범위 내에 있으면 기본 스크롤 차단
+      if (scrollY <= (totalSections - 1) * height + 50) {
+        e.preventDefault();
+      }
+
+      if (isScrollingRef.current) return;
+
+      // 애니메이션 완료 체크 (Slides 1-5인 경우)
       if (currentIndex >= 1 && currentIndex <= slides.length) {
         if (!animationCompletedRef.current[currentIndex]) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (!isBlocking) {
-            isBlocking = true;
-            window.scrollTo({
-              top: currentIndex * height,
-              behavior: 'auto',
-            });
-            setTimeout(() => {
-              isBlocking = false;
-            }, 100);
-          }
-          return false;
+          return;
         }
+      }
+
+      if (deltaY > 0 && currentIndex < totalSections - 1) {
+        // 아래로 이동
+        performScroll(currentIndex + 1);
+      } else if (deltaY < 0 && currentIndex > 0) {
+        // 위로 이동
+        performScroll(currentIndex - 1);
       }
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY; // 양수면 아래로 스와이프(화면은 위로), 음수면 위로 스와이프(화면은 아래로)
       const scrollY = window.scrollY;
       const height = window.innerHeight;
       const currentIndex = Math.round(scrollY / height);
-      
-      // 애니메이션이 완료되지 않은 슬라이드에서 터치 스크롤 시도 시 차단
+
+      // 최소 스와이프 거리 (너무 예민하지 않게 설정)
+      if (Math.abs(deltaY) < 50) return;
+
+      // 마지막 페이지에서 아래로 스와이프할 때는 차단하지 않음
+      if (currentIndex === totalSections - 1 && deltaY > 0) {
+        return;
+      }
+
+      // 이미 스크롤 중이거나 애니메이션 미완료 시 차단
+      if (isScrollingRef.current) return;
       if (currentIndex >= 1 && currentIndex <= slides.length) {
         if (!animationCompletedRef.current[currentIndex]) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (!isBlocking) {
-            isBlocking = true;
-            window.scrollTo({
-              top: currentIndex * height,
-              behavior: 'auto',
-            });
-            setTimeout(() => {
-              isBlocking = false;
-            }, 100);
-          }
-          return false;
+          return;
         }
+      }
+
+      if (deltaY > 0 && currentIndex < totalSections - 1) {
+        // 아래로 이동 (손가락을 위로 올림)
+        performScroll(currentIndex + 1);
+      } else if (deltaY < 0 && currentIndex > 0) {
+        // 위로 이동 (손가락을 아래로 내림)
+        performScroll(currentIndex - 1);
       }
     };
 
+    const performScroll = (targetIndex: number) => {
+      const height = window.innerHeight;
+      isScrollingRef.current = true;
+      window.scrollTo({
+        top: targetIndex * height,
+        behavior: 'smooth',
+      });
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 800);
+    };
+
     window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [slides.length]);
+  }, [slides.length, totalSections]);
 
   const scrollToSection = (index: number) => {
-    const targetY = index * window.innerHeight;
     window.scrollTo({
-      top: targetY,
+      top: index * window.innerHeight,
       behavior: 'smooth',
     });
   };
@@ -332,13 +346,7 @@ export const LandingSections = () => {
     }, [isActive, onAnimationComplete, onAnimationReset]);
 
     return (
-      <div className="relative w-full overflow-hidden bg-black" style={{
-        height: '100vh',
-        minHeight: '100vh',
-        maxHeight: '100vh',
-        scrollSnapAlign: 'start',
-        scrollSnapStop: 'always'
-      }}>
+      <div className="relative w-full h-screen overflow-hidden bg-black">
         <div className="absolute inset-0" style={{ backgroundImage: `url(${slide.imageSrc})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         <div className="relative h-full flex flex-col items-center justify-center text-white px-4 text-center">
@@ -366,14 +374,7 @@ export const LandingSections = () => {
       )}
 
       {/* 1. Hero Section (Index 0) */}
-      <section id="hero-section" className="relative w-full overflow-hidden" style={{ 
-        backgroundColor: '#1e3f64',
-        height: '100vh',
-        minHeight: '100vh',
-        maxHeight: '100vh',
-        scrollSnapAlign: 'start',
-        scrollSnapStop: 'always'
-      }}>
+      <section id="hero-section" className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: '#1e3f64' }}>
         <div className="absolute inset-0 z-0">
           {!videoError ? (
             <div className="relative w-full h-full">
@@ -415,15 +416,8 @@ export const LandingSections = () => {
         {/* 3. Sitemap Footer Section (Index 6) */}
         <div 
           ref={sitemapRef}
-          className="relative w-full flex flex-col justify-center items-center overflow-hidden"
-          style={{ 
-            background: '#0B1C2B',
-            height: '100vh',
-            minHeight: '100vh',
-            maxHeight: '100vh',
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always'
-          }}
+          className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden"
+          style={{ background: '#0B1C2B' }}
         >
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-8 lg:gap-12">
             <div ref={companyNameRef} className={`text-center transition-all duration-1000 transform ${sitemapVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
