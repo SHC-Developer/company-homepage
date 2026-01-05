@@ -44,6 +44,23 @@ export const LandingSections = () => {
   const [showIndicator, setShowIndicator] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
+  // 모바일 viewport 높이 동적 계산 (브라우저 UI 바 대응)
+  useEffect(() => {
+    const setVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+
+    return () => {
+      window.removeEventListener('resize', setVH);
+      window.removeEventListener('orientationchange', setVH);
+    };
+  }, []);
+
   // 이미지 경로 헬퍼 함수
   const getImagePath = useCallback((filename: string) => {
     return withBaseUrl(`portfolio/${filename}`);
@@ -346,7 +363,7 @@ export const LandingSections = () => {
     }, [isActive, onAnimationComplete, onAnimationReset]);
 
     return (
-      <div className="relative w-full h-screen overflow-hidden bg-black">
+      <div className="relative w-full overflow-hidden bg-black" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
         <div className="absolute inset-0" style={{ backgroundImage: `url(${slide.imageSrc})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         <div className="relative h-full flex flex-col items-center justify-center text-white px-4 text-center">
@@ -374,7 +391,7 @@ export const LandingSections = () => {
       )}
 
       {/* 1. Hero Section (Index 0) */}
-      <section id="hero-section" className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: '#1e3f64' }}>
+      <section id="hero-section" className="relative w-full overflow-hidden" style={{ backgroundColor: '#1e3f64', height: 'calc(var(--vh, 1vh) * 100)' }}>
         <div className="absolute inset-0 z-0">
           {!videoError ? (
             <div className="relative w-full h-full">
@@ -416,8 +433,8 @@ export const LandingSections = () => {
         {/* 3. Sitemap Footer Section (Index 6) */}
         <div 
           ref={sitemapRef}
-          className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden"
-          style={{ background: '#0B1C2B' }}
+          className="relative w-full flex flex-col justify-center items-center overflow-hidden"
+          style={{ background: '#0B1C2B', height: 'calc(var(--vh, 1vh) * 100)' }}
         >
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-8 lg:gap-12">
             <div ref={companyNameRef} className={`text-center transition-all duration-1000 transform ${sitemapVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>

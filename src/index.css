@@ -8,6 +8,9 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* Mobile viewport height fix (updated via JS) */
+    --vh: 1vh;
+    
     /* Korean Engineering Corporate Design System */
     --background: 0 0% 100%;
     --foreground: 210 17% 16%; /* #0D2A4A 계열 */
