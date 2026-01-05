@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { RouteScrollManager } from "@/components/RouteScrollManager";
 import Index from "./pages/Index";
 import LegalBasis from "./pages/LegalBasis";
 import Greeting from "./pages/Greeting";
@@ -27,6 +28,7 @@ const App = () => (
           v7_startTransition: true,
         }}
       >
+        <RouteScrollManager />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/legal-basis" element={<LegalBasis />} />

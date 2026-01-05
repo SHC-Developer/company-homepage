@@ -69,17 +69,18 @@ export const LandingSections = () => {
       const vh = height * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-      // 스냅 구간(마지막 섹션 제외)에서 viewport 높이 변화로 어긋나면 현재 섹션 top으로 재정렬
-      if (
-        activeIndexRef.current !== totalSections - 1 &&
-        !touchActiveRef.current &&
-        !isScrollingRef.current
-      ) {
-        const targetTop = activeIndexRef.current * height;
-        if (Math.abs(window.scrollY - targetTop) > 1) {
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: targetTop, behavior: 'auto' });
-          });
+      // viewport 높이 변화(주소창 등)로 어긋나면 "현재 scrollY 기준"으로 가장 가까운 섹션 top에 재정렬
+      // (뒤로가기 POP 복원과도 잘 맞도록 activeIndex가 아닌 scrollY 기반으로 계산)
+      if (!touchActiveRef.current && !isScrollingRef.current) {
+        const currentY = window.scrollY;
+        const idx = Math.round(currentY / height);
+        if (idx >= 0 && idx < totalSections) {
+          const targetTop = idx * height;
+          if (Math.abs(currentY - targetTop) > 1) {
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: targetTop, behavior: 'auto' });
+            });
+          }
         }
       }
     };
