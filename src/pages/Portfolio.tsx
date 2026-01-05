@@ -77,29 +77,29 @@ const PerformanceTableSection = ({
         <CardContent className="pt-3 sm:pt-4 pb-3 sm:pb-4 px-2 sm:px-4">
           <div className="overflow-hidden rounded-xl border border-slate-200/80">
             <div className="overflow-x-auto">
-              <table className="w-full text-xs sm:text-sm md:text-base min-w-[600px]" style={{ tableLayout: 'auto' }}>
+              <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[726px] sm:min-w-[876px] lg:min-w-[1016px]">
                 <thead>
                   <tr>
                     <th
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
+                      className="w-[86px] sm:w-[96px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
                       style={{ backgroundColor: '#0C2B4B' }}
                     >
                       년도
                     </th>
                     <th
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
+                      className="w-[320px] sm:w-[420px] lg:w-[540px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
                       style={{ backgroundColor: '#0C2B4B' }}
                     >
                       계약명
                     </th>
                     <th
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
+                      className="w-[160px] sm:w-[180px] lg:w-[180px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
                       style={{ backgroundColor: '#0C2B4B' }}
                     >
                       발주처
                     </th>
                     <th
-                      className="px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold whitespace-nowrap"
+                      className="w-[160px] sm:w-[180px] lg:w-[200px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold whitespace-nowrap"
                       style={{ backgroundColor: '#0C2B4B' }}
                     >
                       계약방법
@@ -119,10 +119,16 @@ const PerformanceTableSection = ({
                       <td className="px-2 sm:px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200 whitespace-nowrap">
                         {row.year}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200">
+                      <td
+                        className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
+                        title={row.contractName}
+                      >
                         {row.contractName}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200">
+                      <td
+                        className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
+                        title={row.client}
+                      >
                         {row.client}
                       </td>
                       <td className="px-2 sm:px-3 py-2 text-center font-korean text-slate-900">
@@ -309,7 +315,7 @@ const Portfolio = () => {
                 <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">정밀안전점검</CardTitle>
               </CardHeader>
               <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2" style={{ color: '#D10000' }}>
+                <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2 text-orange-600">
                   {totals.inspection.toLocaleString()}
                   <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
                 </div>
@@ -342,38 +348,40 @@ const Portfolio = () => {
           </div>
 
           {/* 세부 표 */}
-          <Card>
+          <Card className="shadow-sm border-slate-200">
             <CardHeader className="pb-2 pt-4 sm:pt-5 px-4 sm:px-5">
               <CardTitle className="text-sm sm:text-base font-korean">연도별 상세 내역</CardTitle>
             </CardHeader>
             <CardContent className="pt-0 pb-4 sm:pb-5 px-2 sm:px-4 md:px-5">
-              <div className="overflow-x-auto -mx-2 sm:mx-0">
-                <table className="w-full text-xs sm:text-sm md:text-base min-w-[600px]" style={{ tableLayout: 'auto' }}>
-                  <thead className="sticky top-0 z-10">
+              <div className="overflow-hidden rounded-xl border border-slate-200/80">
+                <div className="overflow-x-auto">
+                  <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[806px] sm:min-w-[916px] lg:min-w-[1016px]">
+                    <thead className="sticky top-0 z-10">
                     <tr>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>구분</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>정밀안전진단</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>정밀안전점검</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>엔지니어링 설계</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>건설사업관리</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>기타</th>
-                      <th className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>합계</th>
+                      <th className="w-[86px] sm:w-[96px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>구분</th>
+                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전진단</th>
+                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전점검</th>
+                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>엔지니어링 설계</th>
+                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>건설사업관리</th>
+                      <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>기타</th>
+                      <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>합계</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {portfolioData.map((row) => (
-                      <tr key={row.year} className="border-b hover:bg-slate-50">
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200" style={{ color: '#D10000' }}>{row['정밀안전검검']}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200" style={{ color: '#0EB500' }}>{row['설계']}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
-                        <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-bold text-orange-600">{row['합계']}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {portfolioData.map((row) => (
+                        <tr key={row.year} className="border-b hover:bg-slate-50">
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200 text-orange-600">{row['정밀안전검검']}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200" style={{ color: '#0EB500' }}>{row['설계']}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-bold" style={{ color: '#D10000' }}>{row['합계']}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div className="px-1 sm:px-2 pt-2 sm:pt-3">
                 <p className="text-xs text-slate-500 font-korean text-right">
