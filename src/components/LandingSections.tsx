@@ -186,7 +186,8 @@ export const LandingSections = () => {
       }
       
       // 인디케이터 표시 여부 (데스크톱에서만, Hero 이후부터 표시)
-      setShowIndicator(!isMobile && index > 0);
+      // 모든 버전에서 표시 (Hero 이후부터 표시)
+      setShowIndicator(index > 0);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -476,10 +477,26 @@ export const LandingSections = () => {
     >
       {/* Side Indicator */}
       {showIndicator && (
-        <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
+        <nav
+          className="fixed right-3 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 sm:gap-5 lg:gap-6 pr-[env(safe-area-inset-right)]"
+          style={{ touchAction: 'manipulation' }}
+          aria-label="페이지 이동"
+        >
           {Array.from({ length: totalSections }).map((_, i) => (
-            <button key={i} onClick={() => scrollToSection(i)} className="group relative flex items-center justify-end">
-              <div className={`w-2 h-2 rounded-full transition-all duration-500 border border-white/40 ${i === activeIndex ? 'bg-blue-500 scale-150 border-transparent shadow-[0_0_10px_rgba(59,130,246,0.8)]' : 'bg-transparent'}`} />
+            <button
+              key={i}
+              type="button"
+              onClick={() => scrollToSection(i)}
+              className="group relative flex items-center justify-end p-2 sm:p-1.5"
+              aria-label={`${i + 1}번째 섹션으로 이동`}
+            >
+              <div
+                className={`w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-2 lg:h-2 rounded-full transition-all duration-500 border border-white/40 ${
+                  i === activeIndex
+                    ? 'bg-blue-500 scale-150 border-transparent shadow-[0_0_10px_rgba(59,130,246,0.8)]'
+                    : 'bg-transparent'
+                }`}
+              />
             </button>
           ))}
         </nav>
