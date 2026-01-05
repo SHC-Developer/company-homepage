@@ -124,41 +124,24 @@ export const LandingSections = () => {
     });
   }, []);
 
-  // 기본 스크롤 동작 완전 차단 및 초기 위치 설정
+  // CSS scroll-snap 설정 및 초기 위치 설정
   useEffect(() => {
     // 모바일에서 정확한 섹션 스냅을 위한 설정
-    document.body.style.overscrollBehavior = 'none';
+    document.documentElement.style.scrollSnapType = 'y mandatory';
+    document.documentElement.style.scrollBehavior = 'smooth';
     document.documentElement.style.overscrollBehavior = 'none';
-    
-    // 초기 로드 시 정확한 위치로 스냅
-    const initialIndex = Math.round(window.scrollY / window.innerHeight);
-    window.scrollTo({
-      top: initialIndex * window.innerHeight,
-      behavior: 'auto',
-    });
-
-    // 리사이즈 시 정확한 위치 유지
-    const handleResize = () => {
-      const currentIndex = Math.round(window.scrollY / window.innerHeight);
-      window.scrollTo({
-        top: currentIndex * window.innerHeight,
-        behavior: 'auto',
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
+    document.body.style.overscrollBehavior = 'none';
     
     return () => {
-      document.body.style.overscrollBehavior = '';
+      document.documentElement.style.scrollSnapType = '';
+      document.documentElement.style.scrollBehavior = '';
       document.documentElement.style.overscrollBehavior = '';
-      window.removeEventListener('resize', handleResize);
+      document.body.style.overscrollBehavior = '';
     };
   }, []);
 
-  // 스크롤 기반 activeIndex 업데이트 및 스냅 보장
+  // 스크롤 기반 activeIndex 업데이트
   useEffect(() => {
-    let snapTimeout: NodeJS.Timeout;
-
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
@@ -170,19 +153,6 @@ export const LandingSections = () => {
       
       // 인디케이터 표시 여부 (Hero 이후부터 표시)
       setShowIndicator(index > 0);
-
-      // 스크롤이 멈추면 가장 가까운 섹션으로 스냅
-      clearTimeout(snapTimeout);
-      snapTimeout = setTimeout(() => {
-        const currentIndex = Math.round(window.scrollY / window.innerHeight);
-        const targetY = currentIndex * window.innerHeight;
-        if (Math.abs(window.scrollY - targetY) > 5) {
-          window.scrollTo({
-            top: targetY,
-            behavior: 'smooth',
-          });
-        }
-      }, 150);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -190,179 +160,79 @@ export const LandingSections = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      clearTimeout(snapTimeout);
     };
   }, [activeIndex, totalSections]);
 
-  // 스크롤 스냅을 위한 wheel 및 touch 이벤트 처리
+  // 애니메이션 완료 체크 기반 스크롤 제어
   useEffect(() => {
-    let touchStartY = 0;
-    let touchStartTime = 0;
-    let isTouching = false;
-
-    const performScroll = (targetIndex: number) => {
-      const height = window.innerHeight;
-      const targetY = targetIndex * height;
-      
-      isScrollingRef.current = true;
-      
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth',
-      });
-      
-      // 스크롤 완료 후 정확한 위치 보장
-      setTimeout(() => {
-        const currentY = window.scrollY;
-        // 목표 위치와 5px 이상 차이나면 즉시 보정
-        if (Math.abs(currentY - targetY) > 5) {
-          window.scrollTo({
-            top: targetY,
-            behavior: 'auto', // 즉시 이동
-          });
-        }
-        isScrollingRef.current = false;
-      }, 800);
-    };
+    let lastScrollY = 0;
+    let isBlocking = false;
 
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
-      const deltaY = e.deltaY;
       const currentIndex = Math.round(scrollY / height);
-
-      // 마지막 페이지에서 아래로 스크롤할 때는 차단하지 않음
-      if (currentIndex === totalSections - 1 && deltaY > 0) {
-        return;
-      }
-
-      // 섹션 범위 내에 있으면 기본 스크롤 차단
-      if (scrollY <= (totalSections - 1) * height + 50) {
-        e.preventDefault();
-      }
-
-      if (isScrollingRef.current) return;
-
-      // 애니메이션 완료 체크 (Slides 1-5인 경우)
+      
+      // 애니메이션이 완료되지 않은 슬라이드에서 스크롤 시도 시 차단
       if (currentIndex >= 1 && currentIndex <= slides.length) {
         if (!animationCompletedRef.current[currentIndex]) {
-          return;
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isBlocking) {
+            isBlocking = true;
+            window.scrollTo({
+              top: currentIndex * height,
+              behavior: 'auto',
+            });
+            setTimeout(() => {
+              isBlocking = false;
+            }, 100);
+          }
+          return false;
         }
       }
-
-      if (deltaY > 0 && currentIndex < totalSections - 1) {
-        // 아래로 이동
-        performScroll(currentIndex + 1);
-      } else if (deltaY < 0 && currentIndex > 0) {
-        // 위로 이동
-        performScroll(currentIndex - 1);
-      }
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      // 모든 터치 시작을 감지
-      touchStartY = e.touches[0].clientY;
-      touchStartTime = Date.now();
-      isTouching = true;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // 모든 터치 이동의 기본 스크롤 동작을 차단
-      e.preventDefault();
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (!isTouching) return;
-      
-      e.preventDefault(); // 기본 동작 완전 차단
-      
-      const touchEndY = e.changedTouches[0].clientY;
-      const touchEndTime = Date.now();
-      const deltaY = touchStartY - touchEndY; // 양수면 아래로 스와이프, 음수면 위로 스와이프
-      const deltaTime = touchEndTime - touchStartTime;
       const scrollY = window.scrollY;
       const height = window.innerHeight;
       const currentIndex = Math.round(scrollY / height);
-
-      isTouching = false;
-
-      // 터치 속도 계산 (픽셀/밀리초)
-      const velocity = Math.abs(deltaY) / deltaTime;
-
-      // 최소 스와이프 거리 또는 빠른 스와이프 감지
-      const minDistance = 20; // 더 민감하게 조정
-      const minVelocity = 0.3; // 빠른 스와이프 감지
       
-      if (Math.abs(deltaY) < minDistance && velocity < minVelocity) {
-        // 스와이프가 충분하지 않으면 현재 위치로 스냅
-        performScroll(currentIndex);
-        return;
-      }
-
-      // 마지막 페이지에서 아래로 스와이프할 때는 현재 위치 유지
-      if (currentIndex === totalSections - 1 && deltaY > 0) {
-        performScroll(currentIndex);
-        return;
-      }
-
-      // 이미 스크롤 중이면 현재 위치 유지
-      if (isScrollingRef.current) {
-        performScroll(currentIndex);
-        return;
-      }
-
-      // 애니메이션 미완료 시 차단
+      // 애니메이션이 완료되지 않은 슬라이드에서 터치 스크롤 시도 시 차단
       if (currentIndex >= 1 && currentIndex <= slides.length) {
         if (!animationCompletedRef.current[currentIndex]) {
-          // 현재 위치로 다시 스냅
-          performScroll(currentIndex);
-          return;
+          e.preventDefault();
+          e.stopPropagation();
+          if (!isBlocking) {
+            isBlocking = true;
+            window.scrollTo({
+              top: currentIndex * height,
+              behavior: 'auto',
+            });
+            setTimeout(() => {
+              isBlocking = false;
+            }, 100);
+          }
+          return false;
         }
-      }
-
-      // 스와이프 방향에 따라 페이지 이동
-      if (deltaY > 0 && currentIndex < totalSections - 1) {
-        // 아래로 이동 (손가락을 위로 올림)
-        performScroll(currentIndex + 1);
-      } else if (deltaY < 0 && currentIndex > 0) {
-        // 위로 이동 (손가락을 아래로 내림)
-        performScroll(currentIndex - 1);
-      } else {
-        // 이동할 수 없으면 현재 위치로 스냅
-        performScroll(currentIndex);
       }
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [slides.length, totalSections]);
+  }, [slides.length]);
 
   const scrollToSection = (index: number) => {
-    isScrollingRef.current = true;
     const targetY = index * window.innerHeight;
     window.scrollTo({
       top: targetY,
       behavior: 'smooth',
     });
-    setTimeout(() => {
-      // 정확한 위치 보장
-      if (Math.abs(window.scrollY - targetY) > 5) {
-        window.scrollTo({
-          top: targetY,
-          behavior: 'auto',
-        });
-      }
-      isScrollingRef.current = false;
-    }, 800);
   };
 
   // 사이트맵 섹션 visibility 관리
@@ -465,7 +335,9 @@ export const LandingSections = () => {
       <div className="relative w-full overflow-hidden bg-black" style={{
         height: '100vh',
         minHeight: '100vh',
-        maxHeight: '100vh'
+        maxHeight: '100vh',
+        scrollSnapAlign: 'start',
+        scrollSnapStop: 'always'
       }}>
         <div className="absolute inset-0" style={{ backgroundImage: `url(${slide.imageSrc})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
@@ -481,11 +353,7 @@ export const LandingSections = () => {
   };
 
   return (
-    <div className="relative w-full" style={{ 
-      touchAction: 'none', 
-      overscrollBehavior: 'none',
-      WebkitOverflowScrolling: 'touch'
-    }}>
+    <div className="relative w-full">
       {/* Side Indicator */}
       {showIndicator && (
         <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-6">
@@ -502,7 +370,9 @@ export const LandingSections = () => {
         backgroundColor: '#1e3f64',
         height: '100vh',
         minHeight: '100vh',
-        maxHeight: '100vh'
+        maxHeight: '100vh',
+        scrollSnapAlign: 'start',
+        scrollSnapStop: 'always'
       }}>
         <div className="absolute inset-0 z-0">
           {!videoError ? (
@@ -550,7 +420,9 @@ export const LandingSections = () => {
             background: '#0B1C2B',
             height: '100vh',
             minHeight: '100vh',
-            maxHeight: '100vh'
+            maxHeight: '100vh',
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always'
           }}
         >
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-8 lg:gap-12">
