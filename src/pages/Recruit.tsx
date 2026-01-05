@@ -164,7 +164,7 @@ const Recruit = () => {
                 <p className="mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-white">
                   2026.02.01 ~ 2026.03.31
                 </p>
-                <p className="mt-2 text-xs sm:text-sm text-white/70">온라인 접수 · 이메일 제출 (recruit@example.com)</p>
+                <p className="mt-2 text-xs sm:text-sm text-white/70">온라인 접수 · 이메일 제출 (kdvosisul@daum.net)</p>
               </div>
 
               <div className="rounded-2xl bg-white/5 border border-white/10 p-4 sm:p-5 md:p-6 flex flex-col">
