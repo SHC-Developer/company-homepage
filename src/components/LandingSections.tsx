@@ -43,20 +43,32 @@ export const LandingSections = () => {
   const isScrollingRef = useRef(false);
   const [showIndicator, setShowIndicator] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // 모바일 viewport 높이 동적 계산 (브라우저 UI 바 대응)
+  // 모바일 감지 및 viewport 높이 동적 계산
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
     const setVH = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
+    const handleResize = () => {
+      checkMobile();
+      setVH();
+    };
+
+    checkMobile();
     setVH();
-    window.addEventListener('resize', setVH);
+    
+    window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', setVH);
 
     return () => {
-      window.removeEventListener('resize', setVH);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', setVH);
     };
   }, []);
@@ -152,19 +164,20 @@ export const LandingSections = () => {
         setActiveIndex(index);
       }
       
-      // 인디케이터 표시 여부 (Hero 이후부터 표시)
-      setShowIndicator(index > 0);
+      // 인디케이터 표시 여부 (데스크톱에서만, Hero 이후부터 표시)
+      setShowIndicator(!isMobile && index > 0);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeIndex, totalSections]);
+  }, [activeIndex, totalSections, isMobile]);
 
-  // 스크롤 스냅을 위한 wheel 및 touch 이벤트 처리
+  // 스크롤 스냅을 위한 wheel 이벤트 처리 (데스크톱만)
   useEffect(() => {
-    let touchStartY = 0;
+    // 모바일에서는 스크롤 스냅 비활성화
+    if (isMobile) return;
 
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
@@ -200,42 +213,6 @@ export const LandingSections = () => {
       }
     };
 
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaY = touchStartY - touchEndY; // 양수면 아래로 스와이프(화면은 위로), 음수면 위로 스와이프(화면은 아래로)
-      const scrollY = window.scrollY;
-      const height = window.innerHeight;
-      const currentIndex = Math.round(scrollY / height);
-
-      // 최소 스와이프 거리 (너무 예민하지 않게 설정)
-      if (Math.abs(deltaY) < 50) return;
-
-      // 마지막 페이지에서 아래로 스와이프할 때는 차단하지 않음
-      if (currentIndex === totalSections - 1 && deltaY > 0) {
-        return;
-      }
-
-      // 이미 스크롤 중이거나 애니메이션 미완료 시 차단
-      if (isScrollingRef.current) return;
-      if (currentIndex >= 1 && currentIndex <= slides.length) {
-        if (!animationCompletedRef.current[currentIndex]) {
-          return;
-        }
-      }
-
-      if (deltaY > 0 && currentIndex < totalSections - 1) {
-        // 아래로 이동 (손가락을 위로 올림)
-        performScroll(currentIndex + 1);
-      } else if (deltaY < 0 && currentIndex > 0) {
-        // 위로 이동 (손가락을 아래로 내림)
-        performScroll(currentIndex - 1);
-      }
-    };
-
     const performScroll = (targetIndex: number) => {
       const height = window.innerHeight;
       isScrollingRef.current = true;
@@ -249,15 +226,11 @@ export const LandingSections = () => {
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [slides.length, totalSections]);
+  }, [isMobile, slides.length, totalSections]);
 
   const scrollToSection = (index: number) => {
     window.scrollTo({
@@ -268,8 +241,9 @@ export const LandingSections = () => {
 
   // 사이트맵 섹션 visibility 관리
   useEffect(() => {
-    setSitemapVisible(activeIndex === totalSections - 1);
-  }, [activeIndex, totalSections]);
+    // 모바일에서는 항상 표시
+    setSitemapVisible(isMobile || activeIndex === totalSections - 1);
+  }, [activeIndex, totalSections, isMobile]);
 
   const handleCategoryClick = (path: string, hash?: string) => {
     if (hash) {
@@ -346,10 +320,19 @@ export const LandingSections = () => {
     isActive: boolean; 
     onAnimationComplete: () => void;
     onAnimationReset: () => void;
-  }> = ({ slide, index, isActive, onAnimationComplete, onAnimationReset }) => {
+    isMobile: boolean;
+  }> = ({ slide, index, isActive, onAnimationComplete, onAnimationReset, isMobile }) => {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
+      // 모바일에서는 항상 표시
+      if (isMobile) {
+        setVisible(true);
+        onAnimationComplete();
+        return;
+      }
+
+      // 데스크톱에서는 기존 애니메이션 동작
       if (isActive) {
         setVisible(true);
         const timer = setTimeout(() => {
@@ -360,7 +343,7 @@ export const LandingSections = () => {
         setVisible(false);
         onAnimationReset();
       }
-    }, [isActive, onAnimationComplete, onAnimationReset]);
+    }, [isActive, onAnimationComplete, onAnimationReset, isMobile]);
 
     return (
       <div className="relative w-full overflow-hidden bg-black" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
@@ -427,6 +410,7 @@ export const LandingSections = () => {
             isActive={activeIndex === index + 1}
             onAnimationComplete={() => handleAnimationComplete(index + 1)}
             onAnimationReset={() => handleAnimationReset(index + 1)}
+            isMobile={isMobile}
           />
         ))}
 

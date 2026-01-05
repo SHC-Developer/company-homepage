@@ -1,26 +1,53 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/404.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
 /assets/*.js
   Content-Type: application/javascript; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/*.mjs
   Content-Type: application/javascript; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/*.css
   Content-Type: text/css; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /company-homepage/assets/*.js
   Content-Type: application/javascript; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /company-homepage/assets/*.mjs
   Content-Type: application/javascript; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /company-homepage/assets/*.css
   Content-Type: text/css; charset=utf-8
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=31536000, immutable
 
 /*.js
   Content-Type: application/javascript; charset=utf-8
