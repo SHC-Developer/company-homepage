@@ -204,23 +204,35 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
       } else {
         const heroSection = document.getElementById('hero-section');
         const sitemapSection = document.getElementById('sitemap-section');
-        const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : window.innerHeight;
         
-        // SitemapSection 영역에 있는지 확인
-        if (sitemapSection) {
+        if (heroSection && sitemapSection) {
+          const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
           const sitemapTop = sitemapSection.offsetTop;
           const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
           
-          // SitemapSection 영역에 있으면 투명 배경(어두운 테마)
+          // HeroSection 하단 80% 이후부터 SitemapSection 끝까지는 어두운 배경 유지
+          // 이렇게 하면 HeroSection에서 SitemapSection으로 전환되는 구간에서도 색상이 깜빡이지 않음
+          if (currentScrollY >= heroBottom * 0.8 && currentScrollY < sitemapBottom) {
+            setIsOverLightBackground(false);
+            return;
+          }
+        } else if (sitemapSection) {
+          // heroSection이 없는 경우 (비정상적이지만 안전장치)
+          const sitemapTop = sitemapSection.offsetTop;
+          const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
           if (currentScrollY >= sitemapTop && currentScrollY < sitemapBottom) {
             setIsOverLightBackground(false);
             return;
           }
         }
         
-        // 히어로 섹션 높이를 기준으로 밝은 배경 위에 있는지 확인
-        // 히어로 섹션은 보통 100vh이므로, 그 이후부터는 밝은 배경으로 간주 (단, SitemapSection 제외)
-        setIsOverLightBackground(currentScrollY > heroBottom * 0.8);
+        // 그 외 영역은 히어로 섹션 하단 80% 이후부터 밝은 배경
+        if (heroSection) {
+          const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+          setIsOverLightBackground(currentScrollY > heroBottom * 0.8);
+        } else {
+          setIsOverLightBackground(currentScrollY > window.innerHeight * 0.8);
+        }
       }
     };
 
