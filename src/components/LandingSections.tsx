@@ -288,7 +288,7 @@ export const LandingSections = () => {
       touchStartTimeRef.current = Date.now();
       gestureStartIndexRef.current = activeIndexRef.current;
     };
-
+ 
     const handleTouchMove = (e: TouchEvent) => {
       if (!touchActiveRef.current) return;
       if (isScrollingRef.current) {
@@ -312,6 +312,7 @@ export const LandingSections = () => {
       touchActiveRef.current = false;
 
       const currentIndex = activeIndexRef.current;
+
       const distanceThreshold = 30; // 30px만 움직여도 다음 페이지로
 
       const canMoveNext = currentIndex < totalSections - 1;

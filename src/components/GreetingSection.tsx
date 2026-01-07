@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { HandHeart, Target, Award, TrendingUp, Globe, Users } from 'lucide-react';
+import { HandHeart, Target, Award, TrendingUp, Globe } from 'lucide-react';
 import { setupLoopingVideo } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -9,8 +9,6 @@ export const GreetingSection = () => {
   const [showBottomText, setShowBottomText] = useState(true);
   const [visibleParagraphs, setVisibleParagraphs] = useState<boolean[]>([false, false, false, false, false, false]);
   const [visibleTitle, setVisibleTitle] = useState(false);
-  const [visibleImage, setVisibleImage] = useState(false);
-  const [visibleCEOMessage, setVisibleCEOMessage] = useState(false);
   const [visibleSubtitle, setVisibleSubtitle] = useState(false);
   const [visiblePhilosophyTitle, setVisiblePhilosophyTitle] = useState(false);
   const [visiblePhilosophyContent, setVisiblePhilosophyContent] = useState(false);
@@ -18,11 +16,8 @@ export const GreetingSection = () => {
   const [visibleCoreValues, setVisibleCoreValues] = useState<boolean[]>([false, false, false, false, false]);
   const [visibleHistoryTitle, setVisibleHistoryTitle] = useState(false);
   const [visibleHistoryItems, setVisibleHistoryItems] = useState<boolean[]>([false, false, false, false, false, false, false, false, false, false, false, false]);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const ceoMessageRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLDivElement>(null);
   const philosophyTitleRef = useRef<HTMLDivElement>(null);
   const philosophyContentRef = useRef<HTMLDivElement>(null);
@@ -30,6 +25,8 @@ export const GreetingSection = () => {
   const coreValueRefs = useRef<(HTMLDivElement | null)[]>([]);
   const historyTitleRef = useRef<HTMLDivElement>(null);
   const historyItemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const licenseCardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [visibleLicenseCards, setVisibleLicenseCards] = useState<boolean[]>(Array(7).fill(false));
 
   // 로컬 비디오 반복 재생
   useEffect(() => {
@@ -90,54 +87,78 @@ export const GreetingSection = () => {
     };
   };
 
-  // 인증서 목록 (특허증 제외)
-  const certifications = [
-    { name: '수익사업승인서', date: '2024-23호', path: 'certification/01.수익사업 승인서.jpg' },
-    { name: '안전진단전문기관등록증', date: '2021.06.02.', path: 'certification/02.안전진단전문기관등록증.jpg' },
-    { name: '엔지니어링사업자신고증', date: '2022.01.13.', path: 'certification/03.엔지니어링사업자신고증.jpg' },
-    { name: '건설엔지니어링업등록증', date: '2021.11.15.', path: 'certification/04.건설엔지니어링업등록증.jpg' },
-  ];
-
-  // 보유기술 (특허) 목록
-  const patents = [
+  const approvalAndCertificates = [
     {
-      division: '1',
-      applicationDate: '2023.12.19.',
-      applicationNo: '2023-0185643',
-      name: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템',
-      registrationDate: '2024.04.01.',
-      registrationNo: '10-2654625',
-      performance2024: '안전진단 1건',
-      performance2025: '정밀안전점검 1건(예정)'
+      title: '수익사업 승인서',
+      badge: 'APPROVAL',
+      items: [
+        { label: '등록번호', value: '제2024-23호' },
+        { label: '등록일자', value: '2024년 11월 28일' },
+        {
+          label: '승인내용',
+          value:
+            '용역사업[①경비, 청소 ②조경(화훼포함) ③소방 시설물 관리(조사, 설계, 감리, 사업관리) ④ 오•폐수처리',
+        },
+      ],
     },
     {
-      division: '2',
-      applicationDate: '2023.12.19.',
-      applicationNo: '2023-0185661',
-      name: '교량의 3차원 거동 측정 방법',
-      registrationDate: '2024.04.01.',
-      registrationNo: '10-2654629',
-      performance2024: '-',
-      performance2025: '-'
+      title: '안전진단전문기관등록증',
+      badge: 'CERTIFICATE',
+      items: [
+        { label: '등록번호', value: '제 서울-11호' },
+        { label: '등록일자', value: '2003년 06월 10일' },
+        { label: '등록분야', value: '교량 및 터널, 수리시설, 건축' },
+      ],
     },
     {
-      division: '3',
-      applicationDate: '2023.12.19.',
-      applicationNo: '2023-0185678',
-      name: '교량의 3차원 거동 측정 시스템',
-      registrationDate: '2024.04.01.',
-      registrationNo: '10-2654632',
-      performance2024: '-',
-      performance2025: '-'
-    }
-  ];
+      title: '엔지니어링사업자 신고증',
+      badge: 'CERTIFICATE',
+      items: [
+        { label: '등록번호', value: '제E-9-1673호' },
+        { label: '등록일자', value: '2003년 06월 11일' },
+        { label: '등록분야', value: '건설 등 1개 부문, 구조 등 4개 분야' },
+      ],
+    },
+    {
+      title: '건설엔지니어링업 등록증',
+      badge: 'CERTIFICATE',
+      items: [
+        { label: '등록번호', value: '서울-2-134호' },
+        { label: '등록일자', value: '2015년 02월 12일' },
+        { label: '등록분야', value: '설계•사업관리' },
+      ],
+    },
+  ] as const;
 
-  // 특허증 이미지 목록
-  const patentImages = [
-    { title: '특허증_제10-2654625호', description: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템', path: 'certification/특허증_제10-2654625호_교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템.jpg' },
-    { title: '특허증_제10-2654629호', description: '교량의 3차원 거동 측정 방법', path: 'certification/특허증_제10-2654629호_교량의 3차원 거동 측정 방법.jpg' },
-    { title: '특허증_제10-2654632호', description: '교량의 3차원 거동 측정 시스템', path: 'certification/특허증_제10-2654632호_교량의 3차원 거동 측정 시스템_.jpg' },
-  ];
+  const patentsTextOnly = [
+    {
+      title: '특허 제10-2654625호',
+      badge: 'PATENT',
+      items: [
+        { label: '출원일', value: '2023년 12월 19일' },
+        { label: '등록일', value: '2024년 04월 01일' },
+        { label: '발명 명칭', value: '교량의 3차원 거동 측정 장치 및 이를 포함하는 시스템' },
+      ],
+    },
+    {
+      title: '특허 제10-2654629호',
+      badge: 'PATENT',
+      items: [
+        { label: '출원일', value: '2023년 12월 19일' },
+        { label: '등록일', value: '2024년 04월 01일' },
+        { label: '발명 명칭', value: '교량의 3차원 거동 측정 방법' },
+      ],
+    },
+    {
+      title: '특허 제10-2654632호',
+      badge: 'PATENT',
+      items: [
+        { label: '출원일', value: '2023년 12월 19일' },
+        { label: '등록일', value: '2024년 04월 01일' },
+        { label: '발명 명칭', value: '교량의 3차원 거동 측정 시스템' },
+      ],
+    },
+  ] as const;
 
   useEffect(() => {
     return observeMany(
@@ -159,22 +180,6 @@ export const GreetingSection = () => {
   // Title 애니메이션 감지
   useEffect(() => {
     return observeSingle(titleRef, setVisibleTitle, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    });
-  }, []);
-
-  // Image 애니메이션 감지
-  useEffect(() => {
-    return observeSingle(imageRef, setVisibleImage, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    });
-  }, []);
-
-  // CEO Message 애니메이션 감지
-  useEffect(() => {
-    return observeSingle(ceoMessageRef, setVisibleCEOMessage, {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px',
     });
@@ -262,6 +267,24 @@ export const GreetingSection = () => {
       {
         threshold: 0.2,
         rootMargin: '0px 0px 100px 0px',
+      }
+    );
+  }, []);
+
+  // License/Patent Cards 애니메이션 감지
+  useEffect(() => {
+    return observeMany(
+      licenseCardRefs,
+      (index, isVisible) => {
+        setVisibleLicenseCards((prev) => {
+          const next = [...prev];
+          next[index] = isVisible;
+          return next;
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: '0px 0px 80px 0px',
       }
     );
   }, []);
@@ -839,36 +862,41 @@ export const GreetingSection = () => {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">국가승인서 및 등록증</h2>
           </div>
 
-          {/* 인증서 갤러리 - 4개 그리드 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-            {certifications.map((cert, index) => (
-              <div key={index} className="flex flex-col items-center cursor-pointer group">
-                <div 
-                  className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md md:hover:shadow-xl transition-all duration-300 transform md:hover:scale-105"
-                  onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${cert.path}`)}
-                >
-                  <img
-                    src={`${import.meta.env.BASE_URL}${cert.path}`}
-                    alt={cert.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
-                      const img = e.currentTarget;
-                      img.onerror = null;
-                      img.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                    <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
-                      <p className="text-sm font-semibold">이미지 확대</p>
-                    </div>
+          {/* 텍스트 카드 (4개) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+            {approvalAndCertificates.map((card, index) => (
+              <motion.div
+                key={card.title}
+                ref={(el) => {
+                  licenseCardRefs.current[index] = el;
+                }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={visibleLicenseCards[index] ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                transition={{ duration: 0.55, ease: 'easeOut' }}
+                className="rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="px-5 pt-5 pb-4 border-b border-slate-200">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-[0.75rem] tracking-[0.22em] font-semibold text-slate-500">
+                      {card.badge}
+                    </p>
+                    <span className="h-1.5 w-10 rounded-full bg-[#0C2B4B]/90" />
                   </div>
+                  <h3 className="mt-2 text-lg sm:text-xl font-bold text-[#0B1C2B] break-keep">
+                    {card.title}
+                  </h3>
                 </div>
-                <div className="mt-3 text-left w-full px-2">
-                  <p className="text-xs sm:text-sm lg:text-base text-gray-700 font-korean break-keep leading-relaxed">{cert.name}</p>
-                  <p className="text-xs sm:text-sm lg:text-base text-gray-500 font-korean mt-1">{cert.date}</p>
+                <div className="px-5 py-5">
+                  <dl className="space-y-3">
+                    {card.items.map((it) => (
+                      <div key={it.label} className="grid grid-cols-[92px_1fr] gap-3">
+                        <dt className="text-sm font-semibold text-slate-600">{it.label}</dt>
+                        <dd className="text-sm text-[#0C2B4B] leading-6 break-keep">{it.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -882,75 +910,48 @@ export const GreetingSection = () => {
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-[#1D66B3] to-[#1D66B3] bg-clip-text text-transparent py-4 border-l-4 border-[#1D66B3] pl-6">보유기술</h2>
           </div>
 
-          {/* 특허증 갤러리 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-            {patentImages.map((patent, index) => (
-              <div key={index} className="flex flex-col items-center cursor-pointer group">
-                <div 
-                  className="relative w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden shadow-md md:hover:shadow-xl transition-all duration-300 transform md:hover:scale-105"
-                  onClick={() => setSelectedImage(`${import.meta.env.BASE_URL}${patent.path}`)}
+          {/* 텍스트 카드 (3개) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            {patentsTextOnly.map((card, idx) => {
+              const index = approvalAndCertificates.length + idx;
+              return (
+                <motion.div
+                  key={card.title}
+                  ref={(el) => {
+                    licenseCardRefs.current[index] = el;
+                  }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={visibleLicenseCards[index] ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  transition={{ duration: 0.55, ease: 'easeOut', delay: 0.05 }}
+                  className="rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <img
-                    src={`${import.meta.env.BASE_URL}${patent.path}`}
-                    alt={patent.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
-                      const img = e.currentTarget;
-                      img.onerror = null;
-                      img.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                    <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
-                      <p className="text-sm font-semibold">이미지 확대</p>
+                  <div className="px-5 pt-5 pb-4 border-b border-slate-200">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[0.75rem] tracking-[0.22em] font-semibold text-slate-500">
+                        {card.badge}
+                      </p>
+                      <span className="h-1.5 w-10 rounded-full bg-[#1D66B3]/90" />
                     </div>
+                    <h3 className="mt-2 text-lg sm:text-xl font-bold text-[#0B1C2B] break-keep">
+                      {card.title}
+                    </h3>
                   </div>
-                </div>
-                <div className="mt-3 text-left w-full px-2">
-                  <p className="text-xs sm:text-sm lg:text-base text-gray-700 font-korean break-keep leading-relaxed">{patent.title}</p>
-                </div>
-              </div>
-            ))}
+                  <div className="px-5 py-5">
+                    <dl className="space-y-3">
+                      {card.items.map((it) => (
+                        <div key={it.label} className="grid grid-cols-[72px_1fr] gap-3">
+                          <dt className="text-sm font-semibold text-slate-600">{it.label}</dt>
+                          <dd className="text-sm text-[#0C2B4B] leading-6 break-keep">{it.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
-
-        {/* 모달 팝업 */}
-        {selectedImage && (
-          <div 
-            className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedImage(null)}
-          >
-            <div 
-              className="relative max-w-3xl w-full max-h-[90vh] bg-white rounded-lg overflow-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* 닫기 버튼 */}
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-200 transition-colors duration-200 shadow-lg"
-              >
-                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-
-              {/* 이미지 */}
-              <img
-                src={selectedImage || ''}
-                alt="확대된 이미지"
-                className="w-full h-auto"
-                onError={(e) => {
-                  // 이미지 로드 실패 시 모달 닫기
-                  const img = e.currentTarget;
-                  img.onerror = null; // 무한 루프 방지
-                  setSelectedImage(null);
-                }}
-              />
-            </div>
-          </div>
-        )}
 
       {/* 조직구성 콘텐츠 섹션 */}
       <div className="pt-20 pb-16" id="organization" style={{ backgroundColor: '#F7FBFF' }}>
