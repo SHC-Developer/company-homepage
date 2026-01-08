@@ -432,7 +432,7 @@ export const LandingSections = () => {
     { id: 'vision', label: '비전 및 경영이념', icon: <Lightbulb className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'management-philosophy') },
     { id: 'history', label: '회사연혁', icon: <CheckSquare2 className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'company-history') },
     { id: 'license', label: '보유 면허 및 자격증', icon: <Shield className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'license') },
-    { id: 'organization', label: '조직도', icon: <Users className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'organization') },
+    { id: 'organization', label: '조직도', icon: <Users className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'organization-chart') },
     { id: 'portfolio', label: '수행 실적', icon: <Search className="w-8 h-8" />, onClick: () => handleCategoryClick('/portfolio') },
   ];
 

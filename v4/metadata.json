@@ -1,0 +1,5 @@
+{
+  "name": "Organization Chart Viewer",
+  "description": "A responsive organizational chart replicating the structure of the provided PowerPoint design using React and Tailwind CSS.",
+  "requestFramePermissions": []
+}

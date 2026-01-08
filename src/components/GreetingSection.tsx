@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { HandHeart, Target, Award, TrendingUp, Globe } from 'lucide-react';
 import { setupLoopingVideo } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { OrganizationChartV4 } from '@/components/OrganizationChartV4';
 
 export const GreetingSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -911,7 +912,8 @@ export const GreetingSection = () => {
           </div>
 
           {/* 텍스트 카드 (3개) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {/* md(768px)에서는 3열이 너무 좁아 텍스트가 과도하게 줄바꿈되므로 2열로 표시, lg부터 3열 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {patentsTextOnly.map((card, idx) => {
               const index = approvalAndCertificates.length + idx;
               return (
@@ -941,7 +943,7 @@ export const GreetingSection = () => {
                       {card.items.map((it) => (
                         <div key={it.label} className="grid grid-cols-[72px_1fr] gap-3">
                           <dt className="text-sm font-semibold text-slate-600">{it.label}</dt>
-                          <dd className="text-sm text-[#0C2B4B] leading-6 break-keep">{it.value}</dd>
+                          <dd className="min-w-0 text-sm text-[#0C2B4B] leading-6 break-keep">{it.value}</dd>
                         </div>
                       ))}
                     </dl>
@@ -953,29 +955,19 @@ export const GreetingSection = () => {
         </div>
       </div>
 
-      {/* 조직구성 콘텐츠 섹션 */}
-      <div className="pt-20 pb-16" id="organization" style={{ backgroundColor: '#F7FBFF' }}>
+      {/* 조직도 (v4 코드 반영: 기존 폰트/컬러 토큰 사용) */}
+      <div className="pt-20 pb-16" id="organization-chart" style={{ backgroundColor: '#F7FBFF' }}>
         <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16">
           <div className="mb-10 flex items-center gap-3">
             <div className="h-1.5 w-12 rounded-full bg-[#1e40af]" />
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold" style={{ color: '#1D66B3' }}>조직구성</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold" style={{ color: '#1D66B3' }}>
+              조직구성
+            </h2>
           </div>
 
           <div className="w-full">
-            <div className="rounded-2xl border border-border bg-white p-4 sm:p-8 lg:p-10 shadow-sm h-full flex flex-col">
-              <div className="w-full flex justify-center items-center">
-                <img
-                  src={`${import.meta.env.BASE_URL}organization chart.png`}
-                  alt="조직구성도"
-                  className="w-full h-auto max-w-6xl object-contain"
-                  onError={(e) => {
-                    // 이미지 로드 실패 시 에러 핸들러 제거하여 무한 루프 방지
-                    const img = e.currentTarget;
-                    img.onerror = null;
-                    img.style.display = 'none';
-                  }}
-                />
-              </div>
+            <div className="rounded-2xl border border-border bg-white p-4 sm:p-8 lg:p-10 shadow-sm">
+              <OrganizationChartV4 />
             </div>
           </div>
         </div>
@@ -985,5 +977,4 @@ export const GreetingSection = () => {
     </div>
   );
 };
-
 

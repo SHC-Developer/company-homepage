@@ -122,7 +122,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'license' });
 
   const handleOrganizationClick = (e: React.MouseEvent) =>
-    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'organization' });
+    handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'organization-chart' });
 
   const handleCeoMessageClick = (e: React.MouseEvent) =>
     handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'ceo-message' });
