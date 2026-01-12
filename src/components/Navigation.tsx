@@ -12,7 +12,8 @@ const menuStructure = {
   '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성'],
   '관계법령': [],
   '분야별 수행실적': ['안전진단', '설계', '건설사업관리'],
-  '자료실': ['채용공고']
+  // 자료실: 서브메뉴에서 '채용공고' 제거 (데스크톱/모바일 동일 적용)
+  '자료실': []
 };
 
 interface NavigationProps {
@@ -335,7 +336,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           ? handleLegalBasisClick
                           : menu === '자료실'
                             ? handleRecruitClick
-                            : undefined
+                          : undefined
                   }
                   aria-haspopup="true"
                   aria-expanded={activeMenu === menu}
@@ -351,21 +352,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         <Link
                           key={subMenu}
                           to="/legal-basis"
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </Link>
-                      ) : subMenu === '채용공고' ? (
-                        <Link
-                          key={subMenu}
-                          to="/recruit"
-                          onClick={() => {
-                            window.scrollTo(0, 0);
-                            setActiveMenu(null);
-                            setIsMobileMenuOpen(false);
-                          }}
                           className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
                             dropdownItemClass
                           }`}
@@ -515,9 +501,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                   */}
                   <button
                     onClick={() => {
-                      if (menu === '분야별 수행실적') {
-                        handlePortfolioClick();
-                      } else if (menu === '관계법령') {
+                      if (menu === '관계법령') {
                         handleLegalBasisClick();
                       } else if (menu === '자료실') {
                         handleRecruitClick();
@@ -530,7 +514,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                     }`}
                   >
                     <span className="flex-1">{menu}</span>
-                    {menu !== '분야별 수행실적' && menu !== '관계법령' && (
+                    {menuStructure[menu].length > 0 && menu !== '관계법령' && (
                       <span className={`ml-2 text-sm transition-transform duration-200 flex-shrink-0 ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}>
                         ▼
                       </span>
@@ -556,21 +540,6 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           <Link
                             key={subMenu}
                             to="/legal-basis"
-                            className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
-                              dropdownItemClass
-                            }`}
-                          >
-                            {subMenu}
-                          </Link>
-                        ) : subMenu === '채용공고' ? (
-                          <Link
-                            key={subMenu}
-                            to="/recruit"
-                            onClick={() => {
-                              window.scrollTo(0, 0);
-                              setActiveMenu(null);
-                              setIsMobileMenuOpen(false);
-                            }}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
                             }`}

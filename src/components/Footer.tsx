@@ -10,7 +10,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative overflow-hidden text-primary-foreground hidden lg:block"
+      className="relative overflow-hidden text-primary-foreground"
       style={{ backgroundColor: '#0b1c2b' }}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-14 pb-16">
@@ -43,18 +43,18 @@ export const Footer = () => {
                 {/* 모바일: TEL과 FAX 가로 배치 - 바로 옆에, 좌정렬 */}
                 <div className="flex justify-start xl:block gap-x-3 sm:gap-x-4 items-center xl:space-y-2">
                   {/* TEL */}
-                  <div className="xl:block whitespace-nowrap text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg">
+                  <div className="xl:block whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg">
                     TEL&nbsp;
                     <span className="font-english text-primary-foreground">{tel}</span>
                   </div>
                   {/* FAX */}
-                  <div className="xl:block whitespace-nowrap text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg">
+                  <div className="xl:block whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg">
                     FAX&nbsp;
                     <span className="font-english text-primary-foreground">{fax}</span>
                   </div>
                 </div>
                 {/* 주소 */}
-                <div className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg text-primary-foreground/80 whitespace-nowrap">
+                <div className="text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg text-primary-foreground/80 whitespace-normal sm:whitespace-nowrap break-words">
                   Add.&nbsp;
                   <span className="font-korean text-primary-foreground">{addressLine1}</span>
                   <br />

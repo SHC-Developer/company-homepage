@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ScrollToTop } from '@/components/ScrollToTop';
@@ -19,8 +19,59 @@ interface PerformanceRecord {
   year: string;
   contractName: string;
   client: string;
-  method: string;
 }
+
+const useInViewOnce = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || isInView) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { root: null, rootMargin: '0px 0px -12% 0px', threshold: 0.08 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isInView]);
+
+  return { ref, isInView };
+};
+
+const Reveal = ({
+  children,
+  className = '',
+  delayMs = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delayMs?: number;
+}) => {
+  const { ref, isInView } = useInViewOnce();
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delayMs}ms` }}
+      className={
+        'motion-reduce:opacity-100 motion-reduce:translate-y-0 ' +
+        'transition-all duration-700 ease-out will-change-transform ' +
+        (isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5') +
+        (className ? ` ${className}` : '')
+      }
+    >
+      {children}
+    </div>
+  );
+};
 
 const portfolioData: PortfolioData[] = [
   { year: 2003, '정밀안전진단': 4, '정밀안전검검': 0, '설계': 0, '감리': 0, '기타': 0, '합계': 4 },
@@ -64,90 +115,83 @@ const PerformanceTableSection = ({
 
   return (
     <section id={id} className="mt-12 sm:mt-14 md:mt-16 scroll-mt-32">
-      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-0 mb-3">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold font-korean tracking-tight">
-          {title}
-        </h2>
-        <p className="text-xs md:text-sm text-slate-500 font-korean">
-          {records.length.toLocaleString()}
-          {description}
-        </p>
-      </div>
-      <Card className="shadow-sm border-slate-200">
-        <CardContent className="pt-3 sm:pt-4 pb-3 sm:pb-4 px-2 sm:px-4">
-          <div className="overflow-hidden rounded-xl border border-slate-200/80">
-            <div className="overflow-x-auto">
-              <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[726px] sm:min-w-[876px] lg:min-w-[1016px]">
-                <thead>
-                  <tr>
-                    <th
-                      className="w-[86px] sm:w-[96px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
-                      style={{ backgroundColor: '#0C2B4B' }}
-                    >
-                      년도
-                    </th>
-                    <th
-                      className="w-[320px] sm:w-[420px] lg:w-[540px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
-                      style={{ backgroundColor: '#0C2B4B' }}
-                    >
-                      계약명
-                    </th>
-                    <th
-                      className="w-[160px] sm:w-[180px] lg:w-[180px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
-                      style={{ backgroundColor: '#0C2B4B' }}
-                    >
-                      발주처
-                    </th>
-                    <th
-                      className="w-[160px] sm:w-[180px] lg:w-[200px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold whitespace-nowrap"
-                      style={{ backgroundColor: '#0C2B4B' }}
-                    >
-                      계약방법
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records.map((row, index) => (
-                    <tr
-                      key={`${row.year}-${index}`}
-                      className={
-                        'border-b border-slate-100 last:border-b-0 transition-colors ' +
-                        (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
-                        ' hover:bg-blue-50/60'
-                      }
-                    >
-                      <td className="px-2 sm:px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200 whitespace-nowrap">
-                        {row.year}
-                      </td>
-                      <td
-                        className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
-                        title={row.contractName}
-                      >
-                        {row.contractName}
-                      </td>
-                      <td
-                        className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
-                        title={row.client}
-                      >
-                        {row.client}
-                      </td>
-                      <td className="px-2 sm:px-3 py-2 text-center font-korean text-slate-900">
-                        {row.method ? (
-                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 sm:px-3 py-0.5 sm:py-1 text-xs md:text-sm font-medium text-emerald-700 ring-1 ring-emerald-100 whitespace-nowrap">
-                            {row.method}
-                          </span>
-                        ) : (
-                          ''
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+      <Reveal>
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-0 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="h-6 w-1.5 rounded-full bg-gradient-to-b from-[#0C2B4B] to-[#1E6FD9]" />
+            <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold font-korean tracking-tight text-slate-900">
+              {title}
+            </h2>
           </div>
-        </CardContent>
-      </Card>
+          <p className="text-xs md:text-sm text-slate-500 font-korean">
+            <span className="font-semibold tabular-nums text-slate-700">{records.length.toLocaleString()}</span>
+            {description}
+          </p>
+        </div>
+      </Reveal>
+
+      <Reveal delayMs={80}>
+        <Card className="border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+          <CardContent className="pt-3 sm:pt-4 pb-3 sm:pb-4 px-2 sm:px-4">
+            <div className="overflow-hidden rounded-2xl border border-slate-200/80">
+              <div className="overflow-x-auto">
+                <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[726px] sm:min-w-[876px] lg:min-w-[1016px]">
+                  <thead className="sticky top-0 z-10">
+                    <tr>
+                      <th
+                        className="w-[86px] sm:w-[96px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
+                        style={{ backgroundColor: '#0C2B4B' }}
+                      >
+                        년도
+                      </th>
+                      <th
+                        className="w-[320px] sm:w-[420px] lg:w-[540px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap"
+                        style={{ backgroundColor: '#0C2B4B' }}
+                      >
+                        계약명
+                      </th>
+                      <th
+                        className="w-[320px] sm:w-[360px] lg:w-[380px] px-2 sm:px-3 py-2 sm:py-3 text-center text-white font-korean font-semibold whitespace-nowrap"
+                        style={{ backgroundColor: '#0C2B4B' }}
+                      >
+                        발주처
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {records.map((row, index) => (
+                      <tr
+                        key={`${row.year}-${index}`}
+                        className={
+                          'border-b border-slate-100 last:border-b-0 transition-colors duration-200 ' +
+                          (index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                          ' hover:bg-blue-50/60'
+                        }
+                      >
+                        <td className="px-2 sm:px-3 py-2 text-center font-korean text-slate-900 border-r border-slate-200 whitespace-nowrap tabular-nums">
+                          {row.year}
+                        </td>
+                        <td
+                          className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 border-r border-slate-200 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
+                          title={row.contractName}
+                        >
+                          {row.contractName}
+                        </td>
+                        <td
+                          className="px-2 sm:px-3 py-2 text-left font-korean text-slate-900 break-keep whitespace-normal md:whitespace-nowrap md:truncate"
+                          title={row.client}
+                        >
+                          {row.client}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </Reveal>
     </section>
   );
 };
@@ -203,16 +247,11 @@ const Portfolio = () => {
             const year = (parts[0] ?? '').trim();
             const contractName = (parts[1] ?? '').trim();
             const client = (parts[2] ?? '').trim();
-            let method = (parts[3] ?? '').trim();
-
-            // 양쪽 따옴표 제거 등 간단 정리
-            method = method.replace(/^"+|"+$/g, '').trim();
 
             return {
               year,
               contractName,
               client,
-              method,
             };
           });
 
@@ -244,9 +283,12 @@ const Portfolio = () => {
     <div className="min-h-screen bg-white">
       <Navigation variant="default" forceLightTheme={true} />
 
-      <div className="pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16 md:pb-20">
+      <div className="relative pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16 md:pb-20">
+        {/* Subtle background accent (non-intrusive, keeps layout intact) */}
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white via-slate-50/60 to-white" />
+
         {/* 풀폭 헤더 배너 (배경 이미지 + 중앙 정렬 텍스트) */}
-        <section className="relative overflow-hidden text-white mb-20 sm:mb-28 md:mb-40">
+        <section className="relative isolate overflow-hidden text-white mb-20 sm:mb-28 md:mb-40">
           <div className="absolute inset-0">
             {!heroImageError && (
               <img
@@ -259,7 +301,7 @@ const Portfolio = () => {
                   getImagePath('performance5.JPG')
                 }
                 alt="Portfolio hero background"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover scale-[1.03] motion-safe:transition-transform motion-safe:duration-[2500ms] motion-safe:ease-out"
                 onError={() => {
                   if (heroImageAttempt < 5) {
                     setHeroImageAttempt(prev => prev + 1);
@@ -270,15 +312,25 @@ const Portfolio = () => {
                 }}
               />
             )}
-            <div className="absolute inset-0 bg-slate-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-900/55 to-slate-950/70" />
+            <div className="absolute inset-0 opacity-60 bg-[radial-gradient(900px_500px_at_50%_15%,rgba(30,111,217,0.35),transparent_60%)]" />
           </div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-28 lg:py-32">
             <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[75%] mx-auto text-center">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight font-korean">분야별 수행실적</h1>
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-white/85 font-korean">정밀안전진단•정밀안전점검•엔지니어링 설계•건설사업관리</p>
+              <Reveal>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight font-korean drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)]">
+                  분야별 수행실적
+                </h1>
+              </Reveal>
+              <Reveal delayMs={120}>
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-white/85 font-korean">
+                  정밀안전진단•정밀안전점검•엔지니어링 설계•건설사업관리
+                </p>
+              </Reveal>
             </div>
           </div>
         </section>
+
         {/* 네비게이션 너비에 맞춘 가로줄 */}
         <div className="w-[95%] sm:w-[90%] md:w-[85%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
           <div className="border-t border-slate-300"></div>
@@ -286,110 +338,142 @@ const Portfolio = () => {
         <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[75%] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 md:pt-12">
           {/* KPI 카드 */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-8 sm:mb-10">
-            <Card className="border-2 border-[#0C2B4B]">
-              <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
-                <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">총 수행건수</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold text-slate-900 tabular-nums flex items-baseline gap-1 sm:gap-2">
-                  {totals.totalProjects.toLocaleString()}
-                  <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Reveal delayMs={0}>
+              <Card
+                className="relative overflow-hidden border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-[#0C2B4B] before:via-[#1E6FD9] before:to-[#0C2B4B]"
+              >
+                <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">총 수행건수</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
+                  <div className="text-2xl sm:text-3xl font-bold text-slate-900 tabular-nums flex items-baseline gap-1 sm:gap-2">
+                    {totals.totalProjects.toLocaleString()}
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
 
-            <Card className="border-2 border-[#0C2B4B]">
-              <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
-                <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">정밀안전진단</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600 tabular-nums flex items-baseline gap-1 sm:gap-2">
-                  {totals.diagnosis.toLocaleString()}
-                  <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Reveal delayMs={60}>
+              <Card
+                className="relative overflow-hidden border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-blue-700 before:via-sky-500 before:to-blue-700"
+              >
+                <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">정밀안전진단</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 tabular-nums flex items-baseline gap-1 sm:gap-2">
+                    {totals.diagnosis.toLocaleString()}
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
 
-            <Card className="border-2 border-[#0C2B4B]">
-              <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
-                <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">정밀안전점검</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2 text-orange-600">
-                  {totals.inspection.toLocaleString()}
-                  <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Reveal delayMs={120}>
+              <Card
+                className="relative overflow-hidden border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-orange-700 before:via-amber-500 before:to-orange-700"
+              >
+                <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">정밀안전점검</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
+                  <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2 text-orange-600">
+                    {totals.inspection.toLocaleString()}
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
 
-            <Card className="border-2 border-[#0C2B4B]">
-              <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
-                <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">엔지니어링 설계</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2" style={{ color: '#0EB500' }}>
-                  {totals.design.toLocaleString()}
-                  <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Reveal delayMs={180}>
+              <Card
+                className="relative overflow-hidden border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-emerald-700 before:via-green-500 before:to-emerald-700"
+              >
+                <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">엔지니어링 설계</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
+                  <div className="text-2xl sm:text-3xl font-bold tabular-nums flex items-baseline gap-1 sm:gap-2" style={{ color: '#0EB500' }}>
+                    {totals.design.toLocaleString()}
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
 
-            <Card className="border-2 border-[#0C2B4B] col-span-2 lg:col-span-1">
-              <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
-                <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건설사업관리</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
-                <div className="text-2xl sm:text-3xl font-bold text-purple-600 tabular-nums flex items-baseline gap-1 sm:gap-2">
-                  {totals.supervision.toLocaleString()}
-                  <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Reveal delayMs={240} className="col-span-2 lg:col-span-1">
+              <Card
+                className="relative overflow-hidden border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 before:content-[''] before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-purple-700 before:via-fuchsia-500 before:to-purple-700"
+              >
+                <CardHeader className="pb-1 sm:pb-2 pt-3 sm:pt-4 px-3 sm:px-4">
+                  <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건설사업관리</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3 sm:pb-4 px-3 sm:px-4">
+                  <div className="text-2xl sm:text-3xl font-bold text-purple-600 tabular-nums flex items-baseline gap-1 sm:gap-2">
+                    {totals.supervision.toLocaleString()}
+                    <span className="text-xs sm:text-sm font-medium text-slate-600 font-korean">건</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Reveal>
           </div>
 
           {/* 세부 표 */}
-          <Card className="shadow-sm border-slate-200">
-            <CardHeader className="pb-2 pt-4 sm:pt-5 px-4 sm:px-5">
-              <CardTitle className="text-sm sm:text-base font-korean">연도별 상세 내역</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0 pb-4 sm:pb-5 px-2 sm:px-4 md:px-5">
-              <div className="overflow-hidden rounded-xl border border-slate-200/80">
-                <div className="overflow-x-auto">
-                  <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[806px] sm:min-w-[916px] lg:min-w-[1016px]">
-                    <thead className="sticky top-0 z-10">
-                    <tr>
-                      <th className="w-[86px] sm:w-[96px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>구분</th>
-                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전진단</th>
-                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전점검</th>
-                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>엔지니어링 설계</th>
-                      <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>건설사업관리</th>
-                      <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>기타</th>
-                      <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>합계</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      {portfolioData.map((row) => (
-                        <tr key={row.year} className="border-b hover:bg-slate-50">
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200">{row.year}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-blue-700 font-medium border-r border-slate-200">{row['정밀안전진단']}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200 text-orange-600">{row['정밀안전검검']}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200" style={{ color: '#0EB500' }}>{row['설계']}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-purple-700 font-medium border-r border-slate-200">{row['감리']}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-slate-700 border-r border-slate-200">{row['기타']}</td>
-                          <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-bold" style={{ color: '#D10000' }}>{row['합계']}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+          <Reveal>
+            <Card className="border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm supports-[backdrop-filter]:bg-white/70 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+              <CardHeader className="pb-2 pt-4 sm:pt-5 px-4 sm:px-5">
+                <div className="flex items-center gap-3">
+                  <div className="h-6 w-1.5 rounded-full bg-gradient-to-b from-[#0C2B4B] to-[#1E6FD9]" />
+                  <CardTitle className="text-sm sm:text-base font-korean">연도별 상세 내역</CardTitle>
                 </div>
-              </div>
-              <div className="px-1 sm:px-2 pt-2 sm:pt-3">
-                <p className="text-xs text-slate-500 font-korean text-right">
-                  <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardHeader>
+              <CardContent className="pt-0 pb-4 sm:pb-5 px-2 sm:px-4 md:px-5">
+                <div className="overflow-hidden rounded-2xl border border-slate-200/80">
+                  <div className="overflow-x-auto">
+                    <table className="w-full table-fixed text-xs sm:text-sm md:text-base min-w-[806px] sm:min-w-[916px] lg:min-w-[1016px]">
+                      <thead className="sticky top-0 z-10">
+                      <tr>
+                        <th className="w-[86px] sm:w-[96px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>구분</th>
+                        <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전진단</th>
+                        <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>정밀안전점검</th>
+                        <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>엔지니어링 설계</th>
+                        <th className="w-[140px] sm:w-[160px] lg:w-[180px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap break-keep" style={{ backgroundColor: '#0C2B4B' }}>건설사업관리</th>
+                        <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold border-r border-slate-200 whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>기타</th>
+                        <th className="w-[80px] sm:w-[90px] lg:w-[100px] px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-white font-korean font-semibold whitespace-nowrap" style={{ backgroundColor: '#0C2B4B' }}>합계</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        {portfolioData.map((row, idx) => (
+                          <tr
+                            key={row.year}
+                            className={
+                              'border-b border-slate-100 last:border-b-0 transition-colors duration-200 ' +
+                              (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60') +
+                              ' hover:bg-blue-50/50'
+                            }
+                          >
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-semibold text-slate-900 font-korean border-r border-slate-200 tabular-nums">{row.year}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-blue-700 font-medium border-r border-slate-200 tabular-nums">{row['정밀안전진단']}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200 text-orange-600 tabular-nums">{row['정밀안전검검']}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-medium border-r border-slate-200 tabular-nums" style={{ color: '#0EB500' }}>{row['설계']}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-purple-700 font-medium border-r border-slate-200 tabular-nums">{row['감리']}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center text-slate-700 border-r border-slate-200 tabular-nums">{row['기타']}</td>
+                            <td className="px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 text-center font-bold tabular-nums" style={{ color: '#D10000' }}>{row['합계']}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="px-1 sm:px-2 pt-2 sm:pt-3">
+                  <p className="text-xs text-slate-500 font-korean text-right">
+                    <span className="font-semibold">※ 기타</span> : 성능평가용역, 연구용역 등
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Reveal>
 
           <PerformanceTableSection
             id="portfolio-safety-bridge-tunnel"
