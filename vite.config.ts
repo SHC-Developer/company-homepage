@@ -83,6 +83,19 @@ const copyNetlifyFiles = () => ({
         const indexHtmlContent = fs.readFileSync(indexHtmlDest, "utf-8");
         fs.writeFileSync(html404Dest, indexHtmlContent);
         console.log("✓ Created 404.html from index.html for GitHub Pages SPA routing");
+
+        // Create static route entrypoints so GitHub Pages returns 200 for SPA routes
+        // (Search Console won't index routes that return 404 even if the SPA renders via 404.html fallback)
+        const spaRoutes = ["greeting", "legal-basis", "portfolio", "recruit"];
+        spaRoutes.forEach((route) => {
+          const routeDir = path.resolve(distDir, route);
+          const routeIndex = path.resolve(routeDir, "index.html");
+          if (!fs.existsSync(routeDir)) {
+            fs.mkdirSync(routeDir, { recursive: true });
+          }
+          fs.writeFileSync(routeIndex, indexHtmlContent);
+        });
+        console.log(`✓ Created ${4} SPA route entrypoints in dist (for GitHub Pages SEO)`);
       } else if (fs.existsSync(path.resolve(__dirname, "public/404.html"))) {
         // Fallback: copy from public if index.html doesn't exist yet
         fs.copyFileSync(path.resolve(__dirname, "public/404.html"), html404Dest);
