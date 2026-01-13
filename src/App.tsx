@@ -13,8 +13,10 @@ import Recruit from "./pages/Recruit";
 
 const queryClient = new QueryClient();
 
-// GitHub Pages를 위한 basename 설정
-const basename = import.meta.env.PROD ? "/company-homepage" : "";
+// basename은 배포 경로에 따라 달라집니다.
+// - 커스텀 도메인(루트 배포): ""
+// - GitHub Project Pages(서브패스 배포): 예) "/company-homepage"
+const basename = import.meta.env.PROD ? (import.meta.env.VITE_BASENAME || "") : "";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

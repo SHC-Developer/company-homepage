@@ -98,7 +98,9 @@ const copyNetlifyFiles = () => ({
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "/company-homepage/" : "/",
+  // For custom domains, the site is served from the origin root, so base should be "/".
+  // If you ever deploy under a subpath (e.g. GitHub project pages), set VITE_BASE="/your-repo-name/" when building.
+  base: mode === "production" ? (process.env.VITE_BASE || "/") : "/",
   server: {
     host: "::",
     port: 8080,
