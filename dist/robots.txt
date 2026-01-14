@@ -13,4 +13,7 @@ Allow: /
 User-agent: *
 Allow: /
 
+User-agent: Yeti
+Allow:/
+
 Sitemap: https://kdvosisul119.com/sitemap.xml
