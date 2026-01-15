@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>대한민국상이군경회시설사업소</title>
+    <link>https://kdvosisul119.com/</link>
+    <atom:link href="https://kdvosisul119.com/rss.xml" rel="self" type="application/rss+xml" />
+    <description>대한민국상이군경회시설사업소 공식 사이트 업데이트</description>
+    <language>ko</language>
+    <lastBuildDate>Thu, 15 Jan 2026 00:00:00 +0900</lastBuildDate>
+    <generator>Vite (static RSS)</generator>
+
+    <item>
+      <title>홈</title>
+      <link>https://kdvosisul119.com/</link>
+      <guid isPermaLink="true">https://kdvosisul119.com/</guid>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0900</pubDate>
+      <description>대한민국상이군경회시설사업소 홈페이지</description>
+    </item>
+
+    <item>
+      <title>인사말</title>
+      <link>https://kdvosisul119.com/greeting/</link>
+      <guid isPermaLink="true">https://kdvosisul119.com/greeting/</guid>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0900</pubDate>
+      <description>시설사업소 인사말</description>
+    </item>
+
+    <item>
+      <title>법적근거</title>
+      <link>https://kdvosisul119.com/legal-basis/</link>
+      <guid isPermaLink="true">https://kdvosisul119.com/legal-basis/</guid>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0900</pubDate>
+      <description>법적근거 및 관련 문서</description>
+    </item>
+
+    <item>
+      <title>사업실적</title>
+      <link>https://kdvosisul119.com/portfolio/</link>
+      <guid isPermaLink="true">https://kdvosisul119.com/portfolio/</guid>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0900</pubDate>
+      <description>사업실적 및 포트폴리오</description>
+    </item>
+
+    <item>
+      <title>채용</title>
+      <link>https://kdvosisul119.com/recruit/</link>
+      <guid isPermaLink="true">https://kdvosisul119.com/recruit/</guid>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0900</pubDate>
+      <description>채용 안내</description>
+    </item>
+  </channel>
+</rss>
+

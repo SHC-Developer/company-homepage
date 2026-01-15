@@ -76,6 +76,26 @@
 
 # Redirects
 [[redirects]]
+  from = "/naver921477a8f0af34ada450148c190e4b4b.html"
+  to = "/naver921477a8f0af34ada450148c190e4b4b.html"
+  status = 200
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+
+[[redirects]]
+  from = "/rss.xml"
+  to = "/rss.xml"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
