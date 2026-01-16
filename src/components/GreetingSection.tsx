@@ -620,8 +620,8 @@ export const GreetingSection = () => {
           <div className="relative divide-y divide-slate-300 md:divide-y-0 md:space-y-24">
             {/* 연결된 세로줄 (PC 전용) */}
             <div className="hidden md:block absolute left-[304px] top-0 bottom-0 w-px bg-slate-300"></div>
-            {/* 2026.01 */}
-            <div
+            {/* 2026.01 - 잠시 숨김 처리 */}
+            {/* <div
               id="history-2026"
               ref={el => historyItemRefs.current[11] = el}
               className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
@@ -640,7 +640,7 @@ export const GreetingSection = () => {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> */}
 
             {/* 2021.11 */}
             <div

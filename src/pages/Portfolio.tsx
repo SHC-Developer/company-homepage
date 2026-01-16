@@ -1,9 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { withBaseUrl } from '@/lib/utils';
+import { Search } from 'lucide-react';
+
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 interface PortfolioData {
   year: number;
@@ -24,6 +27,7 @@ interface PerformanceRecord {
 const useInViewOnce = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isInView, setIsInView] = useState(false);
+  
 
   useEffect(() => {
     const el = ref.current;
@@ -203,6 +207,141 @@ const Portfolio = () => {
   const [gamRiRecords, setGamRiRecords] = useState<PerformanceRecord[]>([]);
   const [heroImageError, setHeroImageError] = useState(false);
   const [heroImageAttempt, setHeroImageAttempt] = useState(0);
+
+  // 검색 관련 state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [matchCount, setMatchCount] = useState(0);
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+  const searchContentRef = useRef<HTMLDivElement>(null);
+  const matchesRef = useRef<HTMLElement[]>([]);
+  const isComposingRef = useRef(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // 검색 함수들
+  const clearHighlights = useCallback(() => {
+    if (!searchContentRef.current) return;
+
+    const highlights = searchContentRef.current.querySelectorAll('mark[data-search-highlight="true"]');
+    highlights.forEach((highlight) => {
+      const text = document.createTextNode(highlight.textContent ?? '');
+      highlight.replaceWith(text);
+    });
+
+    searchContentRef.current.normalize();
+    matchesRef.current = [];
+    setMatchCount(0);
+    setCurrentMatchIndex(0);
+  }, []);
+
+  const updateActiveHighlight = useCallback((index: number) => {
+    matchesRef.current.forEach((highlight, highlightIndex) => {
+      highlight.style.backgroundColor = highlightIndex === index ? '#FFEB3B' : '#FFF59D';
+    });
+  }, []);
+
+  const scrollToHighlight = useCallback((index: number) => {
+    const target = matchesRef.current[index];
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      updateActiveHighlight(index);
+    }
+  }, [updateActiveHighlight]);
+
+  const handleSearch = useCallback(() => {
+    if (!searchContentRef.current) return;
+
+    const query = searchQuery.trim();
+    clearHighlights();
+
+    if (!query) return;
+
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(searchContentRef.current, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement?.closest('mark[data-search-highlight="true"]')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    let currentNode = walker.nextNode();
+    while (currentNode) {
+      textNodes.push(currentNode as Text);
+      currentNode = walker.nextNode();
+    }
+
+    const regex = new RegExp(escapeRegExp(query), 'gi');
+    textNodes.forEach((node) => {
+      const text = node.nodeValue ?? '';
+      let match: RegExpExecArray | null;
+      let lastIndex = 0;
+      const fragment = document.createDocumentFragment();
+
+      regex.lastIndex = 0;
+      while ((match = regex.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        }
+
+        const mark = document.createElement('mark');
+        mark.setAttribute('data-search-highlight', 'true');
+        mark.style.backgroundColor = '#FFF59D';
+        mark.style.padding = '0 2px';
+        mark.textContent = match[0];
+        fragment.appendChild(mark);
+        lastIndex = match.index + match[0].length;
+      }
+
+      if (lastIndex < text.length) {
+        fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+
+      if (fragment.childNodes.length > 0) {
+        node.parentNode?.replaceChild(fragment, node);
+      }
+    });
+
+    matchesRef.current = Array.from(
+      searchContentRef.current.querySelectorAll<HTMLElement>('mark[data-search-highlight="true"]')
+    );
+    setMatchCount(matchesRef.current.length);
+
+    if (matchesRef.current.length > 0) {
+      setCurrentMatchIndex(0);
+      scrollToHighlight(0);
+    }
+
+    searchInputRef.current?.focus();
+  }, [clearHighlights, searchQuery, scrollToHighlight]);
+
+  const handleMoveMatch = useCallback((direction: 'prev' | 'next') => {
+    if (!matchesRef.current.length) return;
+
+    const nextIndex = direction === 'next'
+      ? (currentMatchIndex + 1) % matchesRef.current.length
+      : (currentMatchIndex - 1 + matchesRef.current.length) % matchesRef.current.length;
+
+    setCurrentMatchIndex(nextIndex);
+    scrollToHighlight(nextIndex);
+  }, [currentMatchIndex, scrollToHighlight]);
+
+  // 검색어가 없으면 자동으로 강조 해제 & 검색어 입력 시 자동 검색 (debounce)
+  useEffect(() => {
+    const query = searchQuery.trim();
+    
+    if (!query) {
+      clearHighlights();
+      return;
+    }
+
+    if (isComposingRef.current) return;
+
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, clearHighlights, handleSearch]);
 
   const totals = useMemo(() => {
     const totalProjects = portfolioData.reduce((sum, d) => sum + d['합계'], 0);
@@ -475,33 +614,92 @@ const Portfolio = () => {
             </Card>
           </Reveal>
 
-          <PerformanceTableSection
-            id="portfolio-safety-bridge-tunnel"
-            title="안전진단 수행실적 - 교량및터널"
-            records={tunnelRecords}
-            description="건의 교량 및 터널 관련 수행실적"
-          />
+          {/* 실적 검색창 (모든 버전 상단 고정) */}
+          <div className="sticky top-16 sm:top-20 md:top-24 lg:top-28 z-20 mt-12 sm:mt-14 md:mt-16">
+            <div className="rounded-lg border border-border bg-white p-4 shadow-sm">
+              <label className="block text-xs font-semibold text-slate-700 font-korean" htmlFor="portfolio-search">
+                실적 검색
+              </label>
+              <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <input
+                  id="portfolio-search"
+                  type="text"
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onCompositionStart={() => { isComposingRef.current = true; }}
+                  onCompositionEnd={() => { isComposingRef.current = false; }}
+                  onKeyDown={(e) => {
+                    const nativeEvent = e.nativeEvent as KeyboardEvent;
+                    const isIme = nativeEvent.isComposing || nativeEvent.keyCode === 229;
+                    if (e.key === 'Enter' && !isComposingRef.current && !isIme) {
+                      handleSearch();
+                    }
+                  }}
+                  placeholder="검색어 입력"
+                  className="w-full sm:flex-1 rounded-md border border-slate-200 px-3 py-2 text-sm font-korean focus:border-[#0B1C2B] focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  aria-label="검색"
+                  className="inline-flex items-center justify-center rounded-md bg-[#0B1C2B] px-3 py-2 text-white hover:bg-[#081420] transition-colors sm:w-auto"
+                >
+                  <Search className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 font-korean">
+                <span>{matchCount > 0 ? `${currentMatchIndex + 1}/${matchCount}` : '결과 없음'}</span>
+                <button
+                  type="button"
+                  onClick={() => handleMoveMatch('prev')}
+                  className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                  disabled={matchCount === 0}
+                >
+                  이전
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMoveMatch('next')}
+                  className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                  disabled={matchCount === 0}
+                >
+                  다음
+                </button>
+              </div>
+            </div>
+          </div>
 
-          <PerformanceTableSection
-            id="portfolio-safety-suri"
-            title="안전진단 수행실적 - 수리"
-            records={suriRecords}
-            description="건의 수리 관련 수행실적"
-          />
+          {/* 검색 대상 콘텐츠 영역 - 기존 레이아웃 유지 */}
+          <div ref={searchContentRef}>
+            <PerformanceTableSection
+              id="portfolio-safety-bridge-tunnel"
+              title="안전진단 수행실적 - 교량및터널"
+              records={tunnelRecords}
+              description="건의 교량 및 터널 관련 수행실적"
+            />
 
-          <PerformanceTableSection
-            id="portfolio-design"
-            title="설계 수행실적"
-            records={designRecords}
-            description="건의 설계 관련 수행실적"
-          />
+            <PerformanceTableSection
+              id="portfolio-safety-suri"
+              title="안전진단 수행실적 - 수리"
+              records={suriRecords}
+              description="건의 수리 관련 수행실적"
+            />
 
-          <PerformanceTableSection
-            id="portfolio-supervision"
-            title="건설사업관리 실적"
-            records={gamRiRecords}
-            description="건의 건설사업관리 관련 수행실적"
-          />
+            <PerformanceTableSection
+              id="portfolio-design"
+              title="설계 수행실적"
+              records={designRecords}
+              description="건의 설계 관련 수행실적"
+            />
+
+            <PerformanceTableSection
+              id="portfolio-supervision"
+              title="건설사업관리 실적"
+              records={gamRiRecords}
+              description="건의 건설사업관리 관련 수행실적"
+            />
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import { Search } from 'lucide-react';
 
 // 섹션 화면 비율 설정 (% 단위로 입력)
 const HERO_WIDTH = 100; // Hero 섹션 너비
@@ -9,7 +10,193 @@ const CONTENT_WIDTH = 65; // 컨텐츠 섹션 너비 (PC)
 const TOC_LINK_COLOR = '#0C2B4B';
 const TOC_LINK_HOVER_COLOR = '#0B1C2B';
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const tocItems = [
+  { type: 'link', targetId: 'laws-list', label: '수의계약 체결 가능한 법률조항' },
+  { type: 'link', targetId: 'qa', label: '질의회신자료' },
+  { type: 'label', label: '관련 법령' },
+  { type: 'link', targetId: 'act-veterans', label: '- 국가유공자단체법', indent: true },
+  { type: 'link', targetId: 'basiclaw-veterans', label: '- 국가보훈 기본법', indent: true },
+  { type: 'link', targetId: 'decree-national', label: '- 국가계약법 시행령', indent: true },
+  { type: 'link', targetId: 'decree-local', label: '- 지방계약법 시행령', indent: true },
+];
+
 const LegalBasis = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [matchCount, setMatchCount] = useState(0);
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const matchesRef = useRef<HTMLElement[]>([]);
+  const isComposingRef = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const clearHighlights = useCallback(() => {
+    if (!contentRef.current) {
+      return;
+    }
+
+    const highlights = contentRef.current.querySelectorAll('mark[data-search-highlight="true"]');
+    highlights.forEach((highlight) => {
+      const text = document.createTextNode(highlight.textContent ?? '');
+      highlight.replaceWith(text);
+    });
+
+    contentRef.current.normalize();
+    matchesRef.current = [];
+    setMatchCount(0);
+    setCurrentMatchIndex(0);
+  }, []);
+
+  const updateActiveHighlight = useCallback((index: number) => {
+    matchesRef.current.forEach((highlight, highlightIndex) => {
+      highlight.style.backgroundColor = highlightIndex === index ? '#FFEB3B' : '#FFF59D';
+    });
+  }, []);
+
+  const scrollToHighlight = useCallback((index: number) => {
+    const target = matchesRef.current[index];
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      updateActiveHighlight(index);
+    }
+  }, [updateActiveHighlight]);
+
+  const handleSearch = useCallback(() => {
+    if (!contentRef.current) {
+      return;
+    }
+
+    const query = searchQuery.trim();
+    clearHighlights();
+
+    if (!query) {
+      return;
+    }
+
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(contentRef.current, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        if (!node.nodeValue || !node.nodeValue.trim()) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
+        if (node.parentElement?.closest('mark[data-search-highlight="true"]')) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    let currentNode = walker.nextNode();
+    while (currentNode) {
+      textNodes.push(currentNode as Text);
+      currentNode = walker.nextNode();
+    }
+
+    const regex = new RegExp(escapeRegExp(query), 'gi');
+    textNodes.forEach((node) => {
+      const text = node.nodeValue ?? '';
+      let match: RegExpExecArray | null;
+      let lastIndex = 0;
+      const fragment = document.createDocumentFragment();
+
+      regex.lastIndex = 0;
+      while ((match = regex.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        }
+
+        const mark = document.createElement('mark');
+        mark.setAttribute('data-search-highlight', 'true');
+        mark.style.backgroundColor = '#FFF59D';
+        mark.style.padding = '0 2px';
+        mark.textContent = match[0];
+        fragment.appendChild(mark);
+        lastIndex = match.index + match[0].length;
+      }
+
+      if (lastIndex < text.length) {
+        fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+      }
+
+      if (fragment.childNodes.length > 0) {
+        node.parentNode?.replaceChild(fragment, node);
+      }
+    });
+
+    matchesRef.current = Array.from(
+      contentRef.current.querySelectorAll<HTMLElement>('mark[data-search-highlight="true"]')
+    );
+    setMatchCount(matchesRef.current.length);
+
+    if (matchesRef.current.length > 0) {
+      setCurrentMatchIndex(0);
+      scrollToHighlight(0);
+    }
+
+    inputRef.current?.focus();
+  }, [clearHighlights, searchQuery]);
+
+  const handleMoveMatch = useCallback((direction: 'prev' | 'next') => {
+    if (!matchesRef.current.length) {
+      return;
+    }
+
+    const nextIndex = direction === 'next'
+      ? (currentMatchIndex + 1) % matchesRef.current.length
+      : (currentMatchIndex - 1 + matchesRef.current.length) % matchesRef.current.length;
+
+    setCurrentMatchIndex(nextIndex);
+    scrollToHighlight(nextIndex);
+  }, [currentMatchIndex, scrollToHighlight]);
+
+  // 검색어가 없으면 자동으로 강조 해제 & 검색어 입력 시 자동 검색 (debounce)
+  useEffect(() => {
+    const query = searchQuery.trim();
+    
+    // 검색어가 없으면 즉시 강조 해제
+    if (!query) {
+      clearHighlights();
+      return;
+    }
+
+    // IME 조합 중이면 검색하지 않음
+    if (isComposingRef.current) {
+      return;
+    }
+
+    // debounce: 300ms 후 자동 검색
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, clearHighlights, handleSearch]);
+
+  const TocNav = () => (
+    <nav aria-label="Table of contents" className="text-sm font-korean">
+      <ul className="space-y-2">
+        {tocItems.map((item) => {
+          if (item.type === 'label') {
+            return (
+              <li key={item.label} className="space-y-2" style={{ color: '#0B1C2B' }}>
+                {item.label}
+              </li>
+            );
+          }
+
+          return (
+            <li key={item.targetId} className={item.indent ? 'ml-3' : undefined}>
+              <TocLink targetId={item.targetId}>{item.label}</TocLink>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+
   const setTocLinkColor = (e: React.MouseEvent<HTMLAnchorElement>, color: string) => {
     e.currentTarget.style.color = color;
   };
@@ -67,45 +254,145 @@ const LegalBasis = () => {
         {/* Legal Content Section */}
         <section className="py-8 sm:py-10 md:py-14 bg-background">
           <div className="w-[95%] sm:w-[90%] md:w-[85%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-              {/* TOC - PC에서만 표시 */}
-              <aside className="hidden lg:block lg:col-span-3">
-                <div className="sticky top-28">
+            {/* Mobile Search (sticky) - 1024px 이하에서만 표시 */}
+            <div className="lg:hidden sticky top-12 sm:top-16 md:top-20 z-20 mb-6">
+              <div className="rounded-lg border border-border bg-white p-4 shadow-sm">
+                <label className="block text-xs font-semibold text-slate-700 font-korean" htmlFor="legal-search-mobile">
+                  본문 검색
+                </label>
+                <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                  <input
+                    id="legal-search-mobile"
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onCompositionStart={() => {
+                      isComposingRef.current = true;
+                    }}
+                    onCompositionEnd={() => {
+                      isComposingRef.current = false;
+                    }}
+                    onKeyDown={(e) => {
+                      const nativeEvent = e.nativeEvent as KeyboardEvent;
+                      const isIme = nativeEvent.isComposing || nativeEvent.keyCode === 229;
+                      if (e.key === 'Enter' && !isComposingRef.current && !isIme) {
+                        handleSearch();
+                      }
+                    }}
+                    placeholder="검색어 입력"
+                    className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-korean focus:border-[#0B1C2B] focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSearch}
+                    aria-label="검색"
+                    className="inline-flex items-center justify-center rounded-md bg-[#0B1C2B] px-3 py-2 text-white hover:bg-[#081420] transition-colors sm:w-auto"
+                  >
+                    <Search className="h-4 w-4" />
+                  </button>
+                </div>
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 font-korean">
+                    <span>{matchCount > 0 ? `${currentMatchIndex + 1}/${matchCount}` : '결과 없음'}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveMatch('prev')}
+                      className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                      disabled={matchCount === 0}
+                    >
+                      이전
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveMatch('next')}
+                      className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                      disabled={matchCount === 0}
+                    >
+                      다음
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            {/* Desktop: Flex layout for sticky sidebar */}
+            <div className="flex flex-col lg:flex-row lg:gap-8">
+              {/* TOC + Search (desktop) - 1024px 이상에서만 표시, 함께 sticky */}
+              <aside className="hidden lg:block lg:w-[280px] lg:flex-shrink-0">
+                <div className="sticky top-28 space-y-4">
+                  {/* 목차 박스 */}
                   <div className="rounded-lg border border-border bg-white p-5 shadow-sm">
                     <div className="mb-3">
                       <p className="text-sm font-semibold tracking-wide font-korean">목차</p>
                     </div>
-                    <nav aria-label="Table of contents" className="text-sm font-korean">
-                      <ul className="space-y-2">
-                        <li>
-                          <TocLink targetId="laws-list">수의계약 체결 가능한 법률조항</TocLink>
-                        </li>
-                        <li>
-                          <TocLink targetId="qa">질의회신자료</TocLink>
-                        </li>
-                        <li className="space-y-2" style={{ color: '#0B1C2B' }}>관련 법령</li>
-                        <li className="ml-3">
-                          <TocLink targetId="act-veterans">- 국가유공자단체법</TocLink>
-                        </li>
-                        <li className="ml-3">
-                          <TocLink targetId="basiclaw-veterans">- 국가보훈 기본법</TocLink>
-                        </li>
-                        <li className="ml-3">
-                          <TocLink targetId="decree-national">- 국가계약법 시행령</TocLink>
-                        </li>
-                        <li className="ml-3">
-                          <TocLink targetId="decree-local">- 지방계약법 시행령</TocLink>
-                        </li>
-                      </ul>
-                    </nav>
+                    <TocNav />
+                  </div>
+                  {/* 본문 검색 박스 */}
+                  <div className="rounded-lg border border-border bg-white p-5 shadow-sm">
+                    <label className="block text-xs font-semibold text-slate-700 font-korean" htmlFor="legal-search-desktop">
+                      본문 검색
+                    </label>
+                    <div className="mt-2 flex flex-col gap-2">
+                      <input
+                        id="legal-search-desktop"
+                        type="text"
+                        ref={inputRef}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onCompositionStart={() => {
+                          isComposingRef.current = true;
+                        }}
+                        onCompositionEnd={() => {
+                          isComposingRef.current = false;
+                        }}
+                        onKeyDown={(e) => {
+                          const nativeEvent = e.nativeEvent as KeyboardEvent;
+                          const isIme = nativeEvent.isComposing || nativeEvent.keyCode === 229;
+                          if (e.key === 'Enter' && !isComposingRef.current && !isIme) {
+                            handleSearch();
+                          }
+                        }}
+                        placeholder="검색어 입력"
+                        className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-korean focus:border-[#0B1C2B] focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSearch}
+                        aria-label="검색"
+                        className="inline-flex items-center justify-center rounded-md bg-[#0B1C2B] px-3 py-2 text-white hover:bg-[#081420] transition-colors"
+                      >
+                        <Search className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 font-korean">
+                      <span>{matchCount > 0 ? `${currentMatchIndex + 1}/${matchCount}` : '결과 없음'}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveMatch('prev')}
+                        className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                        disabled={matchCount === 0}
+                      >
+                        이전
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveMatch('next')}
+                        className="rounded border border-slate-200 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                        disabled={matchCount === 0}
+                      >
+                        다음
+                      </button>
+                    </div>
                   </div>
                 </div>
               </aside>
 
               {/* Content */}
-              <div className="lg:col-span-9">
+              <div className="flex-1 min-w-0">
                 <div className="bg-white rounded-xl shadow-sm border border-border">
-                  <div className="p-4 sm:p-6 md:p-7 lg:p-8 text-sm sm:text-base leading-7 sm:leading-8 font-korean text-foreground space-y-8 sm:space-y-10" style={{ wordBreak: 'keep-all', overflowWrap: 'break-word' }}>
+                  <div
+                    ref={contentRef}
+                    className="p-4 sm:p-6 md:p-7 lg:p-8 text-sm sm:text-base leading-7 sm:leading-8 font-korean text-foreground space-y-8 sm:space-y-10"
+                    style={{ wordBreak: 'keep-all', overflowWrap: 'break-word' }}
+                  >
                     {/* Summary Callout */}
                     <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 sm:p-5">
                       <p className="text-xs sm:text-sm font-semibold text-blue-900 mb-2">핵심 요약</p>
