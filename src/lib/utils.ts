@@ -37,6 +37,12 @@ export function portfolioImage(name: string): string {
   return withBaseUrl(`portfolio/${name}.${ext}`);
 }
 
+/** 히어로 영상 poster: {name}.mp4 0초 프레임 이미지(webp 우선, jpg 폴백). 예: Main1, Main2 */
+export function heroPosterImage(name: 'Main1' | 'Main2' = 'Main1'): string {
+  const ext = supportsWebP() ? 'webp' : 'jpg';
+  return withBaseUrl(`video/${name}_poster.${ext}`);
+}
+
 export function setupLoopingVideo(
   video: HTMLVideoElement,
   handlers: {

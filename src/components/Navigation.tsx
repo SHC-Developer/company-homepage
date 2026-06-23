@@ -10,7 +10,7 @@ interface MenuStructure {
 }
 
 const menuStructure = {
-  '회사소개': ['인사말', '회사연혁', '보유면허 및 기술', '조직구성'],
+  '회사소개': ['설립이념', '인사말', '회사연혁', '보유면허 및 기술', '조직구성'],
   '관계법령': [],
   '분야별 수행실적': ['안전진단', '설계', '건설사업관리'],
   // 자료실: 서브메뉴에서 '채용공고' 제거 (데스크톱/모바일 동일 적용)
@@ -114,7 +114,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     );
   };
 
-  const handlePhilosophyClick = (e: React.MouseEvent) =>
+  const handleEstablishmentPhilosophyClick = (e: React.MouseEvent) =>
     handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'management-philosophy' });
 
   const handleHistoryClick = (e: React.MouseEvent) =>
@@ -129,7 +129,24 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   const handleCeoMessageClick = (e: React.MouseEvent) =>
     handleSameOrNavigateToSection(e, { pagePath: '/greeting', id: 'ceo-message' });
 
-  const handleCompanyIntroClick = handlePhilosophyClick;
+  /** 모바일: 회사소개 레이블 탭 / 데스크톱 상단 버튼 — 히어로로 이동 */
+  const goToGreetingHero = () => {
+    closeMenus();
+    if (location.pathname === '/greeting') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.replaceState(null, '', '/greeting');
+      return;
+    }
+    navigate('/greeting');
+    window.setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }, 0);
+  };
+
+  const handleCompanyIntroClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    goToGreetingHero();
+  };
 
   const handlePortfolioClick = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
@@ -356,6 +373,17 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         >
                           {subMenu}
                         </Link>
+                      ) : subMenu === '설립이념' ? (
+                        <a
+                          key={subMenu}
+                          href="#management-philosophy"
+                          onClick={handleEstablishmentPhilosophyClick}
+                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
+                            dropdownItemClass
+                          }`}
+                        >
+                          {subMenu}
+                        </a>
                       ) : subMenu === '인사말' ? (
                         <a
                           key={subMenu}
@@ -497,27 +525,55 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                     - 텍스트 크기: text-base (16px) - 모바일에서 읽기 좋은 크기
                     - 패딩: px-3 (12px 좌우) - 모바일에서 공간 효율적
                   */}
-                  <button
-                    onClick={() => {
-                      if (menu === '관계법령') {
-                        handleLegalBasisClick();
-                      } else if (menu === '자료실') {
-                        handleRecruitClick();
-                      } else {
-                        toggleMobileMenu(menu);
-                      }
-                    }}
-                    className={`w-full text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg flex justify-between items-center font-korean transition-colors duration-200 active:scale-[0.98] ${
-                      mobileMenuButtonThemeClass
-                    }`}
-                  >
-                    <span className="flex-1">{menu}</span>
-                    {menuStructure[menu].length > 0 && menu !== '관계법령' && (
-                      <span className={`ml-2 text-sm transition-transform duration-200 flex-shrink-0 ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}>
-                        ▼
-                      </span>
-                    )}
-                  </button>
+                  {menu === '회사소개' ? (
+                    <div className="flex w-full gap-1 font-korean">
+                      <button
+                        type="button"
+                        onClick={goToGreetingHero}
+                        className={`min-w-0 flex-1 text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg transition-colors duration-200 active:scale-[0.98] ${mobileMenuButtonThemeClass}`}
+                      >
+                        {menu}
+                      </button>
+                      <button
+                        type="button"
+                        aria-expanded={mobileExpandedMenus.includes(menu)}
+                        aria-label="회사소개 하위 메뉴 펼치기"
+                        onClick={() => toggleMobileMenu(menu)}
+                        className={`flex w-11 shrink-0 items-center justify-center rounded-lg text-sm transition-colors duration-200 active:scale-[0.98] ${mobileMenuButtonThemeClass}`}
+                      >
+                        <span
+                          className={`transition-transform duration-200 ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}
+                          aria-hidden
+                        >
+                          ▼
+                        </span>
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        if (menu === '관계법령') {
+                          handleLegalBasisClick();
+                        } else if (menu === '자료실') {
+                          handleRecruitClick();
+                        } else {
+                          toggleMobileMenu(menu);
+                        }
+                      }}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-left font-korean text-base font-medium transition-colors duration-200 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-lg ${
+                        mobileMenuButtonThemeClass
+                      }`}
+                    >
+                      <span className="flex-1">{menu}</span>
+                      {menuStructure[menu].length > 0 && menu !== '관계법령' && (
+                        <span
+                          className={`ml-2 flex-shrink-0 text-sm transition-transform duration-200 ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}
+                        >
+                          ▼
+                        </span>
+                      )}
+                    </button>
+                  )}
                   
                   {/* 
                     서브메뉴 최적화:
@@ -544,6 +600,17 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                           >
                             {subMenu}
                           </Link>
+                        ) : subMenu === '설립이념' ? (
+                          <a
+                            key={subMenu}
+                            href="#management-philosophy"
+                            onClick={handleEstablishmentPhilosophyClick}
+                            className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
+                              dropdownItemClass
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
                         ) : subMenu === '인사말' ? (
                           <a
                             key={subMenu}

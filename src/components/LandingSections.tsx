@@ -13,8 +13,7 @@ import {
   Zap
 } from 'lucide-react';
 import { NAV_CONTENT_INSET_CLASS } from '@/lib/navContentInset';
-import { withBaseUrl, setupLoopingVideo, portfolioImage, HERO_VIDEO_POSTER_DATA_URL } from '@/lib/utils';
-import logo2 from '@/assets/logo2.png';
+import { withBaseUrl, setupLoopingVideo, portfolioImage, heroPosterImage } from '@/lib/utils';
 
 interface CategoryItem {
   id: string;
@@ -212,6 +211,17 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
       },
     });
   }, []);
+
+  // 히어로(0)를 벗어나면 영상 디코딩 부하를 줄이기 위해 일시정지, 복귀 시 재생
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || videoError) return;
+    if (activeIndex === 0) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [activeIndex, videoError]);
 
   // 스크롤 기반 activeIndex 업데이트
   useEffect(() => {
@@ -463,7 +473,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
   };
 
   const categories: CategoryItem[] = [
-    { id: 'ceo', label: '인사말', icon: <Building2 className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'management-philosophy') },
+    { id: 'ceo', label: '인사말', icon: <Building2 className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'ceo-message') },
     { id: 'vision', label: '비전 및 경영이념', icon: <Lightbulb className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'management-philosophy') },
     { id: 'history', label: '회사연혁', icon: <CheckSquare2 className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'company-history') },
     { id: 'license', label: '보유 면허 및 자격증', icon: <Shield className="w-8 h-8" />, onClick: () => handleCategoryClick('/greeting', 'license') },
@@ -620,7 +630,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
                 ref={videoRef}
                 className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2 object-cover"
                 src={`${import.meta.env.BASE_URL}video/Main1.mp4`}
-                poster={HERO_VIDEO_POSTER_DATA_URL}
+                poster={heroPosterImage()}
                 autoPlay
                 muted
                 playsInline
@@ -628,7 +638,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
                 preload={isMobile ? 'none' : 'auto'}
                 style={{ pointerEvents: 'none' }}
               />
-              <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.05) 100%)' }}></div>
+              <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.02) 100%)' }}></div>
             </div>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary to-primary-hover" style={{ backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))` }} />
@@ -705,6 +715,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
         {/* 3. Sitemap Footer Section (Index 6) */}
         <div
           ref={sitemapRef}
+          id="sitemap-footer"
           className="relative box-border flex w-full flex-col overflow-hidden pb-[max(0.35rem,env(safe-area-inset-bottom,0px))]"
           style={{
             background: 'radial-gradient(ellipse at 50% 45%, #122438 0%, #0B1C2B 55%, #060f18 100%)',

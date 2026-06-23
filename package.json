@@ -9,7 +9,8 @@
     "build:clean": "vite build --emptyOutDir",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "shot": "node scripts/shot.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -74,8 +75,12 @@
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "ffmpeg-static": "^5.3.0",
     "globals": "^15.15.0",
     "lovable-tagger": "^1.1.10",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.61.0",
+    "pngjs": "^7.0.0",
     "postcss": "^8.5.6",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",

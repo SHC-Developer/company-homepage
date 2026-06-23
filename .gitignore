@@ -12,6 +12,9 @@ node_modules
 dist-ssr
 *.local
 
+# 스크린샷 검증 산출물
+screenshots/
+
 # Gradle
 .gradle/
 
