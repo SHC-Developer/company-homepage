@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import fs from "fs";
+import { heroPosterLqip } from "./src/lib/heroPosterLqip";
+import { HERO_GRADIENTS } from "./src/lib/heroGradients";
 
 // Plugin to copy .nojekyll and _headers file to dist after build
 // Also ensures public folder files are copied
@@ -109,11 +111,75 @@ const copyNetlifyFiles = () => ({
   },
 });
 
+// Inject hero poster boot script (first paint before React) + preload
+const injectHeroPosterBoot = (base: string) => ({
+  name: "inject-hero-poster-boot",
+  transformIndexHtml(html: string) {
+    const bootScript = `
+    <script>
+      (function (base) {
+        var path = location.pathname.replace(/\\/$/, '') || '/';
+        if (base !== '/') {
+          var prefix = base.replace(/\\/$/, '');
+          if (path.indexOf(prefix) === 0) path = path.slice(prefix.length) || '/';
+        }
+        var isGreeting = path === '/greeting';
+        var isHome = path === '/';
+        if (!isHome && !isGreeting) return;
+        var name = isGreeting ? 'Main2' : 'Main1';
+        var posterWebp = base + 'video/' + name + '_poster.webp';
+        var posterJpg = base + 'video/' + name + '_poster.jpg';
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = posterWebp;
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
+        var lqip = ${JSON.stringify(heroPosterLqip)};
+        var img = document.createElement('img');
+        img.id = 'hero-boot-poster';
+        img.alt = '';
+        img.decoding = 'sync';
+        img.fetchPriority = 'high';
+        img.src = lqip[name];
+        Object.assign(img.style, {
+          position: 'fixed',
+          inset: '0',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: '0',
+          pointerEvents: 'none',
+        });
+        document.body.insertBefore(img, document.body.firstChild);
+        var gradients = ${JSON.stringify(HERO_GRADIENTS)};
+        var overlay = document.createElement('div');
+        overlay.id = 'hero-boot-gradient';
+        Object.assign(overlay.style, {
+          position: 'fixed',
+          inset: '0',
+          zIndex: '1',
+          pointerEvents: 'none',
+          background: gradients[name],
+        });
+        document.body.insertBefore(overlay, img.nextSibling);
+        var full = new Image();
+        full.onload = function () { img.src = posterWebp; };
+        full.onerror = function () { img.src = posterJpg; };
+        full.src = posterWebp;
+      })(${JSON.stringify(base)});
+    </script>`;
+    return html.replace("<body>", `<body>${bootScript}`);
+  },
+});
+
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  const base = mode === "production" ? (process.env.VITE_BASE || "/") : "/";
+  return {
   // For custom domains, the site is served from the origin root, so base should be "/".
   // If you ever deploy under a subpath (e.g. GitHub project pages), set VITE_BASE="/your-repo-name/" when building.
-  base: mode === "production" ? (process.env.VITE_BASE || "/") : "/",
+  base,
   server: {
     host: "::",
     port: parseInt(process.env.PORT || '8081'),
@@ -134,10 +200,12 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     copyNetlifyFiles(),
+    injectHeroPosterBoot(base),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+};
+});

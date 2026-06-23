@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { HandHeart, Target, Award, TrendingUp, Globe, ChevronDown } from 'lucide-react';
-import { setupLoopingVideo, heroPosterImage } from '@/lib/utils';
+import { setupLoopingVideo } from '@/lib/utils';
+import { HeroVideoLayer, heroSectionBackgroundStyle } from '@/components/HeroVideoLayer';
+import { HeroGradientOverlay } from '@/components/HeroGradientOverlay';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { OrganizationChartV4 } from '@/components/OrganizationChartV4';
 import { SignatureReveal } from '@/components/SignatureReveal';
@@ -14,7 +16,7 @@ import {
 const HERO_EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 /** LandingSections `performScroll` 과 동일한 스냅 잠금 시간 */
-const GREETING_SNAP_SCROLL_MS = 800;
+const GREETING_SNAP_SCROLL_MS = 200;
 
 /**
  * 경영이념 영역 내부 `overflow-y-auto` 패널이 먼저 스크롤되어야 할 때.
@@ -163,7 +165,7 @@ export const GreetingSection = () => {
   /** 모바일: LandingSections와 동일한 터치 스냅(히어로 ↔ 경영이념 상단) */
   const greetingTouchActiveRef = useRef(false);
   const greetingTouchMovedRef = useRef(false);
-  const greetingGestureSnapRef = useRef<0 | 1 | null>(null);
+  const greetingGestureSnapRef = useRef<0 | null>(null);
   const greetingTouchStartYRef = useRef(0);
   const greetingTouchCurrentYRef = useRef(0);
   /** LandingSections `viewportHeightRef` 와 동기 — 휠 스냅 구간 계산 */
@@ -311,71 +313,6 @@ export const GreetingSection = () => {
     };
   }, [refreshGreetingSnapMetrics]);
 
-  /**
-   * 메인 LandingSections 히어로↔슬라이드와 동일한 의도:
-   * - 히어로 구간: 휠 시 기본 스크롤 차단(LandingSections 의 snap 구간과 동일)
-   * - 아래로: 경영이념 섹션 상단으로 한 번에 스크롤
-   * - 경영이념 첫 뷰포트: 내부 패널 스크롤이 남아 있으면 그쪽 우선, 아니면 위로 히어로 복귀
-   */
-  useEffect(() => {
-    if (isMobile) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      const hero = heroSectionRef.current;
-      const phil = philosophySectionRef.current;
-      if (!hero || !phil) return;
-
-      refreshGreetingSnapMetrics();
-      const vh = greetingViewportHeightRef.current;
-      let { philTop, philSnapY } = greetingSnapMetricsRef.current;
-      if (philTop <= 0) {
-        philTop = phil.getBoundingClientRect().top + window.scrollY;
-        const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
-        philSnapY = Math.max(0, philTop - marginTop);
-        greetingSnapMetricsRef.current.philTop = philTop;
-        greetingSnapMetricsRef.current.philSnapY = philSnapY;
-      }
-
-      const y = window.scrollY;
-      const delta = e.deltaY;
-      const SNAP_FUZZ = 50;
-
-      // philSnapY(= 네비 아래 정렬 지점) 미만만 히어로 — philTop 기준이면 설립이념 스냅 후에도 휠이 전부 막힘
-      const atHero = y < philSnapY - SNAP_FUZZ;
-      const inPhilFirstViewport =
-        y >= philSnapY - SNAP_FUZZ && y <= philSnapY + (phil.offsetHeight || vh) + SNAP_FUZZ;
-
-      if (atHero) {
-        e.preventDefault();
-        if (isGreetingSnapScrollingRef.current) return;
-        if (delta > 0) {
-          isGreetingSnapScrollingRef.current = true;
-          window.scrollTo({ top: philSnapY, behavior: 'smooth' });
-          window.setTimeout(() => {
-            isGreetingSnapScrollingRef.current = false;
-          }, GREETING_SNAP_SCROLL_MS);
-        }
-        return;
-      }
-
-      if (inPhilFirstViewport) {
-        if (greetingInnerWheelConsumes(e.target, phil, delta)) return;
-        if (delta < 0) {
-          e.preventDefault();
-          if (isGreetingSnapScrollingRef.current) return;
-          isGreetingSnapScrollingRef.current = true;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          window.setTimeout(() => {
-            isGreetingSnapScrollingRef.current = false;
-          }, GREETING_SNAP_SCROLL_MS);
-        }
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [isMobile, refreshGreetingSnapMetrics]);
-
   const performGreetingSnap = useCallback((index: 0 | 1) => {
     const hero = heroSectionRef.current;
     const phil = philosophySectionRef.current;
@@ -392,13 +329,67 @@ export const GreetingSection = () => {
     const top = index === 0 ? 0 : philSnapY;
     if (isGreetingSnapScrollingRef.current) return;
     isGreetingSnapScrollingRef.current = true;
-    window.scrollTo({ top, behavior: 'smooth' });
+    window.scrollTo({ top, behavior: 'auto' });
     window.setTimeout(() => {
       isGreetingSnapScrollingRef.current = false;
     }, GREETING_SNAP_SCROLL_MS);
   }, [refreshGreetingSnapMetrics]);
 
-  const getGreetingTouchSnapZone = useCallback((): 0 | 1 | null => {
+  /**
+   * 메인 LandingSections 히어로↔슬라이드와 동일한 의도:
+   * - 히어로 구간: 휠 시 기본 스크롤 차단(LandingSections 의 snap 구간과 동일)
+   * - 아래로: 경영이념 섹션 상단으로 한 번에 스크롤
+   * - 설립이념 스냅 정렬 지점(atPhilSnap)에서만 위로 히어로 복귀; 그 아래(인사말 등)는 일반 스크롤
+   */
+  useEffect(() => {
+    if (isMobile) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      const hero = heroSectionRef.current;
+      const phil = philosophySectionRef.current;
+      if (!hero || !phil) return;
+
+      refreshGreetingSnapMetrics();
+      let { philTop, philSnapY } = greetingSnapMetricsRef.current;
+      if (philTop <= 0) {
+        philTop = phil.getBoundingClientRect().top + window.scrollY;
+        const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
+        philSnapY = Math.max(0, philTop - marginTop);
+        greetingSnapMetricsRef.current.philTop = philTop;
+        greetingSnapMetricsRef.current.philSnapY = philSnapY;
+      }
+
+      const y = window.scrollY;
+      const delta = e.deltaY;
+      const SNAP_FUZZ = 50;
+
+      const atHero = y < philSnapY - SNAP_FUZZ;
+      /** 설립이념이 뷰포트 상단에 스냅된 상태에서만 히어로 복귀 — 섹션 전체 높이가 아님 */
+      const atPhilSnap = Math.abs(y - philSnapY) <= SNAP_FUZZ;
+
+      if (isGreetingSnapScrollingRef.current) {
+        if (atHero || atPhilSnap) e.preventDefault();
+        return;
+      }
+
+      if (atHero) {
+        e.preventDefault();
+        if (delta > 0) performGreetingSnap(1);
+        return;
+      }
+
+      if (atPhilSnap && delta < 0) {
+        if (greetingInnerWheelConsumes(e.target, phil, delta)) return;
+        e.preventDefault();
+        performGreetingSnap(0);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [isMobile, refreshGreetingSnapMetrics, performGreetingSnap]);
+
+  const getGreetingTouchSnapZone = useCallback((): 0 | null => {
     const hero = heroSectionRef.current;
     const phil = philosophySectionRef.current;
     if (!hero || !phil) return null;
@@ -414,7 +405,6 @@ export const GreetingSection = () => {
       greetingSnapMetricsRef.current.philSnapY = philSnapY;
     }
     if (y < philSnapY - 36) return 0;
-    if (y >= philSnapY - 28 && y <= philSnapY + (phil.offsetHeight || vh) + 50) return 1;
     return null;
   }, [refreshGreetingSnapMetrics]);
 
@@ -465,12 +455,6 @@ export const GreetingSection = () => {
           greetingTouchMovedRef.current = true;
           e.preventDefault();
         }
-        return;
-      }
-
-      if (startZone === 1 && diffY < -5) {
-        greetingTouchMovedRef.current = true;
-        e.preventDefault();
       }
     };
 
@@ -490,27 +474,8 @@ export const GreetingSection = () => {
       if (startZone === 0) {
         if (greetingTouchMovedRef.current && diffY > distanceThreshold) {
           performGreetingSnap(1);
-        } else if (greetingTouchMovedRef.current && diffY < -distanceThreshold) {
+        } else if (greetingTouchMovedRef.current) {
           performGreetingSnap(0);
-        } else {
-          const hero = heroSectionRef.current;
-          const phil = philosophySectionRef.current;
-          if (hero && phil) {
-            const y = window.scrollY;
-            const heroH = hero.offsetHeight;
-            performGreetingSnap(y < heroH * 0.5 ? 0 : 1);
-          }
-        }
-        return;
-      }
-
-      if (startZone === 1) {
-        if (greetingTouchMovedRef.current && diffY < -distanceThreshold) {
-          performGreetingSnap(0);
-        } else if (greetingTouchMovedRef.current && diffY > distanceThreshold) {
-          // 아래로 스와이프(본문 읽기) — 스냅으로 위치 덮어쓰지 않음
-        } else {
-          performGreetingSnap(1);
         }
       }
     };
@@ -795,31 +760,16 @@ export const GreetingSection = () => {
         id="greeting-hero"
         ref={heroSectionRef}
         className="relative w-full overflow-hidden"
-        style={{ backgroundColor: '#1e3f64', height: 'calc(var(--vh, 1vh) * 100)' }}
+        style={{ ...heroSectionBackgroundStyle('Main2'), height: 'calc(var(--vh, 1vh) * 100)' }}
       >
         <div className="absolute inset-0 z-0">
           {!videoError ? (
-            <div className="relative h-full w-full">
-              <video
-                ref={videoRef}
-                className="absolute top-1/2 left-1/2 h-[56.25vw] w-[177.77vh] min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 transform object-cover"
-                src={`${import.meta.env.BASE_URL}video/Main2.mp4`}
-                poster={heroPosterImage('Main2')}
-                autoPlay
-                muted
-                playsInline
-                loop={false}
-                preload={isMobile ? 'none' : 'auto'}
-                style={{ pointerEvents: 'none' }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 z-10"
-                style={{
-                  background:
-                    'linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.24) 28%, rgba(0,0,0,0.1) 52%, rgba(0,0,0,0.03) 70%, transparent 88%)',
-                }}
-              />
-            </div>
+            <HeroVideoLayer
+              videoRef={videoRef}
+              src={`${import.meta.env.BASE_URL}video/Main2.mp4`}
+              posterName="Main2"
+              preload={isMobile ? 'none' : 'auto'}
+            />
           ) : (
             <div
               className="h-full w-full bg-gradient-to-br from-primary to-primary-hover"
@@ -827,6 +777,7 @@ export const GreetingSection = () => {
             />
           )}
         </div>
+        <HeroGradientOverlay posterName="Main2" />
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -911,10 +862,10 @@ export const GreetingSection = () => {
           style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 100%)' }}
           aria-hidden
         />
-        <div className="relative z-[1] flex min-h-0 w-full flex-col h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] md:h-[calc(100dvh-4.25rem)] lg:min-h-0 lg:h-[calc(100dvh-5rem)] lg:flex-row lg:overflow-hidden xl:h-[calc(100dvh-5.5rem)] desktop:h-[calc(100dvh-6rem)] 2xl:h-[calc(100dvh-7.5rem)]">
-          {/* ══ 좌측 패널: 딥 네이비 슬로건 — 배경은 뷰포트 최좌측부터 */}
+        <div className="relative z-[1] flex min-h-0 w-full flex-col lg:h-[calc(100dvh-5rem)] lg:flex-row lg:overflow-hidden xl:h-[calc(100dvh-5.5rem)] desktop:h-[calc(100dvh-6rem)] 2xl:h-[calc(100dvh-7.5rem)]">
+          {/* ══ 좌측 패널: 딥 네이비 슬로건 — 모바일 숨김, lg 이상 2분할 */}
           <div
-            className={`relative flex min-h-0 shrink-0 flex-col justify-between pt-12 pr-8 pb-8 lg:w-[30%] lg:overflow-x-hidden lg:overflow-y-auto lg:pr-7 lg:pb-7 lg:pt-14 xl:w-[33%] xl:pr-8 xl:pb-8 xl:pt-16 ${NAV_CONTENT_TEXT_START_PL_CLASS}`}
+            className={`relative hidden min-h-0 shrink-0 flex-col justify-between pt-12 pr-8 pb-8 lg:flex lg:w-[30%] lg:overflow-x-hidden lg:overflow-y-auto lg:pr-7 lg:pb-7 lg:pt-14 xl:w-[33%] xl:pr-8 xl:pb-8 xl:pt-16 ${NAV_CONTENT_TEXT_START_PL_CLASS}`}
             style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 55%, #071420 100%)' }}
           >
             <div
@@ -974,7 +925,7 @@ export const GreetingSection = () => {
 
           {/* ══ 우측 패널 — 가로: 좌는 열 경계 여백, 우는 네비 인셋 끝선과 정렬 */}
           <div
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#F9FAFB] lg:overflow-hidden ${NAV_CONTENT_TEXT_START_PL_STACKED_THEN_SPLIT_CLASS} ${NAV_CONTENT_TEXT_END_PR_CLASS}`}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[#F9FAFB] lg:overflow-hidden ${NAV_CONTENT_TEXT_START_PL_STACKED_THEN_SPLIT_CLASS} ${NAV_CONTENT_TEXT_END_PR_CLASS}`}
           >
             <div className="flex min-h-0 flex-1 flex-col lg:overflow-hidden">
               <div className="shrink-0 pt-8 lg:pt-10 xl:pt-11">

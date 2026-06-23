@@ -13,7 +13,9 @@ import {
   Zap
 } from 'lucide-react';
 import { NAV_CONTENT_INSET_CLASS } from '@/lib/navContentInset';
-import { withBaseUrl, setupLoopingVideo, portfolioImage, heroPosterImage } from '@/lib/utils';
+import { withBaseUrl, setupLoopingVideo, portfolioImage } from '@/lib/utils';
+import { HeroVideoLayer, heroSectionBackgroundStyle } from '@/components/HeroVideoLayer';
+import { HeroGradientOverlay } from '@/components/HeroGradientOverlay';
 
 interface CategoryItem {
   id: string;
@@ -622,28 +624,24 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
       )}
 
       {/* 1. Hero Section (Index 0) */}
-      <section id="hero-section" className="relative w-full overflow-hidden" style={{ backgroundColor: '#1e3f64', height: 'calc(var(--vh, 1vh) * 100)' }}>
+      <section
+        id="hero-section"
+        className="relative w-full overflow-hidden"
+        style={{ ...heroSectionBackgroundStyle('Main1'), height: 'calc(var(--vh, 1vh) * 100)' }}
+      >
         <div className="absolute inset-0 z-0">
           {!videoError ? (
-            <div className="relative w-full h-full">
-              <video
-                ref={videoRef}
-                className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full transform -translate-x-1/2 -translate-y-1/2 object-cover"
-                src={`${import.meta.env.BASE_URL}video/Main1.mp4`}
-                poster={heroPosterImage()}
-                autoPlay
-                muted
-                playsInline
-                loop={false}
-                preload={isMobile ? 'none' : 'auto'}
-                style={{ pointerEvents: 'none' }}
-              />
-              <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.02) 100%)' }}></div>
-            </div>
+            <HeroVideoLayer
+              videoRef={videoRef}
+              src={`${import.meta.env.BASE_URL}video/Main1.mp4`}
+              posterName="Main1"
+              preload={isMobile ? 'none' : 'auto'}
+            />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary to-primary-hover" style={{ backgroundImage: `linear-gradient(135deg, rgba(13, 42, 74, 0.8), rgba(30, 111, 217, 0.8))` }} />
           )}
         </div>
+        <HeroGradientOverlay posterName="Main1" />
         {/* Hero Text Overlay */}
         <div className="absolute inset-0 z-20 flex flex-col justify-start pt-[32vh] text-white">
           <div className="w-[95%] sm:w-[90%] md:w-[85%] mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
