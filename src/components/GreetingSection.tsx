@@ -1179,8 +1179,8 @@ export const GreetingSection = () => {
       </div>
 
       {/* 회사연혁 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-20 md:pt-36" id="company-history" style={{ background: 'linear-gradient(to bottom, #F0F4F8 0%, #F7FBFF 100%)' }}>
-        <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] lg:w-[65%] px-4 sm:px-6 lg:px-8 py-16">
+      <div className="min-h-screen min-w-0 pt-20 md:pt-36" id="company-history" style={{ background: 'linear-gradient(to bottom, #F0F4F8 0%, #F7FBFF 100%)' }}>
+        <div className="mx-auto min-w-0 w-[95%] sm:w-[90%] md:w-[85%] lg:w-[65%] px-4 sm:px-6 lg:px-8 py-16">
           {/* 헤더 */}
           <div
             ref={historyTitleRef}
@@ -1209,24 +1209,24 @@ export const GreetingSection = () => {
 
 
           {/* 리스트형 타임라인 */}
-          <div className="relative divide-y divide-slate-300 md:divide-y-0 md:space-y-24">
+          <div className="relative min-w-0 divide-y divide-slate-300 md:divide-y-0 md:space-y-24">
             {/* 연결된 세로줄 (PC 전용) */}
             <div className="hidden md:block absolute left-[304px] top-0 bottom-0 w-px bg-slate-300"></div>
             {/* 2026.01 - 잠시 숨김 처리 */}
             {/* <div
               id="history-2026"
               ref={el => historyItemRefs.current[11] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[11] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2026.01</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">초경량비행장치사용 사업자 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1238,17 +1238,17 @@ export const GreetingSection = () => {
             <div
               id="history-2021"
               ref={el => historyItemRefs.current[10] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[10] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2021.11</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">건설기술용역업 - 건설엔지니어링업 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1260,17 +1260,17 @@ export const GreetingSection = () => {
             <div
               id="history-2017"
               ref={el => historyItemRefs.current[9] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[9] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2017.03</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">기업부설연구소 등록 (시설사업소 휴먼테크연구부)</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">연구개발전담부서 등록·운영 (시설사업소 휴먼테크연구부, 2017.03~2020.01)</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1282,17 +1282,17 @@ export const GreetingSection = () => {
             <div
               id="history-2015"
               ref={el => historyItemRefs.current[8] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[8] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2015.02</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 - 건설기술용역업 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1304,17 +1304,17 @@ export const GreetingSection = () => {
             <div
               id="history-2014"
               ref={el => historyItemRefs.current[7] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[7] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2014.03</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 부임</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회시설사업소 소장 나경준 임명</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1326,17 +1326,17 @@ export const GreetingSection = () => {
             <div
               id="history-2012"
               ref={el => historyItemRefs.current[6] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[6] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2012.05</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링사업자 신고</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링산업 진흥법에 따른 엔지니어링 사업자 변경 신고</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1348,17 +1348,17 @@ export const GreetingSection = () => {
             <div
               id="history-2009-10"
               ref={el => historyItemRefs.current[5] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.10</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 등록</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">감리전문회사 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1370,17 +1370,17 @@ export const GreetingSection = () => {
             <div
               id="history-2009-07"
               ref={el => historyItemRefs.current[4] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[4] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2009.07</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul className="divide-y divide-slate-200">
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 - 대한민국상이군경회시설사업소 법인 명칭 변경</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1392,24 +1392,24 @@ export const GreetingSection = () => {
             <div
               id="history-2003-06"
               ref={el => historyItemRefs.current[3] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[3] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3 className="text-3xl max-[480px]:text-3xl sm:text-4xl md:text-5xl font-extrabold md:w-[256px]" style={{ color: '#1D66B3' }}>2003.06</h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                 <ul>
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">안전진단전문기관 등록</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">안전진단전문기관 등록</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
                   <li className="group relative py-3 pl-6">
-                    <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                    <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                     <div>
-                      <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링활동주체 신고</p>
+                      <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">엔지니어링활동주체 신고</p>
                       <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                     </div>
                   </li>
@@ -1421,7 +1421,7 @@ export const GreetingSection = () => {
             <div
               id="history-2002"
               ref={el => historyItemRefs.current[2] = el}
-              className={`grid grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid min-w-0 grid-cols-1 md:grid-cols-[240px_1fr] items-start gap-6 py-10 md:py-0 transition-all duration-700 ${visibleHistoryItems[2] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div className="md:w-[240px] md:text-right md:pr-6">
                 <h3
@@ -1431,12 +1431,12 @@ export const GreetingSection = () => {
                   2002.12.03
                 </h3>
               </div>
-              <div className="relative md:pl-10">
+              <div className="relative min-w-0 md:pl-10">
                   <ul className="divide-y divide-slate-200">
                     <li className="group relative py-3 pl-6">
-                      <span className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
+                      <span className="absolute left-1 md:left-0 top-[1.125rem] md:top-1/2 -translate-y-0 md:-translate-y-1/2 md:-translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 transition-colors duration-200 bg-white border-[#1D66B3] group-hover:bg-[#1D66B3] group-hover:border-[#1D66B3]"></span>
                       <div>
-                        <p className="text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
+                        <p className="history-event-text text-base max-[480px]:text-base sm:text-lg text-gray-700">대한민국상이군경회 시설물관리사업소 설립</p>
                         <div className="hidden md:block mt-2 border-b border-slate-300 w-full"></div>
                       </div>
                     </li>

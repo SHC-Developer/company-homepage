@@ -59,7 +59,7 @@ export function HeroVideoLayer({
         alt=""
         aria-hidden
         decoding="sync"
-        fetchPriority="high"
+        fetchpriority="high"
         onLoad={removeBootPoster}
         className={`${VIDEO_COVER_CLASS} z-0 transition-opacity duration-300 ${frameReady ? 'opacity-0' : 'opacity-100'}`}
       />

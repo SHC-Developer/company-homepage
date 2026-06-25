@@ -43,6 +43,11 @@ export function heroPosterImage(name: 'Main1' | 'Main2' = 'Main1'): string {
   return withBaseUrl(`video/${name}_poster.${ext}`);
 }
 
+/** play() 중단(탭 전환·절전 등) — 실제 장애가 아니므로 에러 처리에서 제외 */
+export function isBenignVideoPlayError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
 export function setupLoopingVideo(
   video: HTMLVideoElement,
   handlers: {
@@ -51,9 +56,14 @@ export function setupLoopingVideo(
     onAutoplayError?: (error: unknown) => void;
   } = {}
 ) {
+  const notifyPlayError = (error: unknown, handler?: (error: unknown) => void) => {
+    if (isBenignVideoPlayError(error)) return;
+    handler?.(error);
+  };
+
   const handleEnded = () => {
     video.currentTime = 0;
-    video.play().catch((e) => handlers.onEndedPlayError?.(e));
+    video.play().catch((e) => notifyPlayError(e, handlers.onEndedPlayError));
   };
 
   const handleError = () => {
@@ -64,7 +74,7 @@ export function setupLoopingVideo(
   video.addEventListener('error', handleError);
 
   // 자동 재생 시도 (브라우저 정책으로 실패할 수 있음)
-  video.play().catch((e) => handlers.onAutoplayError?.(e));
+  video.play().catch((e) => notifyPlayError(e, handlers.onAutoplayError));
 
   return () => {
     video.removeEventListener('ended', handleEnded);

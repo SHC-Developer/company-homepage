@@ -201,6 +201,26 @@ All colors MUST be HSL.
     }
   }
 
+  /* 회사연혁 — 모바일 긴 문구 줄바꿈·잘림 방지 (grid min-width + 한글 keep-all) */
+  #company-history [id^="history-"] {
+    min-width: 0;
+  }
+
+  #company-history [id^="history-"] > div:last-child {
+    min-width: 0;
+  }
+
+  #company-history [id^="history-"] li.group > div {
+    min-width: 0;
+  }
+
+  #company-history .history-event-text {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-height: 1.625;
+    min-width: 0;
+  }
+
     /* Hero section utilities */
   .hero-gradient {
     background: var(--gradient-hero);
