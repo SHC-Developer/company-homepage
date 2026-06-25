@@ -35,10 +35,6 @@ jobs:
         run: npm ci
 
       - name: Build
-        env:
-          # Vite asset base & React Router basename (Project Pages 서브경로)
-          VITE_BASE: /${{ github.event.repository.name }}/
-          VITE_BASENAME: /${{ github.event.repository.name }}
         run: npm run build
 
       - name: Configure Pages
