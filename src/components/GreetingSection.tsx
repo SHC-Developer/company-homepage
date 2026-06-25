@@ -5,7 +5,9 @@ import { HeroVideoLayer, heroSectionBackgroundStyle } from '@/components/HeroVid
 import { HeroGradientOverlay } from '@/components/HeroGradientOverlay';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { OrganizationChartV4 } from '@/components/OrganizationChartV4';
-import { SignatureReveal } from '@/components/SignatureReveal';
+import logo2 from '@/assets/logo2.png';
+// 사인 드로잉 애니메이션 — 재활성화 시 import 및 하단 SignatureReveal 주석 해제
+// import { SignatureReveal } from '@/components/SignatureReveal';
 import {
   NAV_CONTENT_INSET_CLASS,
   NAV_CONTENT_TEXT_END_PR_CLASS,
@@ -15,8 +17,8 @@ import {
 
 const HERO_EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-/** LandingSections `performScroll` 과 동일한 스냅 잠금 시간 */
-const GREETING_SNAP_SCROLL_MS = 200;
+/** LandingSections `performScroll` 과 동일한 스냅 잠금 시간(smooth 애니메이션 기준) */
+const GREETING_SNAP_SCROLL_MS = 800;
 
 /**
  * 경영이념 영역 내부 `overflow-y-auto` 패널이 먼저 스크롤되어야 할 때.
@@ -158,14 +160,15 @@ export const GreetingSection = () => {
   const subtitleRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const philosophySectionRef = useRef<HTMLElement | null>(null);
+  const ceoMessageSectionRef = useRef<HTMLDivElement | null>(null);
   const isGreetingSnapScrollingRef = useRef(false);
   /** 휠 스냅용 — 매 wheel 이벤트마다 offsetHeight/offsetTop 읽지 않도록 캐시 (레이아웃 스래싱 방지) */
   /** philTop: 섹션 레이아웃 상단(document). philSnapY: scroll-margin 반영 후 목표 스크롤(네비 아래 정렬). */
-  const greetingSnapMetricsRef = useRef({ heroH: 0, philTop: 0, philSnapY: 0 });
+  const greetingSnapMetricsRef = useRef({ heroH: 0, philTop: 0, philSnapY: 0, ceoTop: 0, ceoSnapY: 0 });
   /** 모바일: LandingSections와 동일한 터치 스냅(히어로 ↔ 경영이념 상단) */
   const greetingTouchActiveRef = useRef(false);
   const greetingTouchMovedRef = useRef(false);
-  const greetingGestureSnapRef = useRef<0 | null>(null);
+  const greetingGestureSnapRef = useRef<number | null>(null);
   const greetingTouchStartYRef = useRef(0);
   const greetingTouchCurrentYRef = useRef(0);
   /** LandingSections `viewportHeightRef` 와 동기 — 휠 스냅 구간 계산 */
@@ -265,14 +268,24 @@ export const GreetingSection = () => {
   const refreshGreetingSnapMetrics = useCallback(() => {
     const hero = heroSectionRef.current;
     const phil = philosophySectionRef.current;
+    const ceo = ceoMessageSectionRef.current;
     if (!hero || !phil) return;
     const philTop = phil.getBoundingClientRect().top + window.scrollY;
-    const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
-    const philSnapY = Math.max(0, philTop - marginTop);
+    const philMarginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
+    const philSnapY = Math.max(0, philTop - philMarginTop);
+    let ceoTop = 0;
+    let ceoSnapY = 0;
+    if (ceo) {
+      ceoTop = ceo.getBoundingClientRect().top + window.scrollY;
+      const ceoMarginTop = parseFloat(getComputedStyle(ceo).scrollMarginTop) || 0;
+      ceoSnapY = Math.max(0, ceoTop - ceoMarginTop);
+    }
     greetingSnapMetricsRef.current = {
       heroH: hero.offsetHeight,
       philTop,
       philSnapY,
+      ceoTop,
+      ceoSnapY,
     };
   }, []);
 
@@ -302,9 +315,11 @@ export const GreetingSection = () => {
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refreshGreetingSnapMetrics) : null;
     const h = heroSectionRef.current;
     const p = philosophySectionRef.current;
+    const c = ceoMessageSectionRef.current;
     if (ro) {
       if (h) ro.observe(h);
       if (p) ro.observe(p);
+      if (c) ro.observe(c);
     }
     return () => {
       window.removeEventListener('resize', refreshGreetingSnapMetrics);
@@ -313,36 +328,36 @@ export const GreetingSection = () => {
     };
   }, [refreshGreetingSnapMetrics]);
 
-  const performGreetingSnap = useCallback((index: 0 | 1) => {
+  /**
+   * LandingSections `performScroll` 과 동일: 앵커 인덱스로 smooth 스크롤 + 잠금.
+   * 앵커: 0 = 히어로 상단, 1 = 설립이념 스냅, 2 = 인사말 스냅.
+   */
+  const performGreetingSnap = useCallback((index: 0 | 1 | 2) => {
     const hero = heroSectionRef.current;
     const phil = philosophySectionRef.current;
     if (!hero || !phil) return;
     refreshGreetingSnapMetrics();
-    let { philTop, philSnapY } = greetingSnapMetricsRef.current;
-    if (philTop <= 0) {
-      philTop = phil.getBoundingClientRect().top + window.scrollY;
-      const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
-      philSnapY = Math.max(0, philTop - marginTop);
-      greetingSnapMetricsRef.current.philTop = philTop;
-      greetingSnapMetricsRef.current.philSnapY = philSnapY;
-    }
-    const top = index === 0 ? 0 : philSnapY;
+    const m = greetingSnapMetricsRef.current;
+    const top = index === 0 ? 0 : index === 1 ? m.philSnapY : (m.ceoSnapY > 0 ? m.ceoSnapY : m.philSnapY);
     if (isGreetingSnapScrollingRef.current) return;
     isGreetingSnapScrollingRef.current = true;
-    window.scrollTo({ top, behavior: 'auto' });
+    window.scrollTo({ top, behavior: 'smooth' });
     window.setTimeout(() => {
       isGreetingSnapScrollingRef.current = false;
     }, GREETING_SNAP_SCROLL_MS);
   }, [refreshGreetingSnapMetrics]);
 
   /**
-   * 메인 LandingSections 히어로↔슬라이드와 동일한 의도:
-   * - 히어로 구간: 휠 시 기본 스크롤 차단(LandingSections 의 snap 구간과 동일)
-   * - 아래로: 경영이념 섹션 상단으로 한 번에 스크롤
-   * - 설립이념 스냅 정렬 지점(atPhilSnap)에서만 위로 히어로 복귀; 그 아래(인사말 등)는 일반 스크롤
+   * LandingSections.tsx 의 wheel 스냅과 동일한 구조(데스크톱):
+   * - 앵커 배열 [히어로0, 설립이념1, 인사말2] 사이를 휠 1틱마다 인접 앵커로 smooth 이동
+   * - 스냅 구간([0, 인사말앵커))에서는 기본 스크롤을 항상 차단 → 중간에 멈추는 데드존 제거
+   * - 인사말 앵커 이하부터는 일반 스크롤(인사말 본문·연혁 등), 위로 올려 인사말 상단에 닿으면 재스냅
+   * - 설립이념 우측 패널이 내부 스크롤 가능하면(짧은 뷰포트) 그쪽을 우선
    */
   useEffect(() => {
     if (isMobile) return;
+
+    const SNAP_FUZZ = 60;
 
     const handleWheel = (e: WheelEvent) => {
       const hero = heroSectionRef.current;
@@ -350,38 +365,46 @@ export const GreetingSection = () => {
       if (!hero || !phil) return;
 
       refreshGreetingSnapMetrics();
-      let { philTop, philSnapY } = greetingSnapMetricsRef.current;
-      if (philTop <= 0) {
-        philTop = phil.getBoundingClientRect().top + window.scrollY;
-        const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
-        philSnapY = Math.max(0, philTop - marginTop);
-        greetingSnapMetricsRef.current.philTop = philTop;
-        greetingSnapMetricsRef.current.philSnapY = philSnapY;
-      }
+      const m = greetingSnapMetricsRef.current;
+      const ceo = ceoMessageSectionRef.current;
+      const anchors = ceo && m.ceoSnapY > 0 ? [0, m.philSnapY, m.ceoSnapY] : [0, m.philSnapY];
+      const lastAnchor = anchors[anchors.length - 1];
 
       const y = window.scrollY;
       const delta = e.deltaY;
-      const SNAP_FUZZ = 50;
 
-      const atHero = y < philSnapY - SNAP_FUZZ;
-      /** 설립이념이 뷰포트 상단에 스냅된 상태에서만 히어로 복귀 — 섹션 전체 높이가 아님 */
-      const atPhilSnap = Math.abs(y - philSnapY) <= SNAP_FUZZ;
-
-      if (isGreetingSnapScrollingRef.current) {
-        if (atHero || atPhilSnap) e.preventDefault();
+      // 인사말(마지막 앵커) 이하 — 자유 스크롤. 단, 인사말 상단에서 위로 올리면 직전 앵커로 스냅.
+      if (y >= lastAnchor - SNAP_FUZZ) {
+        if (delta > 0) return;
+        if (Math.abs(y - lastAnchor) <= SNAP_FUZZ) {
+          e.preventDefault();
+          if (isGreetingSnapScrollingRef.current) return;
+          performGreetingSnap((anchors.length - 2) as 0 | 1);
+        }
         return;
       }
 
-      if (atHero) {
-        e.preventDefault();
-        if (delta > 0) performGreetingSnap(1);
-        return;
-      }
+      // 가장 가까운 앵커 = 현재 인덱스
+      let currentIndex = 0;
+      let best = Infinity;
+      anchors.forEach((a, i) => {
+        const d = Math.abs(y - a);
+        if (d < best) {
+          best = d;
+          currentIndex = i;
+        }
+      });
 
-      if (atPhilSnap && delta < 0) {
-        if (greetingInnerWheelConsumes(e.target, phil, delta)) return;
-        e.preventDefault();
-        performGreetingSnap(0);
+      // 설립이념 내부 패널이 휠을 소비할 수 있으면(콘텐츠 넘침) 네이티브 스크롤 양보
+      if (currentIndex === 1 && greetingInnerWheelConsumes(e.target, phil, delta)) return;
+
+      e.preventDefault();
+      if (isGreetingSnapScrollingRef.current) return;
+
+      if (delta > 0 && currentIndex < anchors.length - 1) {
+        performGreetingSnap((currentIndex + 1) as 0 | 1 | 2);
+      } else if (delta < 0 && currentIndex > 0) {
+        performGreetingSnap((currentIndex - 1) as 0 | 1 | 2);
       }
     };
 
@@ -389,26 +412,32 @@ export const GreetingSection = () => {
     return () => window.removeEventListener('wheel', handleWheel);
   }, [isMobile, refreshGreetingSnapMetrics, performGreetingSnap]);
 
-  const getGreetingTouchSnapZone = useCallback((): 0 | null => {
+  /**
+   * 모바일 터치 스냅 — 현재 스크롤이 어느 앵커(0 히어로 / 1 설립이념 / 2 인사말)에
+   * 붙어 있는지 반환. 앵커 근처(±FUZZ)가 아니면 null → 일반 스크롤(섹션 내부 탐독).
+   */
+  const getGreetingTouchAnchorIndex = useCallback((): number | null => {
     const hero = heroSectionRef.current;
     const phil = philosophySectionRef.current;
     if (!hero || !phil) return null;
     refreshGreetingSnapMetrics();
+    const m = greetingSnapMetricsRef.current;
+    const ceo = ceoMessageSectionRef.current;
+    const anchors = ceo && m.ceoSnapY > 0 ? [0, m.philSnapY, m.ceoSnapY] : [0, m.philSnapY];
     const y = window.scrollY;
-    const vh = greetingViewportHeightRef.current;
-    let { heroH, philTop, philSnapY } = greetingSnapMetricsRef.current;
-    if (heroH <= 0) heroH = hero.offsetHeight;
-    if (philTop <= 0) philTop = phil.getBoundingClientRect().top + window.scrollY;
-    if (philSnapY <= 0 && philTop > 0) {
-      const marginTop = parseFloat(getComputedStyle(phil).scrollMarginTop) || 0;
-      philSnapY = Math.max(0, philTop - marginTop);
-      greetingSnapMetricsRef.current.philSnapY = philSnapY;
+    const FUZZ = 48;
+    for (let i = 0; i < anchors.length; i += 1) {
+      if (Math.abs(y - anchors[i]) <= FUZZ) return i;
     }
-    if (y < philSnapY - 36) return 0;
     return null;
   }, [refreshGreetingSnapMetrics]);
 
-  /** 모바일 터치 — LandingSections.tsx 와 같은 임계값·플로우(스크롤 관성 차단 후 스냅) */
+  /**
+   * 모바일 터치 — LandingSections.tsx 와 같은 임계값·플로우(스크롤 관성 차단 후 스냅).
+   * 데스크톱 휠과 동일한 3앵커(히어로↔설립이념↔인사말) 스냅을 방향 기반으로 처리.
+   * - 히어로에서 아래로 → 설립이념 / 설립이념·인사말에서 위로 → 이전 앵커
+   * - 설립이념·인사말에서 아래로(본문 탐독)는 네이티브 스크롤 허용해 콘텐츠가 갇히지 않게 함
+   */
   useEffect(() => {
     if (!isMobile) return;
 
@@ -421,20 +450,26 @@ export const GreetingSection = () => {
       return false;
     };
 
+    /** 해당 앵커에서 주어진 방향(아래=true)으로 스냅해야 하는가 */
+    const shouldSnap = (idx: number, goingDown: boolean): boolean => {
+      if (goingDown) return idx === 0; // 히어로 → 설립이념만 즉시 스냅(나머지 아래로는 본문 탐독)
+      return idx >= 1; // 설립이념·인사말에서 위로는 이전 앵커로 스냅
+    };
+
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
       if (isGreetingSnapScrollingRef.current) return;
       if (skipTarget(e.target)) return;
 
-      const zone = getGreetingTouchSnapZone();
-      if (zone === null) {
+      const idx = getGreetingTouchAnchorIndex();
+      if (idx === null) {
         greetingGestureSnapRef.current = null;
         return;
       }
 
       greetingTouchActiveRef.current = true;
       greetingTouchMovedRef.current = false;
-      greetingGestureSnapRef.current = zone;
+      greetingGestureSnapRef.current = idx;
       greetingTouchStartYRef.current = e.touches[0].clientY;
       greetingTouchCurrentYRef.current = e.touches[0].clientY;
     };
@@ -448,13 +483,18 @@ export const GreetingSection = () => {
 
       greetingTouchCurrentYRef.current = e.touches[0].clientY;
       const diffY = greetingTouchStartYRef.current - greetingTouchCurrentYRef.current;
-      const startZone = greetingGestureSnapRef.current;
+      if (Math.abs(diffY) <= 2) return;
 
-      if (startZone === 0) {
-        if (Math.abs(diffY) > 2) {
-          greetingTouchMovedRef.current = true;
-          e.preventDefault();
-        }
+      const idx = greetingGestureSnapRef.current;
+      const goingDown = diffY > 0;
+
+      if (shouldSnap(idx, goingDown)) {
+        greetingTouchMovedRef.current = true;
+        e.preventDefault();
+      } else {
+        // 본문 탐독 방향 — 네이티브 스크롤에 양보(콘텐츠가 스냅에 갇히지 않도록)
+        greetingTouchActiveRef.current = false;
+        greetingGestureSnapRef.current = null;
       }
     };
 
@@ -462,21 +502,21 @@ export const GreetingSection = () => {
       if (!greetingTouchActiveRef.current) return;
       greetingTouchActiveRef.current = false;
 
-      const startZone = greetingGestureSnapRef.current;
+      const idx = greetingGestureSnapRef.current;
       greetingGestureSnapRef.current = null;
 
-      if (startZone === null) return;
+      if (idx === null) return;
       if (isGreetingSnapScrollingRef.current) return;
+      if (!greetingTouchMovedRef.current) return;
 
       const diffY = greetingTouchStartYRef.current - greetingTouchCurrentYRef.current;
       const distanceThreshold = 30;
+      const goingDown = diffY > 0;
 
-      if (startZone === 0) {
-        if (greetingTouchMovedRef.current && diffY > distanceThreshold) {
-          performGreetingSnap(1);
-        } else if (greetingTouchMovedRef.current) {
-          performGreetingSnap(0);
-        }
+      if (Math.abs(diffY) > distanceThreshold && shouldSnap(idx, goingDown)) {
+        performGreetingSnap((goingDown ? idx + 1 : idx - 1) as 0 | 1 | 2);
+      } else {
+        performGreetingSnap(idx as 0 | 1 | 2); // 임계값 미만 → 현재 앵커로 복귀
       }
     };
 
@@ -497,7 +537,7 @@ export const GreetingSection = () => {
       document.removeEventListener('touchend', handleTouchEnd, true);
       document.removeEventListener('touchcancel', handleTouchCancel, true);
     };
-  }, [isMobile, getGreetingTouchSnapZone, performGreetingSnap]);
+  }, [isMobile, getGreetingTouchAnchorIndex, performGreetingSnap]);
 
   // 히어로 타이포 반복 — 리마운트 비용·CPU 부하 줄이기: 배경 탭에서는 생략, 간격 연장, 감소 동작 시 비활성
   useEffect(() => {
@@ -854,7 +894,7 @@ export const GreetingSection = () => {
       <section
         id="management-philosophy"
         ref={philosophySectionRef}
-        className="relative w-full scroll-mt-14 sm:scroll-mt-16 md:scroll-mt-[4.25rem] lg:scroll-mt-20 xl:scroll-mt-[5.5rem] desktop:scroll-mt-24 2xl:scroll-mt-[7.5rem]"
+        className="relative w-full overflow-hidden scroll-mt-14 sm:scroll-mt-16 md:scroll-mt-[4.25rem] lg:scroll-mt-20 xl:scroll-mt-[5.5rem] desktop:scroll-mt-24 2xl:scroll-mt-[7.5rem] lg:h-[calc(100dvh-5rem)] lg:max-h-[calc(100dvh-5rem)] xl:h-[calc(100dvh-5.5rem)] xl:max-h-[calc(100dvh-5.5rem)] desktop:h-[calc(100dvh-6rem)] desktop:max-h-[calc(100dvh-6rem)] 2xl:h-[calc(100dvh-7.5rem)] 2xl:max-h-[calc(100dvh-7.5rem)]"
       >
         {/* 네이비 브릿지 — 문서 흐름 밖(absolute), 네비 뒤 톤만 맞춤. 레이아웃 여백을 만들지 않음 */}
         <div
@@ -862,11 +902,15 @@ export const GreetingSection = () => {
           style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 100%)' }}
           aria-hidden
         />
-        <div className="relative z-[1] flex min-h-0 w-full flex-col lg:h-[calc(100dvh-5rem)] lg:flex-row lg:overflow-hidden xl:h-[calc(100dvh-5.5rem)] desktop:h-[calc(100dvh-6rem)] 2xl:h-[calc(100dvh-7.5rem)]">
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 z-0 hidden lg:block lg:w-[30%] xl:w-[33%]"
+          style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 55%, #071420 100%)' }}
+          aria-hidden
+        />
+        <div className="relative z-[1] flex h-full min-h-0 w-full flex-col lg:flex-row lg:overflow-hidden">
           {/* ══ 좌측 패널: 딥 네이비 슬로건 — 모바일 숨김, lg 이상 2분할 */}
           <div
-            className={`relative hidden min-h-0 shrink-0 flex-col justify-between pt-12 pr-8 pb-8 lg:flex lg:w-[30%] lg:overflow-x-hidden lg:overflow-y-auto lg:pr-7 lg:pb-7 lg:pt-14 xl:w-[33%] xl:pr-8 xl:pb-8 xl:pt-16 ${NAV_CONTENT_TEXT_START_PL_CLASS}`}
-            style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 55%, #071420 100%)' }}
+            className={`relative hidden min-h-0 shrink-0 flex-col justify-between pt-12 pr-8 pb-8 lg:flex lg:h-full lg:w-[30%] lg:overflow-x-hidden lg:overflow-y-auto lg:pr-7 lg:pb-7 lg:pt-14 xl:w-[33%] xl:pr-8 xl:pb-8 xl:pt-16 ${NAV_CONTENT_TEXT_START_PL_CLASS}`}
           >
             <div
               className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -925,7 +969,7 @@ export const GreetingSection = () => {
 
           {/* ══ 우측 패널 — 가로: 좌는 열 경계 여백, 우는 네비 인셋 끝선과 정렬 */}
           <div
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[#F9FAFB] lg:overflow-hidden ${NAV_CONTENT_TEXT_START_PL_STACKED_THEN_SPLIT_CLASS} ${NAV_CONTENT_TEXT_END_PR_CLASS}`}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[#F9FAFB] lg:h-full lg:overflow-y-auto lg:overflow-x-hidden ${NAV_CONTENT_TEXT_START_PL_STACKED_THEN_SPLIT_CLASS} ${NAV_CONTENT_TEXT_END_PR_CLASS}`}
           >
             <div className="flex min-h-0 flex-1 flex-col lg:overflow-hidden">
               <div className="shrink-0 pt-8 lg:pt-10 xl:pt-11">
@@ -940,11 +984,11 @@ export const GreetingSection = () => {
                   {([
                     {
                       numEn: '01', title: '국가 보훈의 이념',
-                      body: '대한민국의 오늘은 국가유공자의 공헌과 희생 위에 이룩되었습니다. 그 숭고한 애국정신이 항구적으로 존중받고, 이에 상응하는 명예와 보상이 유지되도록 합니다.',
+                      body: '대한민국의 오늘은 국가의 존립과 발전을 위해 공헌하거나 이를 위해 자신을 희생한 국가유공자의 공헌과 희생 위에 이룩되었습니다. 국가유공자의 공헌과 희생이 숭고한 애국정신의 귀감으로서 항구적으로 존중되도록 하며, 그에 상응하는 명예와 보상이 유지되도록 합니다.',
                     },
                     {
                       numEn: '02', title: '단체설립근거',
-                      body: '『국가유공자 등 단체설립에 관한 법률』 제1조에 근거하여 설립되었으며, 국가유공자와 유족의 상부상조, 자활능력 배양, 민족정기 선양, 자유민주주의 수호를 목적으로 합니다.',
+                      body: '『국가유공자 등 단체설립에 관한 법률』 제1조에 근거하여 설립되었으며, 국가유공자와 유족의 상부상조, 자활능력 배양, 민족정기 선양, 자유민주주의 수호 및 평화적 통일과 국제평화 유지에 이바지함을 목적으로 합니다.',
                     },
                   ] as const).map(card => (
                     <div key={card.numEn} className="flex min-w-0 flex-col">
@@ -986,7 +1030,7 @@ export const GreetingSection = () => {
                     return (
                       <div
                         key={item.title}
-                        className="relative flex min-w-0 flex-col rounded-lg border border-slate-200/80 bg-white p-3.5 lg:p-3 xl:p-4"
+                        className="relative flex min-w-0 flex-col rounded-lg border border-slate-200/80 bg-white p-3.5 transition-[border-color,box-shadow] duration-300 hover:border-[#1D66B3]/40 hover:shadow-[0_6px_18px_rgba(11,28,43,0.08)] lg:p-3 xl:p-4"
                       >
                         <span className="mb-2.5 font-english text-[0.6875rem] font-semibold tracking-[0.18em] text-[#0B1C2B]/30 sm:text-[0.72rem] sm:tracking-[0.2em] md:text-[0.76rem] lg:mb-2 lg:text-[0.77rem] lg:tracking-[0.155em] xl:text-[0.8rem] xl:tracking-[0.16em]">
                           {item.num}
@@ -1005,7 +1049,19 @@ export const GreetingSection = () => {
                     );
                   })}
 
-                  <div className="rounded-lg border border-slate-200/80 bg-white" aria-hidden />
+                  <div
+                    className="group relative flex min-w-0 flex-col rounded-lg border border-[#0B1C2B]/15 p-3.5 transition-[border-color,box-shadow] duration-300 hover:border-[#1D66B3]/50 hover:shadow-[0_6px_18px_rgba(11,28,43,0.25)] lg:p-3 xl:p-4"
+                    style={{ background: 'linear-gradient(160deg, #0B1C2B 0%, #0d2237 55%, #071420 100%)' }}
+                  >
+                    {/* 카드 높이는 좌측 텍스트 카드와 동일하게 유지(absolute) + 로고는 카드의 ~76% 채움 */}
+                    <img
+                      src={logo2}
+                      alt=""
+                      className="absolute inset-0 m-auto h-[74%] w-[76%] object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                      decoding="async"
+                      aria-hidden
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -1014,7 +1070,12 @@ export const GreetingSection = () => {
       </section>
 
       {/* 인사말 콘텐츠 섹션 */}
-      <div className="min-h-screen pt-10" id="ceo-message" style={{ background: 'linear-gradient(to bottom, #ffffff 0%, #F0F4F8 100%)' }}>
+      <div
+        ref={ceoMessageSectionRef}
+        className="min-h-screen scroll-mt-14 pt-10 sm:scroll-mt-16 md:scroll-mt-[4.25rem] lg:scroll-mt-20 xl:scroll-mt-[5.5rem] desktop:scroll-mt-24 2xl:scroll-mt-[7.5rem]"
+        id="ceo-message"
+        style={{ background: 'linear-gradient(to bottom, #ffffff 0%, #F0F4F8 100%)' }}
+      >
         <div className="mx-auto w-[95%] sm:w-[90%] md:w-[85%] px-4 sm:px-6 lg:px-8 py-16 md:py-24">
 
           {/* 섹션 레이블 */}
@@ -1023,7 +1084,7 @@ export const GreetingSection = () => {
             className={`flex items-center gap-4 mb-12 md:mb-16 transition-all duration-700 ${visibleTitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           >
             <div className="h-px w-10 bg-[#1D66B3]" />
-            <span className="text-[10px] tracking-[0.45em] text-[#1D66B3] uppercase font-semibold">CEO Message</span>
+            <span className="font-korean text-xs font-semibold tracking-[0.35em] text-[#1D66B3] sm:text-sm sm:tracking-[0.4em]">인 사 말</span>
           </div>
 
           {/* 2열 레이아웃: 좌측 인용 카드 + 우측 본문 */}
@@ -1104,11 +1165,12 @@ export const GreetingSection = () => {
                 ref={el => paragraphRefs.current[5] = el}
                 className={`transition-all duration-700 delay-200 ${visibleParagraphs[5] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
               >
-                <div className="flex flex-col items-end gap-4 border-t border-[#0B1C2B]/10 pt-8 sm:flex-row sm:items-end sm:justify-end sm:gap-5">
+                <div className="flex justify-end border-t border-[#0B1C2B]/10 pt-8">
                   <p className="font-korean whitespace-nowrap text-base font-semibold tracking-wider text-[#0B1C2B] sm:text-lg">
                     대한민국상이군경회시설사업소장
                   </p>
-                  <SignatureReveal active={visibleParagraphs[5]} />
+                  {/* 사인 드로잉 애니메이션 — 재활성화 시 아래 주석 해제 */}
+                  {/* <SignatureReveal active={visibleParagraphs[5]} /> */}
                 </div>
               </div>
             </div>

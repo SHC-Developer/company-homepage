@@ -40,11 +40,64 @@
     <link rel="icon" type="image/x-icon" href="/logo.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="/logo.ico" />
     <link rel="apple-touch-icon" href="/logo.ico" />
-    <script type="module" crossorigin src="/assets/index-BkmR7OVn.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-X00_d7ur.css">
+    <script type="module" crossorigin src="/assets/index-DvP-jfEM.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BLPRKF7n.css">
   </head>
 
   <body>
+    <script>
+      (function (base) {
+        var path = location.pathname.replace(/\/$/, '') || '/';
+        if (base !== '/') {
+          var prefix = base.replace(/\/$/, '');
+          if (path.indexOf(prefix) === 0) path = path.slice(prefix.length) || '/';
+        }
+        var isGreeting = path === '/greeting';
+        var isHome = path === '/';
+        if (!isHome && !isGreeting) return;
+        var name = isGreeting ? 'Main2' : 'Main1';
+        var posterWebp = base + 'video/' + name + '_poster.webp';
+        var posterJpg = base + 'video/' + name + '_poster.jpg';
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = posterWebp;
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
+        var lqip = {"Main1":"data:image/jpeg;base64,/9j/2wBDAA4ODg4PDhASEhAXGBYYFyEfHBwfITIkJyQnJDJNMDgwMDgwTURSQz5DUkR6X1VVX3qMdnB2jKqYmKrWy9b/////2wBDAQ4ODg4PDhASEhAXGBYYFyEfHBwfITIkJyQnJDJNMDgwMDgwTURSQz5DUkR6X1VVX3qMdnB2jKqYmKrWy9b/////wgARCAAWACgDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAMEBgX/xAAXAQEBAQEAAAAAAAAAAAAAAAABAAMC/9oADAMBAAIQAxAAAADW8/kVNsNFHmJJ0LjBqxhULhzShv/EACQQAAEEAQIGAwAAAAAAAAAAAAEAAgMRBCEiBRITMTJBQlFT/9oACAEBAAE/AH8RxP2UnFMS2+VE1aOXins5DMhI2lPy47u3Ep7MUd2KTomg1vv7KyOlEWjl3n4pscArab96oNhHjzjStHFSSOJRmGMwyVblC8veZH6lBxQeV//EABcRAQEBAQAAAAAAAAAAAAAAABEAAhD/2gAIAQIBAT8ACZtd/8QAGREAAgMBAAAAAAAAAAAAAAAAABEBAhAh/9oACAEDAQE/AGxQcK7/AP/Z","Main2":"data:image/jpeg;base64,/9j/2wBDAA4ODg4PDhASEhAXGBYYFyEfHBwfITIkJyQnJDJNMDgwMDgwTURSQz5DUkR6X1VVX3qMdnB2jKqYmKrWy9b/////2wBDAQ4ODg4PDhASEhAXGBYYFyEfHBwfITIkJyQnJDJNMDgwMDgwTURSQz5DUkR6X1VVX3qMdnB2jKqYmKrWy9b/////wgARCAAWACgDASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAMEBQIG/8QAFwEBAQEBAAAAAAAAAAAAAAAAAwIEAf/aAAwDAQACEAMQAAAA9PFnM1ZqOcuGetEBLWgFKfPA7uAiv//EACUQAAIBAwQCAQUAAAAAAAAAAAECAwAEEQUSMUEUIRMyM1Fhcf/aAAgBAQABPwCaPNGAk9CvHdmIUZqUQWiF7mRU/C8sf4Ku9QuZl2IfHg6Ln2akur8zQMdrFCSM/sY6p9Qvi32oqutTukIyFjYoRu5FLC7y72nDbg3H1cHvmpNLj8X5e8A53EmpZjvFGfBq4k+VCDUcjo/o+wDRuXNptDNxzX//xAAbEQACAgMBAAAAAAAAAAAAAAABAgAQAxIxQf/aAAgBAgEBPwAMR5GytwQ7HtPX/8QAHREAAQMFAQAAAAAAAAAAAAAAAgABEAMSIjFBUf/aAAgBAwEBPwCxvUNMerFtQMf/2Q=="};
+        var img = document.createElement('img');
+        img.id = 'hero-boot-poster';
+        img.alt = '';
+        img.decoding = 'sync';
+        img.fetchPriority = 'high';
+        img.src = lqip[name];
+        Object.assign(img.style, {
+          position: 'fixed',
+          inset: '0',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: '0',
+          pointerEvents: 'none',
+        });
+        document.body.insertBefore(img, document.body.firstChild);
+        var gradients = {"Main1":"linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0.02) 100%)","Main2":"linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.24) 28%, rgba(0,0,0,0.1) 52%, rgba(0,0,0,0.03) 70%, transparent 88%)"};
+        var overlay = document.createElement('div');
+        overlay.id = 'hero-boot-gradient';
+        Object.assign(overlay.style, {
+          position: 'fixed',
+          inset: '0',
+          zIndex: '1',
+          pointerEvents: 'none',
+          background: gradients[name],
+        });
+        document.body.insertBefore(overlay, img.nextSibling);
+        var full = new Image();
+        full.onload = function () { img.src = posterWebp; };
+        full.onerror = function () { img.src = posterJpg; };
+        full.src = posterWebp;
+      })("/");
+    </script>
     <div id="root"></div>
   </body>
 </html>

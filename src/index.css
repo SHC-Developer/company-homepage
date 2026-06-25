@@ -156,8 +156,52 @@ All colors MUST be HSL.
     transform: translateY(0);
     opacity: 1;
   }
-  
-  /* Hero section utilities */
+
+  /* 드롭다운 컬럼 순차 등장(stagger) — 각 컬럼에 animationDelay 부여 */
+  @keyframes nav-col-rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-col-stagger {
+    opacity: 0;
+    animation: nav-col-rise 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* active 밑줄 — 좌→우로 그려지는 등장 모션 */
+  @keyframes nav-underline-draw {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .nav-underline-draw {
+    transform-origin: left center;
+    animation: nav-underline-draw 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-col-stagger {
+      animation: none;
+      opacity: 1;
+    }
+
+    .nav-underline-draw {
+      animation: none;
+      transform: scaleX(1);
+    }
+  }
+
+    /* Hero section utilities */
   .hero-gradient {
     background: var(--gradient-hero);
   }

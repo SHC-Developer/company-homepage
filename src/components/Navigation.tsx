@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NAV_CONTENT_INSET_CLASS } from '@/lib/navContentInset';
@@ -13,8 +13,7 @@ const menuStructure = {
   '회사소개': ['설립이념', '인사말', '회사연혁', '보유면허 및 기술', '조직구성'],
   '관계법령': [],
   '분야별 수행실적': ['안전진단', '설계', '건설사업관리'],
-  // 자료실: 서브메뉴에서 '채용공고' 제거 (데스크톱/모바일 동일 적용)
-  '자료실': []
+  '자료실': ['채용공고'],
 };
 
 interface NavigationProps {
@@ -23,8 +22,43 @@ interface NavigationProps {
   autoHideOnMount?: boolean;
 }
 
+/** 메인(/)·회사소개(/greeting) 영상 히어로 — 네비 로고 테마 판별용 */
+function getVideoHeroElement(): HTMLElement | null {
+  return document.getElementById('hero-section') ?? document.getElementById('greeting-hero');
+}
+
+function computeIsOverLightBackground(forceLightTheme: boolean): boolean {
+  if (forceLightTheme) return true;
+
+  const currentScrollY = window.scrollY;
+  const heroSection = getVideoHeroElement();
+  const sitemapSection = document.getElementById('sitemap-section');
+
+  if (heroSection && sitemapSection) {
+    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+    const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
+
+    if (currentScrollY >= heroBottom * 0.8 && currentScrollY < sitemapBottom) {
+      return false;
+    }
+  } else if (sitemapSection) {
+    const sitemapTop = sitemapSection.offsetTop;
+    const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
+    if (currentScrollY >= sitemapTop && currentScrollY < sitemapBottom) {
+      return false;
+    }
+  }
+
+  if (heroSection) {
+    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+    return currentScrollY > heroBottom * 0.8;
+  }
+
+  return currentScrollY > window.innerHeight * 0.8;
+}
+
 export const Navigation = ({ variant = 'default', forceLightTheme = false, autoHideOnMount = false }: NavigationProps) => {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpandedMenus, setMobileExpandedMenus] = useState<string[]>([]);
   const [isOverLightBackground, setIsOverLightBackground] = useState(forceLightTheme);
@@ -35,13 +69,28 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   const navigate = useNavigate();
   const isLandingPage = location.pathname === '/' || location.pathname === '/greeting';
 
+  // 현재 경로 기준 활성 메뉴 판별
+  const menuPathMap: Record<string, string> = {
+    '회사소개': '/greeting',
+    '관계법령': '/legal-basis',
+    '분야별 수행실적': '/portfolio',
+    '자료실': '/recruit',
+  };
+  const isMenuActive = (menu: string) => location.pathname === menuPathMap[menu];
+
   const navBackgroundClass = isOverLightBackground ? 'bg-white' : 'bg-transparent';
   const dropdownContainerClass = isOverLightBackground
     ? 'bg-white border border-gray-200'
     : 'bg-slate-800 border border-slate-700';
+  // 드롭다운 항목 공통 hover — 밑줄 대신 텍스트 위치를 밀지 않는 행 하이라이트(px-2 -mx-2 + 미세 배경)
   const dropdownItemClass = isOverLightBackground
-    ? 'text-gray-700 hover:text-black'
-    : 'text-gray-300 hover:text-white';
+    ? 'text-gray-700 hover:text-[#0B1C2B] hover:bg-[#0B1C2B]/[0.06]'
+    : 'text-gray-300 hover:text-white hover:bg-white/10';
+  const dropdownRowHoverClass = 'rounded-md px-2 -mx-2 transition-colors duration-200';
+  // 카테고리 헤더 hover — 항목과 동일한 배경 하이라이트(텍스트 색만 강조 차등)
+  const dropdownHeaderHoverClass = isOverLightBackground
+    ? 'text-[#0B1C2B] hover:text-[#1D66B3] hover:bg-[#0B1C2B]/[0.06]'
+    : 'text-white hover:text-[#5B9BD5] hover:bg-white/10';
   const brandTextClass = isOverLightBackground
     ? 'text-[#0B1C2B] hover:text-[#0B1C2B]/80'
     : 'text-white hover:text-white/80 drop-shadow-lg';
@@ -51,9 +100,16 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   const mobileMenuButtonThemeClass = isOverLightBackground
     ? 'text-[#0B1C2B] hover:bg-gray-100 active:bg-gray-200'
     : 'text-white hover:bg-white/20 active:bg-white/30';
+  // 모바일 메인 메뉴 — 현재 페이지면 데스크톱과 동일하게 블루 색·배경 하이라이트로 통일
+  const mobileMenuItemClass = (menu: string) =>
+    isMenuActive(menu)
+      ? isOverLightBackground
+        ? 'text-[#1D66B3] bg-[#1D66B3]/[0.08] hover:bg-[#1D66B3]/[0.13] active:bg-[#1D66B3]/[0.18]'
+        : 'text-[#5B9BD5] bg-white/[0.12] hover:bg-white/20 active:bg-white/30'
+      : mobileMenuButtonThemeClass;
 
   const closeMenus = () => {
-    setActiveMenu(null);
+    setIsMegaMenuOpen(false);
     setIsMobileMenuOpen(false);
   };
 
@@ -93,17 +149,123 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     closeMenus();
   };
 
-  const handleMenuEnter = (menu: string) => {
+  const handleMegaMenuEnter = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    setActiveMenu(menu);
+    setIsMegaMenuOpen(true);
   };
 
-  const handleMenuLeave = () => {
+  const handleMegaMenuLeave = () => {
     timeoutRef.current = setTimeout(() => {
-      setActiveMenu(null);
+      setIsMegaMenuOpen(false);
     }, 150);
+  };
+
+  const getMainMenuClickHandler = (menu: string) => {
+    switch (menu) {
+      case '회사소개':
+        return handleCompanyIntroClick;
+      case '관계법령':
+        return handleLegalBasisClick;
+      case '분야별 수행실적':
+        return handlePortfolioClick;
+      case '자료실':
+        return handleRecruitClick;
+      default:
+        return undefined;
+    }
+  };
+
+  // 상단 메뉴 버튼 — 호버 배경/활성 배경 제거(텍스트만). 드롭다운 열과 동일하게 px-3 좌측 정렬로 통일.
+  // active(현재 페이지)는 색·굵기 강조 + 하단 액센트 바(아래 span)로 표시.
+  const desktopNavButtonClass = (active: boolean) =>
+    `block w-full px-3 py-2 text-left text-base font-korean whitespace-nowrap xl:text-lg ${
+      active ? 'font-semibold' : 'font-normal'
+    } ${
+      isOverLightBackground
+        ? `${active ? 'text-[#1D66B3]' : 'text-[#0B1C2B]'} drop-shadow-none`
+        : `${active ? 'text-white' : 'text-white/90'} drop-shadow-md`
+    }`;
+  // active 하단 액센트 바 색 — 영상 히어로(어두운 배경)에선 블루가 안 보이므로 흰색 밑줄
+  const navAccentColor = isOverLightBackground ? '#1D66B3' : '#FFFFFF';
+
+  const renderDesktopSubMenuLink = (subMenu: string, linkClass: string) => {
+    if (subMenu === '수의계약근거') {
+      return (
+        <Link key={subMenu} to="/legal-basis" onClick={closeMenus} className={linkClass}>
+          {subMenu}
+        </Link>
+      );
+    }
+    if (subMenu === '설립이념') {
+      return (
+        <a key={subMenu} href="#management-philosophy" onClick={handleEstablishmentPhilosophyClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '인사말') {
+      return (
+        <a key={subMenu} href="#ceo-message" onClick={handleCeoMessageClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '회사연혁') {
+      return (
+        <a key={subMenu} href="#" onClick={handleHistoryClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '보유면허 및 기술') {
+      return (
+        <a key={subMenu} href="#" onClick={handleLicenseClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '조직구성') {
+      return (
+        <a key={subMenu} href="#" onClick={handleOrganizationClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '안전진단') {
+      return (
+        <a key={subMenu} href="#" onClick={handlePortfolioBridgeTunnelClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '설계') {
+      return (
+        <a key={subMenu} href="#" onClick={handlePortfolioDesignClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '건설사업관리') {
+      return (
+        <a key={subMenu} href="#" onClick={handlePortfolioSupervisionClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    if (subMenu === '채용공고') {
+      return (
+        <a key={subMenu} href="/recruit" onClick={handleRecruitClick} className={linkClass}>
+          {subMenu}
+        </a>
+      );
+    }
+    return (
+      <Link key={subMenu} to="/portfolio" onClick={closeMenus} className={linkClass}>
+        {subMenu}
+      </Link>
+    );
   };
 
   const toggleMobileMenu = (menu: string) => {
@@ -182,7 +344,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setActiveMenu(null);
+        setIsMegaMenuOpen(false);
       }
     };
 
@@ -194,7 +356,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setActiveMenu(null);
+        setIsMegaMenuOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
@@ -212,53 +374,31 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
     };
   }, []);
 
-  // 스크롤 감지로 배경 감지
+  // 스크롤·레이아웃 감지로 배경(로고) 테마 판별 — greeting-hero 포함
+  const syncNavTheme = useCallback(() => {
+    setIsOverLightBackground(computeIsOverLightBackground(forceLightTheme));
+  }, [forceLightTheme]);
+
+  useLayoutEffect(() => {
+    syncNavTheme();
+    const raf = requestAnimationFrame(syncNavTheme);
+    return () => cancelAnimationFrame(raf);
+  }, [location.pathname, syncNavTheme]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // forceLightTheme이 true면 항상 밝은 배경으로 설정
-      if (forceLightTheme) {
-        setIsOverLightBackground(true);
-      } else {
-        const heroSection = document.getElementById('hero-section');
-        const sitemapSection = document.getElementById('sitemap-section');
-        
-        if (heroSection && sitemapSection) {
-          const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-          const sitemapTop = sitemapSection.offsetTop;
-          const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
-          
-          // HeroSection 하단 80% 이후부터 SitemapSection 끝까지는 어두운 배경 유지
-          // 이렇게 하면 HeroSection에서 SitemapSection으로 전환되는 구간에서도 색상이 깜빡이지 않음
-          if (currentScrollY >= heroBottom * 0.8 && currentScrollY < sitemapBottom) {
-            setIsOverLightBackground(false);
-            return;
-          }
-        } else if (sitemapSection) {
-          // heroSection이 없는 경우 (비정상적이지만 안전장치)
-          const sitemapTop = sitemapSection.offsetTop;
-          const sitemapBottom = sitemapSection.offsetTop + sitemapSection.offsetHeight;
-          if (currentScrollY >= sitemapTop && currentScrollY < sitemapBottom) {
-            setIsOverLightBackground(false);
-            return;
-          }
-        }
-        
-        // 그 외 영역은 히어로 섹션 하단 80% 이후부터 밝은 배경
-        if (heroSection) {
-          const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-          setIsOverLightBackground(currentScrollY > heroBottom * 0.8);
-        } else {
-          setIsOverLightBackground(currentScrollY > window.innerHeight * 0.8);
-        }
-      }
-    };
+    if (forceLightTheme) return;
+
+    const handleScroll = () => syncNavTheme();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // 초기 체크
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [forceLightTheme]);
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [forceLightTheme, syncNavTheme]);
 
   // forceLightTheme prop이 변경될 때 상태 업데이트
   useEffect(() => {
@@ -280,7 +420,7 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
         4. 로고와 텍스트 크기 조정: 모바일에서 작게, 데스크톱에서 크게
         5. 가로 룰: src/lib/navContentInset.ts 의 NAV_CONTENT_INSET_CLASS와 동기화
       */}
-      <div className={`${NAV_CONTENT_INSET_CLASS} pt-0`}>
+      <div className={`${NAV_CONTENT_INSET_CLASS} relative pt-0`}>
         {/* 
           네비게이션 바 높이: 모바일·태블릿은 낮게, 넓은 데스크톱(2xl)에서만 여유 높이
           (1440px 미만은 햄버거 — 과도한 세로 공간 방지)
@@ -321,162 +461,89 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
             </Link>
           </div>
 
-          {/* 데스크톱 네비게이션 */}
-          <div className="hidden desktop:flex items-center space-x-8">
-            {Object.keys(menuStructure).map((menu) => (
-              <div
-                key={menu}
-                className="relative"
-                onMouseEnter={() => handleMenuEnter(menu)}
-                onMouseLeave={handleMenuLeave}
-              >
+          {/* 데스크톱 네비게이션 — 우측 일체형 메가 메뉴 (상단 버튼·드롭다운 4열 그리드 동일 정렬) */}
+          <div
+            className="relative ml-auto hidden h-full w-[52%] min-w-[38rem] max-w-[58rem] desktop:flex desktop:items-center"
+            onMouseEnter={handleMegaMenuEnter}
+            onMouseLeave={handleMegaMenuLeave}
+          >
+            {/* 상단 메뉴 행 — 드롭다운과 동일한 컬럼 트랙(8/8/9/5) / px-3 → 항목과 하위 항목이 같은 세로선에 정렬 */}
+            <div className="grid w-full grid-cols-[8fr_8fr_9fr_5fr]">
+              {Object.keys(menuStructure).map((menu) => (
                 <button
-                  className={`px-4 py-2 text-xl font-normal rounded-lg transition-all duration-200 font-korean ${
-                    isOverLightBackground
-                      ? `drop-shadow-none ${activeMenu === menu 
-                          ? 'bg-gray-200 text-[#0B1C2B]' 
-                          : 'text-[#0B1C2B] hover:text-[#0B1C2B]/80 hover:bg-gray-100'
-                        }`
-                      : `drop-shadow-md ${activeMenu === menu 
-                          ? 'bg-white/20 text-white' 
-                          : 'text-white hover:text-white/80 hover:bg-white/10'
-                        }`
-                  }`}
-                  onClick={
-                    menu === '회사소개'
-                      ? handleCompanyIntroClick
-                      : menu === '분야별 수행실적'
-                        ? handlePortfolioClick
-                        : menu === '관계법령'
-                          ? handleLegalBasisClick
-                          : menu === '자료실'
-                            ? handleRecruitClick
-                          : undefined
-                  }
+                  key={menu}
+                  type="button"
+                  className={desktopNavButtonClass(isMenuActive(menu))}
+                  onClick={getMainMenuClickHandler(menu)}
                   aria-haspopup="true"
-                  aria-expanded={activeMenu === menu}
+                  aria-expanded={isMegaMenuOpen}
+                  aria-current={isMenuActive(menu) ? 'page' : undefined}
                 >
-                  {menu}
+                  <span className="relative inline-block">
+                    {menu}
+                    {isMenuActive(menu) && (
+                      <span
+                        className="nav-underline-draw absolute -bottom-1 left-0 right-0 h-0.5 rounded-full"
+                        style={{ backgroundColor: navAccentColor }}
+                        aria-hidden
+                      />
+                    )}
+                  </span>
                 </button>
+              ))}
+            </div>
 
-                {/* 드롭다운 메뉴 - 흰색 라인 아래로 위치 */}
-                {activeMenu === menu && menuStructure[menu].length > 0 && (
-                  <div className={`absolute top-full left-0 mt-12 w-48 rounded-lg shadow-lg nav-slide-down open ${dropdownContainerClass}`}>
-                    {menuStructure[menu].map((subMenu) => (
-                      subMenu === '수의계약근거' ? (
-                        <Link
-                          key={subMenu}
-                          to="/legal-basis"
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
+            {/* 드롭다운 — 네비 바 하단(흰색 라인)에 맞춰 정렬, 컨테이너 너비를 넘지 않음 */}
+            {isMegaMenuOpen && (
+              <div className="absolute inset-x-0 top-full z-40 pt-2">
+                <div className={`rounded-b-lg py-5 shadow-xl nav-slide-down open ${dropdownContainerClass}`}>
+                  <div className="grid grid-cols-[8fr_8fr_9fr_5fr]">
+                    {Object.entries(menuStructure).map(([menu, subs], colIndex) => (
+                      <div
+                        key={menu}
+                        className="nav-col-stagger min-w-0 px-3"
+                        style={{ animationDelay: `${colIndex * 70}ms` }}
+                      >
+                        <button
+                          type="button"
+                          onClick={getMainMenuClickHandler(menu)}
+                          aria-current={isMenuActive(menu) ? 'page' : undefined}
+                          className={`mb-1.5 block w-full py-1 text-left font-korean text-base font-semibold xl:text-lg ${dropdownRowHoverClass} ${
+                            isMenuActive(menu)
+                              ? isOverLightBackground
+                                ? 'text-[#1D66B3] bg-[#1D66B3]/[0.08] hover:bg-[#1D66B3]/[0.15]'
+                                : 'text-[#5B9BD5] bg-white/[0.08] hover:bg-white/[0.16]'
+                              : dropdownHeaderHoverClass
                           }`}
                         >
-                          {subMenu}
-                        </Link>
-                      ) : subMenu === '설립이념' ? (
-                        <a
-                          key={subMenu}
-                          href="#management-philosophy"
-                          onClick={handleEstablishmentPhilosophyClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '인사말' ? (
-                        <a
-                          key={subMenu}
-                          href="#ceo-message"
-                          onClick={handleCeoMessageClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '회사연혁' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handleHistoryClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '보유면허 및 기술' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handleLicenseClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '조직구성' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handleOrganizationClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '안전진단' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handlePortfolioBridgeTunnelClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '설계' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handlePortfolioDesignClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : subMenu === '건설사업관리' ? (
-                        <a
-                          key={subMenu}
-                          href="#"
-                          onClick={handlePortfolioSupervisionClick}
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </a>
-                      ) : (
-                        <Link
-                          key={subMenu}
-                          to="/portfolio"
-                          className={`block px-4 py-2 text-lg hover:underline transition-all duration-200 font-korean ${
-                            dropdownItemClass
-                          }`}
-                        >
-                          {subMenu}
-                        </Link>
-                      )
+                          {menu}
+                        </button>
+                        {subs.length > 0 ? (
+                          <ul className="space-y-0.5">
+                            {subs.map((subMenu) => (
+                              <li key={subMenu}>
+                                {renderDesktopSubMenuLink(
+                                  subMenu,
+                                  `block w-full py-1 text-left text-sm font-korean xl:text-base ${dropdownRowHoverClass} ${dropdownItemClass}`
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : menu === '관계법령' ? (
+                          <button
+                            type="button"
+                            onClick={handleLegalBasisClick}
+                            className={`block w-full py-1 text-left text-sm font-korean xl:text-base ${dropdownRowHoverClass} ${dropdownItemClass}`}
+                          >
+                            관계법령 바로가기
+                          </button>
+                        ) : null}
+                      </div>
                     ))}
                   </div>
-                )}
+                </div>
               </div>
-            ))}
+            )}
           </div>
 
           {/* 모바일 햄버거 버튼 */}
@@ -530,7 +597,8 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                       <button
                         type="button"
                         onClick={goToGreetingHero}
-                        className={`min-w-0 flex-1 text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg transition-colors duration-200 active:scale-[0.98] ${mobileMenuButtonThemeClass}`}
+                        aria-current={isMenuActive(menu) ? 'page' : undefined}
+                        className={`min-w-0 flex-1 text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg transition-colors duration-200 active:scale-[0.98] ${mobileMenuItemClass(menu)}`}
                       >
                         {menu}
                       </button>
@@ -549,19 +617,43 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                         </span>
                       </button>
                     </div>
+                  ) : menu === '자료실' ? (
+                    <div className="flex w-full gap-1 font-korean">
+                      <button
+                        type="button"
+                        onClick={handleRecruitClick}
+                        aria-current={isMenuActive(menu) ? 'page' : undefined}
+                        className={`min-w-0 flex-1 text-left px-3 py-3 sm:px-4 sm:py-2 text-base sm:text-lg font-medium rounded-lg transition-colors duration-200 active:scale-[0.98] ${mobileMenuItemClass(menu)}`}
+                      >
+                        {menu}
+                      </button>
+                      <button
+                        type="button"
+                        aria-expanded={mobileExpandedMenus.includes(menu)}
+                        aria-label="자료실 하위 메뉴 펼치기"
+                        onClick={() => toggleMobileMenu(menu)}
+                        className={`flex w-11 shrink-0 items-center justify-center rounded-lg text-sm transition-colors duration-200 active:scale-[0.98] ${mobileMenuButtonThemeClass}`}
+                      >
+                        <span
+                          className={`transition-transform duration-200 ${mobileExpandedMenus.includes(menu) ? 'rotate-180' : ''}`}
+                          aria-hidden
+                        >
+                          ▼
+                        </span>
+                      </button>
+                    </div>
                   ) : (
                     <button
                       onClick={() => {
                         if (menu === '관계법령') {
                           handleLegalBasisClick();
-                        } else if (menu === '자료실') {
-                          handleRecruitClick();
                         } else {
                           toggleMobileMenu(menu);
                         }
                       }}
+                      aria-current={isMenuActive(menu) ? 'page' : undefined}
                       className={`flex w-full items-center justify-between rounded-lg px-3 py-3 text-left font-korean text-base font-medium transition-colors duration-200 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-lg ${
-                        mobileMenuButtonThemeClass
+                        mobileMenuItemClass(menu)
                       }`}
                     >
                       <span className="flex-1">{menu}</span>
@@ -682,6 +774,17 @@ export const Navigation = ({ variant = 'default', forceLightTheme = false, autoH
                             key={subMenu}
                             href="#"
                             onClick={handlePortfolioSupervisionClick}
+                            className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
+                              dropdownItemClass
+                            }`}
+                          >
+                            {subMenu}
+                          </a>
+                        ) : subMenu === '채용공고' ? (
+                          <a
+                            key={subMenu}
+                            href="/recruit"
+                            onClick={handleRecruitClick}
                             className={`block px-3 py-2.5 sm:px-4 sm:py-2 text-sm sm:text-lg hover:underline active:bg-opacity-20 active:bg-current rounded transition-all duration-200 font-korean ${
                               dropdownItemClass
                             }`}

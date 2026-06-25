@@ -191,7 +191,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
     });
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, isMobile ? 200 : 800);
+    }, isMobile ? 200 : 600);
   }, [isMobile]);
 
   // 비디오 설정 (Hero Section용)
@@ -518,7 +518,7 @@ export const LandingSections = ({ onActiveIndexChange }: { onActiveIndexChange?:
         });
         const animTimer = setTimeout(() => {
           onAnimationComplete();
-        }, 1000);
+        }, 400);
         return () => { clearTimeout(fadeTimer); clearTimeout(animTimer); };
       } else {
         setVisible(false);
